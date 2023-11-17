@@ -1,3 +1,4 @@
+
 function errorHandler(err, req, res, next) {
   console.log(err,'ERRORR');
   let status = 500;
@@ -28,4 +29,5 @@ function errorHandler(err, req, res, next) {
 
   res.status(status).json({ message });
 }
-module.exports = { errorHandler };
+module.exports =  errorHandler ;
+
