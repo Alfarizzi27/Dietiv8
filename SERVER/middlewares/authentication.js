@@ -11,7 +11,7 @@ async function authentication(req, res, next) {
     if (!find) {
       throw { name: "unauthenticated" };
     }
-    req.user = { id: find.id, email: find.email };
+    req.user = { id: find.id, calorieLimit: find.calorieLimit };
     next();
   } catch (error) {
     next(error);
