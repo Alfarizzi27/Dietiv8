@@ -26,6 +26,10 @@ module.exports = {
         allowNull:false,
         type: Sequelize.INTEGER
       },
+      gender: {
+        allowNull:false,
+        type: Sequelize.STRING
+      },
       height: {
         allowNull:false,
         type: Sequelize.INTEGER
