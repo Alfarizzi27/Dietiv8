@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      UserAchievement.belongsTo(models.userAchievement,{foreignKey:'idAchievement'})
+      UserAchievement.belongsTo(models.Achievement,{foreignKey:'idAchievement'})
       UserAchievement.belongsTo(models.User,{foreignKey:'idUser'})
     }
   }

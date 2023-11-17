@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const bc = require("bcryptjs");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -9,20 +10,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.History,{foreignKey:'userId'})
-      User.hasMany(models.userAchievement,{foreignKey:'idUser'})
+      User.hasMany(models.History, { foreignKey: "userId" });
+      User.hasMany(models.UserAchievement, { foreignKey: "idUser" });
     }
   }
   User.init(
     {
       username: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
           notNull: { msg: "Username is required" },
           notEmpty: { msg: "Username is required" },
         },
       },
+      gender: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        validate: {
+          notNull: { msg: "Gender is required" },
+          notEmpty: { msg: "Gender is required" },
+        },
+      },
       email: {
+        allowNull: false,
         type: DataTypes.STRING,
         unique: { msg: "Email must be unique" },
         validate: {
@@ -32,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       password: {
+        allowNull: false,
         type: DataTypes.STRING,
         validate: {
           notNull: { msg: "Password is required" },
@@ -39,6 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       weight: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         validate: {
           notNull: { msg: "Weight is required" },
@@ -46,6 +59,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       height: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         validate: {
           notNull: { msg: "Height is required" },
@@ -53,6 +67,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       dateBirth: {
+        allowNull: false,
         type: DataTypes.DATE,
         validate: {
           isDate: { msg: "DateBirth must be Date format" },
@@ -61,6 +76,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       activityLevel: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         validate: {
           notNull: { msg: "Activity is required" },
@@ -68,6 +84,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       targetWeight: {
+        allowNull: false,
         type: DataTypes.STRING,
         validate: {
           notNull: { msg: "Target Weight is required" },
@@ -78,6 +95,11 @@ module.exports = (sequelize, DataTypes) => {
       calorieLimit: DataTypes.INTEGER,
     },
     {
+      hooks: {
+        beforeCreate(user, options) {
+          user.password = bc.hashSync(user.password);
+        },
+      },
       sequelize,
       modelName: "User",
     }
