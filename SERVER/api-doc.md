@@ -18,16 +18,16 @@ Request:
 
 ```json
 {
-  "username": "string",
-  "email": "string",
-  "password": "string",
-  "weight": "integer",
-  "height": "integer",
-  "dateBirth": "date",
-  "activityLevel": "integer",
-  "targetWeight": "string",
-  "extra": "string",
-  "calorieLimit": "integer",
+	"username":"sayabedjo",
+	"gender":"male",
+	"email":"sayabedjo1234@mail.com", 
+	"password":"sayabedjo", 
+	"weight":"60", 
+	"height":"170",
+	"dateBirth":"1997-01-26",
+	"activityLevel":"1",
+	"extra":"diabetes",
+	"targetWeight":"70"
 }
 ```
 
@@ -35,8 +35,14 @@ _Response (201 - Created)_
 
 ```json
 {
-  "id": "integer",
-  "email": "string"
+	"gender": "male",
+	"username": "sayabedjo",
+	"email": "sayabedjo1234@mail.com",
+	"weight": 60,
+	"height": 170,
+	"extra": "diabetes",
+	"calorieLimit": 1538,
+	"targetWeight": "70"
 }
 ```
 
@@ -103,7 +109,14 @@ _Response (200 - OK)_
 
 ```json
 {
-  "message": "string"
+	"gender": "male",
+	"username": "sayabedjo",
+	"email": "sayabedjo@mail.com",
+	"weight": 60,
+	"height": 170,
+	"extra": "diabetes",
+	"calorieLimit": 1538,
+	"targetWeight": "70"
 }
 ```
 

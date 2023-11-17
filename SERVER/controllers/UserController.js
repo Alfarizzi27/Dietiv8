@@ -1,10 +1,11 @@
 const bcrypt = require("bcryptjs");
 const { User } = require("../models");
+const {createToken,verifyToken} = require('../helpers/jwt')
 const axios = require("axios");
 class UserController {
   static async register(req, res, next) {
     try {
-      let calorieLimit=0
+      let calorieLimit = 0;
       let {
         gender,
         username,
@@ -22,15 +23,20 @@ class UserController {
       let age_dt = new Date(month_diff);
       let year = age_dt.getUTCFullYear();
       let age = Math.abs(year - 1970);
-      let activitylevel=''
-      if(activityLevel==1){
-        activitylevel='level_1'
-      }else if(activityLevel==2){
-        activitylevel='level_2'
-      }else if(activityLevel==3){
-        activitylevel='level_3'
+      let activitylevel = "";
+      if (activityLevel == 1) {
+        activitylevel = "level_1";
+      } else if (activityLevel == 2) {
+        activitylevel = "level_2";
+      } else if (activityLevel == 3) {
+        activitylevel = "level_3";
+      } else if (activityLevel == 4) {
+        activitylevel = "level_4";
+      } else if (activityLevel == 5) {
+        activitylevel = "level_5";
+      } else if (activityLevel == 6) {
+        activitylevel = "level_6";
       }
-      console.log(activityLevel,'<<<<<<<<<<<<<<<<<<<<<ACT');
       const options = {
         method: "GET",
         url: "https://fitness-calculator.p.rapidapi.com/dailycalorie",
@@ -46,15 +52,15 @@ class UserController {
             "665ed1e6f9msh6d85de1ba97e8adp1c24b6jsn6a9bcfc0b7f8",
           "X-RapidAPI-Host": "fitness-calculator.p.rapidapi.com",
         },
-      }
+      };
       try {
-      const {data} = await axios.request(options);
-       calorieLimit = Math.round(data.data.BMR)
-       console.log(calorieLimit);
+        const { data } = await axios.request(options);
+        calorieLimit = Math.round(data.data.BMR);
+        console.log(calorieLimit);
       } catch (error) {
-       next(error) 
+        next(error);
       }
-      const user = await User.create({
+      let user = await User.create({
         gender,
         username,
         email,
@@ -67,7 +73,18 @@ class UserController {
         calorieLimit,
         targetWeight,
       });
-      return res.status(201).json(user);
+      return res
+        .status(201)
+        .json({
+          gender: user.gender,
+          username: user.username,
+          email: user.email,
+          weight: user.weight,
+          height: user.height,
+          extra: user.extra,
+          calorieLimit: user.calorieLimit,
+          targetWeight: user.targetWeight,
+        });
     } catch (err) {
       next(err);
     }
@@ -79,7 +96,7 @@ class UserController {
       if (!email || !password) {
         throw { name: "emailpasswordempty" };
       }
-      const user = await User.findOne({ where: { email } });
+      let user = await User.findOne({ where: { email } });
       if (!user) {
         throw { name: "invalid_email_password" };
       }
@@ -87,7 +104,18 @@ class UserController {
       if (!isValid) {
         throw { name: "invalid_email_password" };
       }
-      return res.status(200).json(user);
+
+          const payload = {id:user.id,
+        gender: user.gender,
+        username: user.username,
+        email: user.email,
+        weight: user.weight,
+        height: user.height,
+        extra: user.extra,
+        calorieLimit: user.calorieLimit,
+        targetWeight: user.targetWeight, };
+          const token = createToken(payload, process.env.SECRET);
+          return res.status(200).json({ access_token: token});
     } catch (error) {
       next(error);
     }
