@@ -112,14 +112,7 @@ _Response (200 - OK)_
 
 ```json
 {
-	"gender": "male",
-	"username": "sayabedjo",
-	"email": "sayabedjo@mail.com",
-	"weight": 60,
-	"height": 170,
-	"extra": "diabetes",
-	"calorieLimit": 1538,
-	"targetWeight": "70"
+	"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsImdlbmRlciI6Im1hbGUiLCJ1c2VybmFtZSI6ImFrdW5maXgydXBkYXRlMiIsImVtYWlsIjoiYWt1bmZpeDJ1cGRhdGUyQG1haWwuY29tIiwid2VpZ2h0IjoiNjAiLCJoZWlnaHQiOiIxNzAiLCJleHRyYSI6ImRpYWJldGVzIiwiY2Fsb3JpZUxpbWl0IjoxNTM4LCJ0YXJnZXRXZWlnaHQiOiI3MCIsImFjdGl2aXR5TGV2ZWwiOiIxIiwiZGF0ZUJpcnRoIjoiMTk5Ny0wMS0yNiIsImlhdCI6MTcwMDI3OTUyNX0.wm8B0nnYwohrG6Bxk-n8vC4fA_ITGRiz7bTidjjfs7E"
 }
 ```
 
