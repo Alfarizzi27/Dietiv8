@@ -50,7 +50,7 @@ class MenuController {
         { transaction: t }
       );
       await t.commit();
-      res.status(201).json({ message: "Menu has been eated" });
+      res.status(201).json({ message: "Food has been inputed" });
     } catch (error) {
       await t.rollback();
       next(error);
