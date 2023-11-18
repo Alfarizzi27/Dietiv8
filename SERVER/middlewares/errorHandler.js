@@ -3,7 +3,7 @@ function errorHandler(err, req, res, next) {
   console.log(err,'ERRORR');
   let status = 500;
   let message = "Internal Server Error";
-  console.log(err)
+//   console.log(err)
   if (err.name === "unauthenticated" || err.name === "JsonWebTokenError") {
     status = 401;
     message = "Invalid Token";
@@ -25,6 +25,18 @@ function errorHandler(err, req, res, next) {
   } else if(err.name==='tag_require'){
     status= 400;
     message = 'Tag is require'
+  } else if (err.name === "menu_not_found") {
+    status = 404
+    message = "Menu Recommendation Is Empty Try Create One"
+  } else if (err.name === "history_not_found") {
+    status = 404
+    message = "History Is Not Found"
+  } else if (err.name === "invalid_food") {
+    status = 401
+    message = err.message
+  } else if (err.name === "age_not_found") {
+    status = 400
+    message = "Date Of Birth Required"
   }
 
   res.status(status).json({ message });

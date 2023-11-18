@@ -85,7 +85,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       targetWeight: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         validate: {
           notNull: { msg: "Target Weight is required" },
           notEmpty: { msg: "Target Weight is required" },

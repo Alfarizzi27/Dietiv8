@@ -1,4 +1,4 @@
-const { verifyToken } = require("../helper/jwt");
+const { verifyToken } = require("../helpers/jwt");
 const { User } = require("../models");
 async function authentication(req, res, next) {
   try {
@@ -11,7 +11,7 @@ async function authentication(req, res, next) {
     if (!find) {
       throw { name: "unauthenticated" };
     }
-    req.user = { id: find.id, calorieLimit: find.calorieLimit };
+    req.user = { id: find.id, calorieLimit: find.calorieLimit, extra: find.extra };
     next();
   } catch (error) {
     next(error);

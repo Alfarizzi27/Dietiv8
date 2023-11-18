@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const { User } = require("../models");
 const {createToken,verifyToken} = require('../helpers/jwt')
 const axios = require("axios");
+const getAge = require("../helpers/getAge");
 class UserController {
   static async register(req, res, next) {
     try {
@@ -18,11 +19,8 @@ class UserController {
         extra,
         targetWeight,
       } = req.body;
-      let dob = new Date(dateBirth);
-      let month_diff = new Date() - dob.getTime();
-      let age_dt = new Date(month_diff);
-      let year = age_dt.getUTCFullYear();
-      let age = Math.abs(year - 1970);
+      if(!dateBirth) throw ({name: "age_not_found"})
+      let age = getAge(dateBirth)
       let activitylevel = "";
       if (activityLevel == 1) {
         activitylevel = "level_1";
@@ -37,6 +35,7 @@ class UserController {
       } else if (activityLevel == 6) {
         activitylevel = "level_6";
       }
+      console.log(req.body)
       const options = {
         method: "GET",
         url: "https://fitness-calculator.p.rapidapi.com/dailycalorie",

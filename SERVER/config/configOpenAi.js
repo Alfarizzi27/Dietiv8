@@ -2,11 +2,10 @@
 const OpenAI = require("openai");
 const calorieFunctionDefinition = require("./foodCalorieAi");
 const recomendFunctionDefinition = require("./recomendAi");
-const validatorFunctionDefinition = require("./validFoodDrinkAi")
+const validatorFunctionDefinition = require("./validFoodDrinkAi");
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_SECRET_KEY,
 });
-
 const functionDefinition = [
   calorieFunctionDefinition,
   recomendFunctionDefinition
@@ -28,7 +27,7 @@ async function agent(userInput) {
       content: userInput,
     });
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-1106",
       messages: messages,
       functions: functionDefinition,
     });
