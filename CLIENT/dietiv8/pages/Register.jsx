@@ -16,7 +16,6 @@ export default function Register({coba}) {
   }
 
   useEffect(() => {
-    console.log("test")
     checkLogin()
   }, [])
   return (

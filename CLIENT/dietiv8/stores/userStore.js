@@ -11,6 +11,7 @@ const userStore = create((set, get) => ({
           method: "POST",
           data: userInput,
         });
+        console.log(data, "<<<<<<<<<<<<<<<<<<<")
         await AsyncStorage.setItem("access_token", data.access_token);
     } catch(error) {
         console.log(error)
@@ -18,10 +19,10 @@ const userStore = create((set, get) => ({
   },
   getAccessToken: async () =>{
     try {
-        const jsonToken = await AsyncStorage.getItem("access_token")
-        return jsonToken != null ? JSON.parse(jsonToken) : null
+        const token = await AsyncStorage.getItem("access_token")
+        return token
     } catch(error) {
-
+        console.log(error)
     }
   }
 }));
