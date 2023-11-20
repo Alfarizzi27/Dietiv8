@@ -12,6 +12,7 @@ async function authentication(req, res, next) {
     if (!find) {
       throw { name: "unauthenticated" };
     }
+
     req.user = {
       id: find.id,
       calorieLimit: find.calorieLimit,
@@ -20,8 +21,8 @@ async function authentication(req, res, next) {
       height:find.height,
       dateBirth:find.dateBirth,
       gender:find.gender
+      extra: find.extra
     };
-    console.log('<<<SELESAI AUTHenticatoin');
     next();
   } catch (error) {
     console.log(error);
