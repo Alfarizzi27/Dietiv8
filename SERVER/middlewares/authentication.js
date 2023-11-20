@@ -20,7 +20,7 @@ async function authentication(req, res, next) {
       activityLevel:find.activityLevel,
       height:find.height,
       dateBirth:find.dateBirth,
-      gender:find.gender
+      gender:find.gender,
       extra: find.extra
     };
     next();
