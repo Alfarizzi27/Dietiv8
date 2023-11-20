@@ -33,6 +33,36 @@ class UserController {
         calorieLimit:calorieLimitVal,
         targetWeight,
       });
+
+// Route untuk mengirim email
+// Konfigurasi Nodemailer untuk Mailtrap
+var transporter = nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "6310e64aea615e",
+    pass: "0832e7dbf3b240"
+  }
+});
+const tanggal = req.session.date
+  const mailOptions = {
+    from: 'kiriminEngine@kirimin.com',
+    to: req.session.email
+                    ,
+    subject: 'Registrasi Berhasil',
+    text: `Registrasi anda sudah berhasil pada ${tanggal}`,
+  };
+    transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Email tidak dapat dikirim');
+    } else {
+      return res.redirect('login')
+      // return res.redirect(`/user/${req.session.userId}/profile`)
+
+    }
+  });
+
       return res.status(201).json({
         gender: user.gender,
         username: user.username,
