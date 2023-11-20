@@ -3,6 +3,7 @@ const calorieLimit = require('../helpers/caloryLimit')
 const { User } = require("../models");
 const { createToken, verifyToken } = require("../helpers/jwt");
 const axios = require("axios");
+const getAge = require("../helpers/getAge");
 class UserController {
   static async register(req, res, next) {
     try {

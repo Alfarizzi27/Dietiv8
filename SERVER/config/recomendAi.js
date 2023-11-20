@@ -7,25 +7,25 @@ const recomendFunctionDefinition =  {
             breakfast: {
                 type: "string"
             },
-            calorieBreakfast:{
+            breakfastCalorie:{
                 type: "number"
             },
             lunch: {
                 type: "string"
             },
-            calorieLunch:{
+            lunchCalorie:{
                 type: "number"
             },
             dinner: {
                 type: "string"
             },
-            calorieDinner:{
+            dinnerCalorie:{
                 type: "number"
             },
             snack: {
                 type: "string"
             },
-            calorieSnack:{
+            snackCalorie:{
                 type: "number"
             },
             message: {
