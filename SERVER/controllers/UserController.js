@@ -6,7 +6,6 @@ const axios = require("axios");
 class UserController {
   static async register(req, res, next) {
     try {
-      // let calorieLimit = 0;
       let {
         gender,
         username,

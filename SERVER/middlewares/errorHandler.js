@@ -22,10 +22,7 @@ function errorHandler(err, req, res, next) {
   } else if (err.name === `SequelizeValidationError`) {
     status = 400;
     message = err.errors[0].message;
-  } else if(err.name==='tag_require'){
-    status= 400;
-    message = 'Tag is require'
-  }
+  } 
 
   res.status(status).json({ message });
 }

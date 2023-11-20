@@ -48,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "Password is required" },
           notEmpty: { msg: "Password is required" },
+          
         },
       },
       weight: {
@@ -70,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.DATE,
         validate: {
-          isDate: { msg: "DateBirth must be Date format" },
+          isDate: { msg: "Date Birth must be Date format" },
           notNull: { msg: "Date Birth is required" },
           notEmpty: { msg: "Date Birth is required" },
         },
@@ -98,6 +99,12 @@ module.exports = (sequelize, DataTypes) => {
       hooks: {
         beforeCreate(user, options) {
           user.password = bc.hashSync(user.password);
+        },
+      },validate: {
+        lengthPassword() {
+          if (this.password.length < 5) {
+            throw new Error(`password must be 5 or greater`);
+          }
         },
       },
       sequelize,
