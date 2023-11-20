@@ -83,9 +83,20 @@ class UserController {
     }
   }
 
+   static async userFindById(req, res, next) {
+    const id = req.user.id
+    try {
+      let user = await User.findByPk(id)
+      if(!user){
+      throw{name:'not_found'}
+      }
+      delete user.password
+      return res.status(200).json(user);
+    } catch (err) {
+      next(err);
+    }
+  }
    static async update(req, res, next) {
-    console.log('MASUK UPDATE');
-    // const id= req.params.id
     const id = req.user.id
     try {
       let {
@@ -100,9 +111,7 @@ class UserController {
         extra,
         targetWeight,
       } = req.body;
-      // console.log('user=',req.body,'=== weight ====',req.body.weight);
       let calorieLimitVal = await calorieLimit(req.body,req.body.weight)
-      // console.log(calorieLimitVal,'==CALLIM');
       let user = await User.update({
         gender,
         username,
@@ -116,7 +125,6 @@ class UserController {
         calorieLimit:calorieLimitVal,
         targetWeight,
       },{where:{id}});
-
         const payload = {
         id: id,
         gender: gender,
@@ -137,13 +145,5 @@ class UserController {
     }
   }
 }
-// function test() {
-//   let dob = new Date('2020-01-01')
-//   let month_diff= new Date() - dob.getTime();
-//   let age_dt = new Date(month_diff)
-//   let year = age_dt.getUTCFullYear()
-//   let age = Math.abs(year - 1970);
-// console.log(age);
-// }
-// test();
+
 module.exports = UserController;

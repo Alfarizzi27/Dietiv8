@@ -25,10 +25,10 @@ class HistoryController {
 
   static async findCurrent(req, res, next) {
     try {
-      // const userId = req.user.id
-      const userId = 1;
-      // const calorieLimit = req.user.calorieLimit
-      const calorieLimit = 1400;
+      const userId = req.user.id
+      // const userId = 1;
+      const calorieLimit = req.user.calorieLimit
+      // const calorieLimit = 1400;
       const currentDate = getCurrentDate();
       const [history, created] = await History.findOrCreate({
         where: { day: currentDate, userId },

@@ -1,4 +1,5 @@
 //OPENAI_SECRET_KEY
+require('dotenv').config();
 const OpenAI = require("openai");
 const calorieFunctionDefinition = require("./foodCalorieAi");
 const recomendFunctionDefinition = require("./recomendAi");

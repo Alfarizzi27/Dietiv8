@@ -2,6 +2,7 @@
 function errorHandler(err, req, res, next) {
   let status = 500;
   let message = "Internal Server Error";
+console.log(err,'<<<<ERRORRRRR');
   if (err.name === "unauthenticated" || err.name === "JsonWebTokenError") {
     status = 401;
     message = "Invalid Token";

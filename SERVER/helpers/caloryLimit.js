@@ -6,6 +6,7 @@ async function setCaloryLimit(user, currentWeight) {
   let age_dt = new Date(month_diff);
   let year = age_dt.getUTCFullYear();
   let age = Math.abs(year - 1970);
+  // console.log(user.activityLevel,'<<<<<<<<<<<<<<<<');
   let activitylevel = "";
   if (user.activityLevel == 1) {
     activitylevel = "level_1";
@@ -39,7 +40,7 @@ async function setCaloryLimit(user, currentWeight) {
   try {
     const { data } = await axios(options);
     let calorieLimit = Math.round(data.data.BMR);
-    console.log(calorieLimit);
+    // console.log(calorieLimit);
     return calorieLimit;
   } catch (error) {
     console.log(error);
