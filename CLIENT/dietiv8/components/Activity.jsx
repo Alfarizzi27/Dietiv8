@@ -11,18 +11,26 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { bed, kursi, spatula, nike, ball, dumbell } from "./Image";
+import registerStore from "../stores/registerStore";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Profile() {
+  const setActivityLevel = registerStore((state) => state.setActivityLevel)
   const navigation = useNavigation();
 
   const [level, setLevel] = useState("");
 
   const setLvl = (lvl) => {
+    setActivityLevel(lvl)
     setLevel(lvl)
   };
+
+  function gotoGoals() {
+
+    navigation.navigate("goals")
+  }
 
     // useEffect(() => {
     //   console.log(level, "<<ini level");
@@ -201,12 +209,13 @@ export default function Profile() {
             </View>
           </ScrollView>
           <View style={{ height: 50 }}>
-            <Pressable
+            {level ?  <Pressable
               style={styles.btn}
-              onPress={() => navigation.navigate("goals")}
+              onPress={gotoGoals}
             >
               <Text style={styles.txtBtn}>Continue</Text>
-            </Pressable>
+            </Pressable> : "" }
+           
           </View>
         </View>
       </View>

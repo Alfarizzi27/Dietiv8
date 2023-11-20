@@ -17,9 +17,9 @@ import Gender from "../components/Gender";
 
 export default function MainStack() {
   const Stack = createNativeStackNavigator();
-  const coba = "aahaha"
   return (
     <Stack.Navigator
+    initialRouteName="Register"
       screenOptions={{
         headerTitleStyle: {
           fontWeight: "bold",
@@ -27,14 +27,14 @@ export default function MainStack() {
       }}
     >
       <Stack.Screen
-        name="Splash"
-        component={Splash}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
         name="Register"
         component={Register}
         options={{ headerShown: false, animation: "slide_from_right" }}
+      />
+      <Stack.Screen
+        name="Splash"
+        component={Splash}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Name"

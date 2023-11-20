@@ -8,8 +8,8 @@ export default function App() {
   return (
     <NavigationContainer>
       {/* <Register /> */}
-      {/* <MainStack /> */}
-      <MainTab />
+      <MainStack />
+      {/* <MainTab /> */}
     </NavigationContainer>
   );
 }

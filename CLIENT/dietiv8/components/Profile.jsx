@@ -22,12 +22,12 @@ export default function Profile() {
   const [dob, setDob] = useState("");
   const [dates, setDates] = useState(new Date());
   const [show, setShow] = useState(false);
-  const setWeightStore = registerStore((state) => state.setWeight)
-  const setHeightStore = registerStore((state) => state.setHeight)
-  const setDateBirthStore = registerStore((state) => state.setDateBirth)
-  const setTargetWeightStore = registerStore((state) => state.setTargetWeight)
+  const setWeightStore = registerStore((state) => state.setWeight);
+  const setHeightStore = registerStore((state) => state.setHeight);
+  const setDateBirthStore = registerStore((state) => state.setDateBirth);
+  const setTargetWeightStore = registerStore((state) => state.setTargetWeight);
   const navigation = useNavigation();
-  
+
   const toggleDate = () => {
     setShow(!show);
   };
@@ -41,15 +41,15 @@ export default function Profile() {
 
     return `${day}-${month}-${year}`;
   };
-  
+
   function goToActivity() {
-    setWeightStore(weight)
-    setHeightStore(height)
-    setDateBirthStore(dates)
-    setTargetWeightStore(target)
-    navigation.navigate("activity")
+    setWeightStore(weight);
+    setHeightStore(height);
+    setDateBirthStore(dates);
+    setTargetWeightStore(target);
+    navigation.navigate("activity");
   }
-  
+
   const onChange = ({ type }, selectedDate) => {
     if (type == "set") {
       const currentDate = selectedDate;
@@ -58,6 +58,12 @@ export default function Profile() {
       toggleDate();
     }
   };
+
+  function validator() {
+    if (weight && height && target && dob) {
+      return dob;
+    }
+  }
 
   return (
     <>
@@ -78,7 +84,16 @@ export default function Profile() {
                   disableFullscreenUI={true}
                   inputMode="numeric"
                 />
-                <Text style={{ marginLeft: -15, fontWeight: "400", position: "relative", paddingLeft: "1%" }}>kg</Text>
+                <Text
+                  style={{
+                    marginLeft: -15,
+                    fontWeight: "400",
+                    position: "relative",
+                    paddingLeft: "1%",
+                  }}
+                >
+                  kg
+                </Text>
               </View>
             </View>
             <View style={styles.weight}>
@@ -130,12 +145,13 @@ export default function Profile() {
             )}
           </View>
           <View>
-            <Pressable
-              style={styles.btn}
-              onPress={goToActivity}
-            >
-              <Text style={styles.txtBtn}>Continue</Text>
-            </Pressable>
+            {validator() ? (
+              <Pressable style={styles.btn} onPress={goToActivity}>
+                <Text style={styles.txtBtn}>Continue</Text>
+              </Pressable>
+            ) : (
+              ""
+            )}
           </View>
         </View>
       </View>
@@ -191,14 +207,12 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontWeight: "500",
   },
-  inputTitle: { 
-    fontWeight: "500", 
+  inputTitle: {
+    fontWeight: "500",
     position: "absolute",
-    paddingLeft: 15,  
+    paddingLeft: 15,
   },
-  inputBack: {
-
-  },
+  inputBack: {},
   txtBtn: {
     color: "white",
     fontSize: 22,

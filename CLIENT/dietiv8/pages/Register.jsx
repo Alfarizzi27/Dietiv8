@@ -3,9 +3,22 @@ import { dietModel } from "../components/Image";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import userStore from "../stores/userStore";
+import { useEffect } from "react";
 
 export default function Register({coba}) {
   const navigation = useNavigation();
+  const getAccessToken = userStore((state) => state.getAccessToken)
+  
+  async function checkLogin() {
+    const access = await getAccessToken()
+    console.log(access)
+  }
+
+  useEffect(() => {
+    console.log("test")
+    checkLogin()
+  }, [])
   return (
     <>
       <View style={styles.container}>
