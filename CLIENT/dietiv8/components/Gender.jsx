@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { male, female, malee, femalee } from "./Image";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -20,33 +20,18 @@ export default function Gender() {
   const navigation = useNavigation();
   const [colors, setColors] = useState("#d9d9d9");
   const [colors2, setColors2] = useState("#d9d9d9");
-  const [colors3, setColors3] = useState("#d9d9d9");
   const [textColor, setTextColor] = useState("black");
   const [textColor2, setTextColor2] = useState("black");
-  const [textColor3, setTextColor3] = useState("black");
 
   const change = (lvl) => {
     if (lvl === 1) {
-      setColors("#850c20");
+      setColors("#adadad");
       setColors2("#d9d9d9");
-      setColors3("#d9d9d9");
-      setTextColor("white");
       setTextColor2("black");
-      setTextColor3("black");
     } else if (lvl === 2) {
-      setColors2("#b36902");
+      setColors2("#adadad");
       setColors("#d9d9d9");
-      setColors3("#d9d9d9");
       setTextColor("black");
-      setTextColor2("white");
-      setTextColor3("black");
-    } else {
-      setColors3("#0c7a22");
-      setColors("#d9d9d9");
-      setColors2("#d9d9d9");
-      setTextColor("black");
-      setTextColor2("black");
-      setTextColor3("white");
     }
   };
 
@@ -68,21 +53,36 @@ export default function Gender() {
               }}
             >
               <View style={styles.activity}>
-                <View style={styles.icon}>
-                  <MaterialCommunityIcons
-                    name="snail"
-                    size={26}
-                    color="#ff4538"
-                  />
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View style={styles.icon}>
+                    <FontAwesome5 name="male" size={28} color="#092342" />
+                  </View>
+                  <View>
+                    <Text
+                      style={{
+                        fontWeight: "600",
+                        color: textColor,
+                        fontSize: 20,
+                      }}
+                    >
+                      Male
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={{ fontWeight: "600", color: textColor }}>
-                    Unhurried
-                  </Text>
-                  <Text style={{ fontWeight: "400", color: textColor }}>
-                    Smaller changes, slower pace
-                  </Text>
-                </View>
+                <Image
+                  source={male}
+                  style={{
+                    height: 85,
+                    width: 82,
+                    marginRight: -20,
+                    transform: [{ rotate: "-90deg" }],
+                  }}
+                ></Image>
               </View>
             </Pressable>
 
@@ -93,42 +93,36 @@ export default function Gender() {
               }}
             >
               <View style={styles.activity}>
-                <View style={[styles.icon, { backgroundColor: "#ffebd9" }]}>
-                  <FontAwesome5 name="cat" size={24} color="#ff9430" />
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <View style={[styles.icon, { backgroundColor: "#ffe6ea" }]}>
+                    <FontAwesome5 name="female" size={28} color="#c14c5f" />
+                  </View>
+                  <View>
+                    <Text
+                      style={{
+                        fontWeight: "600",
+                        color: textColor2,
+                        fontSize: 20,
+                      }}
+                    >
+                      Male
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={{ fontWeight: "500", color: textColor2 }}>
-                    Progressive
-                  </Text>
-                  <Text style={{ fontWeight: "400", color: textColor2 }}>
-                    Moderate and sustainable pace
-                  </Text>
-                </View>
-              </View>
-            </Pressable>
-
-            <Pressable
-              style={[styles.weight, { backgroundColor: colors3 }]}
-              onPress={() => {
-                change(3);
-              }}
-            >
-              <View style={styles.activity}>
-                <View style={[styles.icon, { backgroundColor: "#f3fff2" }]}>
-                  <MaterialCommunityIcons
-                    name="horse-variant-fast"
-                    size={25}
-                    color="#55a64e"
-                  />
-                </View>
-                <View>
-                  <Text style={{ fontWeight: "500", color: textColor3 }}>
-                    Agressive
-                  </Text>
-                  <Text style={{ fontWeight: "400", color: textColor3 }}>
-                    Bigger changes, quicker results
-                  </Text>
-                </View>
+                <Image
+                  source={female}
+                  style={{
+                    height: 87,
+                    width: 64,
+                    marginRight: -10,
+                    transform: [{ rotate: "-220deg" }],
+                  }}
+                ></Image>
               </View>
             </Pressable>
           </View>
@@ -167,7 +161,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     height: 80,
     paddingLeft: 10,
-    paddingRight: 10,
     borderRadius: 7,
     padding: 5,
     justifyContent: "center",
@@ -205,12 +198,13 @@ const styles = StyleSheet.create({
   activity: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     height: 90,
   },
   icon: {
     height: 45,
     width: 45,
-    backgroundColor: "#ffdbd9",
+    backgroundColor: "#ebf4ff",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
