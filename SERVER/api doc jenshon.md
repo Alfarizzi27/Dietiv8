@@ -208,21 +208,17 @@ _200 - OK_
     "userId": "integer",
     "createdAt": "date",
     "updatedAt": "date",
-    "FoodEatens": [
+    "Food": [
         {
             "id": "integer",
-            "historyId": "integer",
-            "foodId": "integer",
-            "createdAt": "2023-11-18T11:00:30.544Z",
-            "updatedAt": "2023-11-18T11:00:30.544Z",
-            "Food": {
-                "id": "integer",
-                "name": "string",
-                "calorie": "integer",
-                "createdAt": "date",
-                "updatedAt": "date"
-            }
-        }        
+            "name": "string",
+            "calorie": "integer",
+            "createdAt": "date",
+            "updatedAt": "date"
+        },
+        {
+            ...
+        }    
     ],
     "Menu": {
         "id": "integer",

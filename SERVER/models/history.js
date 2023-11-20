@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       History.hasMany(models.FoodEaten,{foreignKey:'historyId'})
       History.hasOne(models.Menu,{foreignKey:'historyId'})
       History.belongsTo(models.User,{foreignKey:'userId'})
+      History.belongsToMany(models.Food, { through: models.FoodEaten, foreignKey: "historyId"})
     }
   }
   History.init({

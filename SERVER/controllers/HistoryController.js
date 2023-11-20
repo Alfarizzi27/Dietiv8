@@ -32,15 +32,7 @@ class HistoryController {
       const currentDate = getCurrentDate();
       const [history, created] = await History.findOrCreate({
         where: { day: currentDate, userId },
-        include: [
-          {
-            model: FoodEaten,
-            include: Food,
-          },
-          {
-            model: Menu,
-          },
-        ],
+        include: [Food, Menu],
         defaults: {
           calorieLimit,
           day: currentDate,
@@ -55,6 +47,7 @@ class HistoryController {
         res.status(200).json(history);
       }
     } catch (error) {
+      return res.json(error)
       next(error);
     }
   }
