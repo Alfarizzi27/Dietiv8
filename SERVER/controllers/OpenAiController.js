@@ -2,10 +2,10 @@ const agent = require("../config/configOpenAi")
 class OpenAiController {
     static async getMenu(req, res, next) {
         try {
-            // const { caloryLimit, extra } = req.user
-            const caloryLimit = 1400
-            const extra = ""
-            let promtRec = `Get indonesia menu food for 1 day with calorie limit ${caloryLimit}`
+            const { calorieLimit, extra } = req.user
+            // const caloryLimit = 1400
+            // const extra = ""
+            let promtRec = `Get indonesia menu food for 1 day with calorie limit ${calorieLimit}`
             if(extra) promtRec += `With Restriction ${extra}`
             const menuRec = await agent(promtRec)
             res.status(201).json(menuRec)
