@@ -7,7 +7,6 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import Calendar from "react-native-calendar-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";

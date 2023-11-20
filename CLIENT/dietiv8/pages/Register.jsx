@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import { dietModel } from "../components/Image";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -65,6 +65,7 @@ export default function Register() {
                   Already have an account?{" "}
                   <Text
                     style={{ color: "blue", textDecorationLine: "underline" }}
+                    onPress={() => navigation.navigate("Login")}
                   >
                     Log in
                   </Text>
