@@ -9,13 +9,18 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
-
+import registerStore from "../stores/registerStore";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Password() {
   const [text, onChangeText] = useState("");
   const navigation = useNavigation();
+  const setPassword = registerStore((state) => state.setPassword)
+  function goToMotivation() {
+    setPassword(text)
+    navigation.navigate("motivation")
+  }
   return (
     <>
       <View style={styles.container}>
@@ -34,7 +39,7 @@ export default function Password() {
         {text && (
           <Pressable
             style={styles.button}
-            onPress={() => navigation.navigate("motivation")}
+            onPress={goToMotivation}
           >
             <Text
               style={{

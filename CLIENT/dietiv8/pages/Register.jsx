@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Register() {
+export default function Register({coba}) {
   const navigation = useNavigation();
   return (
     <>

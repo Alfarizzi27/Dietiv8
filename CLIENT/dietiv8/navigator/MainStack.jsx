@@ -13,9 +13,11 @@ import Activity from "../components/Activity";
 import Goals from "../components/Goals";
 import Gender from "../components/Gender";
 
+
+
 export default function MainStack() {
   const Stack = createNativeStackNavigator();
-
+  const coba = "aahaha"
   return (
     <Stack.Navigator
       screenOptions={{
@@ -40,6 +42,7 @@ export default function MainStack() {
         options={{
           headerShown: false,
           animation: "slide_from_bottom",
+          
         }}
       />
       <Stack.Screen

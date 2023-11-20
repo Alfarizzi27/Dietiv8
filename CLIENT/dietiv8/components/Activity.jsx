@@ -21,12 +21,12 @@ export default function Profile() {
   const [level, setLevel] = useState("");
 
   const setLvl = (lvl) => {
-    console.log(lvl);
+    setLevel(lvl)
   };
 
-  //   useEffect(() => {
-  //     console.log(level, "<<ini level");
-  //   }, []);
+    // useEffect(() => {
+    //   console.log(level, "<<ini level");
+    // }, ["level"]);
 
   return (
     <>
@@ -48,13 +48,13 @@ export default function Profile() {
           <ScrollView>
             <View>
               <Pressable
-                style={styles.weight}
-                onPress={() => setLvl("level_1")}
+                style={level === 1 ? styles.selectedButton : styles.weight}
+                onPress={() => setLvl(1)}
               >
                 <View style={styles.activity}>
                   <View>
-                    <Text style={{ fontWeight: "500" }}>Level 1</Text>
-                    <Text style={{ fontWeight: "400", color: "grey" }}>
+                    <Text style={level === 1 ? styles.selectedText : styles.textTitle}>Level 1</Text>
+                    <Text style={level === 1 ? styles.descSelected : styles.desc}>
                       Sedentary: little or no exercise
                     </Text>
                   </View>
@@ -73,13 +73,13 @@ export default function Profile() {
               </Pressable>
 
               <Pressable
-                style={styles.weight}
-                onPress={() => setLvl("level_2")}
+                style={level === 2 ? styles.selectedButton : styles.weight}
+                onPress={() => setLvl(2)}
               >
                 <View style={styles.activity}>
                   <View>
-                    <Text style={{ fontWeight: "500" }}>Level 2</Text>
-                    <Text style={{ fontWeight: "400", color: "grey" }}>
+                  <Text style={level === 2 ? styles.selectedText : styles.textTitle}>Level 2</Text>
+                    <Text style={level === 2 ? styles.descSelected : styles.desc}>
                       Exercise 1-3 times/week
                     </Text>
                   </View>
@@ -97,13 +97,13 @@ export default function Profile() {
               </Pressable>
 
               <Pressable
-                style={styles.weight}
-                onPress={() => setLvl("level_3")}
+                style={level === 3 ? styles.selectedButton : styles.weight}
+                onPress={() => setLvl(3)}
               >
                 <View style={styles.activity}>
                   <View>
-                    <Text style={{ fontWeight: "500" }}>Level 3</Text>
-                    <Text style={{ fontWeight: "400", color: "grey" }}>
+                  <Text style={level === 3 ? styles.selectedText : styles.textTitle}>Level 3</Text>
+                    <Text style={level === 3 ? styles.descSelected : styles.desc}>
                       Exercise 4-5 times/week
                     </Text>
                   </View>
@@ -121,16 +121,16 @@ export default function Profile() {
               </Pressable>
 
               <Pressable
-                style={styles.weight}
-                onPress={() => setLvl("level_4")}
+                style={level === 4 ? styles.selectedButton : styles.weight}
+                onPress={() => setLvl(4)}
               >
                 <View style={styles.activity}>
                   <View>
-                    <Text style={{ fontWeight: "500" }}>Level 4</Text>
-                    <Text style={{ fontWeight: "400", color: "grey" }}>
+                  <Text style={level === 4 ? styles.selectedText : styles.textTitle}>Level 4</Text>
+                    <Text style={level === 4 ? styles.descSelected : styles.desc}>
                       Daily exercise or intense exercise
                     </Text>
-                    <Text style={{ fontWeight: "400", color: "grey" }}>
+                    <Text style={level === 4 ? styles.descSelected : styles.desc}>
                       3-4 times/week
                     </Text>
                   </View>
@@ -149,13 +149,13 @@ export default function Profile() {
               </Pressable>
 
               <Pressable
-                style={styles.weight}
-                onPress={() => setLvl("level_5")}
+                style={level === 5 ? styles.selectedButton : styles.weight}
+                onPress={() => setLvl(5)}
               >
                 <View style={styles.activity}>
                   <View>
-                    <Text style={{ fontWeight: "500" }}>Level 5</Text>
-                    <Text style={{ fontWeight: "400", color: "grey" }}>
+                  <Text style={level === 5 ? styles.selectedText : styles.textTitle}>Level 5</Text>
+                    <Text style={level === 5 ? styles.descSelected : styles.desc}>
                       Intense exercise 6-7 times/week
                     </Text>
                   </View>
@@ -173,16 +173,16 @@ export default function Profile() {
               </Pressable>
 
               <Pressable
-                style={styles.weight}
-                onPress={() => setLvl("level_6")}
+                style={level === 6 ? styles.selectedButton : styles.weight}
+                onPress={() => setLvl(6)}
               >
                 <View style={styles.activity}>
                   <View>
-                    <Text style={{ fontWeight: "500" }}>Level 6</Text>
-                    <Text style={{ fontWeight: "400", color: "grey" }}>
+                  <Text style={level === 6 ? styles.selectedText : styles.textTitle}>Level 6</Text>
+                    <Text style={level === 6 ? styles.descSelected : styles.desc}>
                       Very intense exercise daily,
                     </Text>
-                    <Text style={{ fontWeight: "400", color: "grey" }}>
+                    <Text style={level === 6 ? styles.descSelected : styles.desc}>
                       or physical job
                     </Text>
                   </View>
@@ -280,4 +280,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 90,
   },
+  selectedButton: {
+    marginTop: 20,
+    backgroundColor: "#0c7a22",
+    height: 80,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 7,
+    padding: 5,
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  selectedText: {
+    color: "white",
+    fontWeight: "500"
+  },
+  textTitle: {
+    fontWeight: "500"
+  },
+  desc: {
+    fontWeight: "400",
+    color: "grey"
+  },
+  descSelected: {
+    fontWeight: "400", 
+    color: "lightgrey"
+  }
 });
