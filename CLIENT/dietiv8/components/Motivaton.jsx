@@ -126,15 +126,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textAlign: "center",
   },
-  button: {
-    height: 60,
-    marginTop: 90,
-    width: windowWidth - 70,
-    backgroundColor: "#88bd1e",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 15,
-  },
   cardSad: {
     marginTop: 50,
     marginRight: -7,
@@ -183,7 +174,7 @@ const styles = StyleSheet.create({
     width: 90,
   },
   btn: {
-    marginTop: 70,
+    marginTop: 60,
     width: windowWidth - 40,
     height: 60,
     backgroundColor: "#55a64e",

@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import MainStack from "./MainStack";
+// import MainStack from "./MainStack";
 import Register from "../pages/Register";
 import Home from "../pages/Home";
 import MealPlan from "../pages/MealPlan";
