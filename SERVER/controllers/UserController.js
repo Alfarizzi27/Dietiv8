@@ -7,7 +7,6 @@ const getAge = require("../helpers/getAge");
 class UserController {
   static async register(req, res, next) {
     try {
-      // let calorieLimit = 0;
       let {
         gender,
         username,

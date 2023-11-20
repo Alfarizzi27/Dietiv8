@@ -1,9 +1,7 @@
 
 function errorHandler(err, req, res, next) {
-  console.log(err,'ERRORR');
   let status = 500;
   let message = "Internal Server Error";
-//   console.log(err)
   if (err.name === "unauthenticated" || err.name === "JsonWebTokenError") {
     status = 401;
     message = "Invalid Token";
@@ -22,10 +20,8 @@ function errorHandler(err, req, res, next) {
   } else if (err.name === `SequelizeValidationError`) {
     status = 400;
     message = err.errors[0].message;
-  } else if(err.name==='tag_require'){
-    status= 400;
-    message = 'Tag is require'
-  } else if (err.name === "menu_not_found") {
+  } 
+   else if (err.name === "menu_not_found") {
     status = 404
     message = "Menu Recommendation Is Empty Try Create One"
   } else if (err.name === "history_not_found") {
