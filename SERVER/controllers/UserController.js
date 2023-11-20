@@ -1,12 +1,13 @@
 const bcrypt = require("bcryptjs");
+const calorieLimit = require('../helpers/caloryLimit')
 const { User } = require("../models");
-const {createToken,verifyToken} = require('../helpers/jwt')
+const { createToken, verifyToken } = require("../helpers/jwt");
 const axios = require("axios");
 const getAge = require("../helpers/getAge");
 class UserController {
   static async register(req, res, next) {
     try {
-      let calorieLimit = 0;
+      // let calorieLimit = 0;
       let {
         gender,
         username,
@@ -19,46 +20,7 @@ class UserController {
         extra,
         targetWeight,
       } = req.body;
-      if(!dateBirth) throw ({name: "age_not_found"})
-      let age = getAge(dateBirth)
-      let activitylevel = "";
-      if (activityLevel == 1) {
-        activitylevel = "level_1";
-      } else if (activityLevel == 2) {
-        activitylevel = "level_2";
-      } else if (activityLevel == 3) {
-        activitylevel = "level_3";
-      } else if (activityLevel == 4) {
-        activitylevel = "level_4";
-      } else if (activityLevel == 5) {
-        activitylevel = "level_5";
-      } else if (activityLevel == 6) {
-        activitylevel = "level_6";
-      }
-      console.log(req.body)
-      const options = {
-        method: "GET",
-        url: "https://fitness-calculator.p.rapidapi.com/dailycalorie",
-        params: {
-          age: age,
-          gender: gender,
-          height: height,
-          weight: weight,
-          activitylevel: activitylevel,
-        },
-        headers: {
-          "X-RapidAPI-Key":
-            "665ed1e6f9msh6d85de1ba97e8adp1c24b6jsn6a9bcfc0b7f8",
-          "X-RapidAPI-Host": "fitness-calculator.p.rapidapi.com",
-        },
-      };
-      try {
-        const { data } = await axios.request(options);
-        calorieLimit = Math.round(data.data.BMR);
-        console.log(calorieLimit);
-      } catch (error) {
-        next(error);
-      }
+      let calorieLimitVal = await calorieLimit(req.body,req.body.weight)
       let user = await User.create({
         gender,
         username,
@@ -69,21 +31,19 @@ class UserController {
         dateBirth,
         activityLevel,
         extra,
-        calorieLimit,
+        calorieLimit:calorieLimitVal,
         targetWeight,
       });
-      return res
-        .status(201)
-        .json({
-          gender: user.gender,
-          username: user.username,
-          email: user.email,
-          weight: user.weight,
-          height: user.height,
-          extra: user.extra,
-          calorieLimit: user.calorieLimit,
-          targetWeight: user.targetWeight,
-        });
+      return res.status(201).json({
+        gender: user.gender,
+        username: user.username,
+        email: user.email,
+        weight: user.weight,
+        height: user.height,
+        extra: user.extra,
+        calorieLimit: user.calorieLimit,
+        targetWeight: user.targetWeight,
+      });
     } catch (err) {
       next(err);
     }
@@ -104,7 +64,8 @@ class UserController {
         throw { name: "invalid_email_password" };
       }
 
-          const payload = {id:user.id,
+      const payload = {
+        id: user.id,
         gender: user.gender,
         username: user.username,
         email: user.email,
@@ -112,11 +73,68 @@ class UserController {
         height: user.height,
         extra: user.extra,
         calorieLimit: user.calorieLimit,
-        targetWeight: user.targetWeight, };
-          const token = createToken(payload, process.env.SECRET);
-          return res.status(200).json({ access_token: token});
+        targetWeight: user.targetWeight,
+        activityLevel: user.activityLevel,
+        dateBirth:user.dateBirth
+      };
+      const token = createToken(payload, process.env.SECRET);
+      return res.status(200).json({ access_token: token });
     } catch (error) {
       next(error);
+    }
+  }
+
+   static async update(req, res, next) {
+    console.log('MASUK UPDATE');
+    // const id= req.params.id
+    const id = req.user.id
+    try {
+      let {
+        gender,
+        username,
+        email,
+        password,
+        weight,
+        height,
+        dateBirth,
+        activityLevel,
+        extra,
+        targetWeight,
+      } = req.body;
+      // console.log('user=',req.body,'=== weight ====',req.body.weight);
+      let calorieLimitVal = await calorieLimit(req.body,req.body.weight)
+      // console.log(calorieLimitVal,'==CALLIM');
+      let user = await User.update({
+        gender,
+        username,
+        email,
+        password:bcrypt.hashSync(password),
+        weight,
+        height,
+        dateBirth,
+        activityLevel,
+        extra,
+        calorieLimit:calorieLimitVal,
+        targetWeight,
+      },{where:{id}});
+
+        const payload = {
+        id: id,
+        gender: gender,
+        username: username,
+        email: email,
+        weight: weight,
+        height: height,
+        extra: extra,
+        calorieLimit: calorieLimitVal,
+        targetWeight: targetWeight,
+        activityLevel: activityLevel,
+        dateBirth:dateBirth
+      };
+      const token = createToken(payload, process.env.SECRET);
+      return res.status(200).json({ access_token: token });
+    } catch (err) {
+      next(err);
     }
   }
 }

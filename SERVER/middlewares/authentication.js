@@ -8,14 +8,26 @@ async function authentication(req, res, next) {
     }
     const payload = verifyToken(access_token); // iat = issued at
     const find = await User.findByPk(payload.id);
+    // console.log(find, "<<<<<<<FIN");
     if (!find) {
       throw { name: "unauthenticated" };
     }
-    req.user = { id: find.id, calorieLimit: find.calorieLimit, extra: find.extra };
+
+    req.user = {
+      id: find.id,
+      calorieLimit: find.calorieLimit,
+      weight: find.weight,
+      activityLevel:find.activityLevel,
+      height:find.height,
+      dateBirth:find.dateBirth,
+      gender:find.gender
+      extra: find.extra
+    };
     next();
   } catch (error) {
+    console.log(error);
     next(error);
   }
 }
 
-module.exports = {authentication};
+module.exports = { authentication };

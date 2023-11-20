@@ -6,6 +6,9 @@ List of available endpoints:
 
 - `POST /users/register`
 - `POST /users/login`
+- `PUT /users/:id`
+- `GET /achievements`
+- `POST /achievements`
 - `GET /foods`
 
   &nbsp;
@@ -109,14 +112,7 @@ _Response (200 - OK)_
 
 ```json
 {
-	"gender": "male",
-	"username": "sayabedjo",
-	"email": "sayabedjo@mail.com",
-	"weight": 60,
-	"height": 170,
-	"extra": "diabetes",
-	"calorieLimit": 1538,
-	"targetWeight": "70"
+	"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsImdlbmRlciI6Im1hbGUiLCJ1c2VybmFtZSI6ImFrdW5maXgydXBkYXRlMiIsImVtYWlsIjoiYWt1bmZpeDJ1cGRhdGUyQG1haWwuY29tIiwid2VpZ2h0IjoiNjAiLCJoZWlnaHQiOiIxNzAiLCJleHRyYSI6ImRpYWJldGVzIiwiY2Fsb3JpZUxpbWl0IjoxNTM4LCJ0YXJnZXRXZWlnaHQiOiI3MCIsImFjdGl2aXR5TGV2ZWwiOiIxIiwiZGF0ZUJpcnRoIjoiMTk5Ny0wMS0yNiIsImlhdCI6MTcwMDI3OTUyNX0.wm8B0nnYwohrG6Bxk-n8vC4fA_ITGRiz7bTidjjfs7E"
 }
 ```
 
@@ -130,7 +126,164 @@ _Response (401 - Unauthorized)_
 
 &nbsp;
 
-## 3. GET /foods
+## 3. PUT /users/:id
+
+Description:
+
+- Update user by access token
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+	"username":"akunfix2update2",
+	"gender":"male",
+	"email":"akunfix2update2@mail.com", 
+	"password":"akunfix2update2", 
+	"weight":"60", 
+	"height":"170",
+	"dateBirth":"1997-01-26",
+	"activityLevel":"1",
+	"extra":"diabetes",
+	"targetWeight":"70"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+	"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsImdlbmRlciI6Im1hbGUiLCJ1c2VybmFtZSI6ImFrdW5maXgydXBkYXRlMiIsImVtYWlsIjoiYWt1bmZpeDJ1cGRhdGUyQG1haWwuY29tIiwid2VpZ2h0IjoiNjAiLCJoZWlnaHQiOiIxNzAiLCJleHRyYSI6ImRpYWJldGVzIiwiY2Fsb3JpZUxpbWl0IjoxNTM4LCJ0YXJnZXRXZWlnaHQiOiI3MCIsImFjdGl2aXR5TGV2ZWwiOiIxIiwiZGF0ZUJpcnRoIjoiMTk5Ny0wMS0yNiIsImlhdCI6MTcwMDI3OTUyNX0.wm8B0nnYwohrG6Bxk-n8vC4fA_ITGRiz7bTidjjfs7E"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "data with id 1100 not found"
+}
+```
+
+&nbsp;
+
+## 4. GET /achievements
+
+Description:
+
+- Get Achievements user by access token
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+[
+	{
+		"id": 1,
+		"idUser": 15,
+		"idAchievement": 7,
+		"createdAt": "2023-11-17T10:21:01.462Z",
+		"updatedAt": "2023-11-17T10:21:01.462Z",
+		"Achievement": {
+			"id": 7,
+			"date": null,
+			"weightBefore": 60,
+			"currentWeight": 100,
+			"createdAt": "2023-11-17T10:21:00.144Z",
+			"updatedAt": "2023-11-17T10:21:00.144Z"
+		}
+	},
+	{
+		"id": 2,
+		"idUser": 15,
+		"idAchievement": 8,
+		"createdAt": "2023-11-17T10:22:15.534Z",
+		"updatedAt": "2023-11-17T10:22:15.534Z",
+		"Achievement": {
+			"id": 8,
+			"date": null,
+			"weightBefore": 60,
+			"currentWeight": 90,
+			"createdAt": "2023-11-17T10:22:14.241Z",
+			"updatedAt": "2023-11-17T10:22:14.241Z"
+		}
+	},
+...
+]
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "data with id 1100 not found"
+}
+```
+
+&nbsp;
+
+## 5. POST /achievements
+
+Description:
+
+- Post achievement by access token
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+	"currentWeight":"90"	
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+	"message": "Berhasil Menambahkan Achievement"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "data with id 1100 not found"
+}
+```
+
+&nbsp;
+
+## 6. GET /foods
 
 Description:
 
