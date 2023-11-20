@@ -12,11 +12,7 @@ const fitnesRouter = require("./fitnes");
 router.use("/users", userRoute);
 
 router.use(authentication)
-
-
-
 router.use('/achievements',achievementRouter)
-
 router.use("/foods", foodRoute);
 router.use("/openai", openAiRouter)
 router.use("/histories", historyRouter)
