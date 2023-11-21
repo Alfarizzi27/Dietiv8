@@ -40,6 +40,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
+import userStore from "../stores/userStore";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -60,36 +61,27 @@ const chartConfig = {
   useShadowColorFromDataset: false, // optional
 };
 
-export default function Home() {
-  const [user, setUser] = useState({});
-  const [calorie, setCalorie] = useState({});
-  const [percentageCal, setPercentagecal] = useState(0);
 
-  const baseUrl = "http://13.250.41.248/";
+export default function Home({navigation}) {
+  const [user, setUser] = useState({})
+  const [calorie, setCalorie] = useState({})
+  const [percentageCal, setPercentagecal] = useState(0)
 
-  const dataUser = async () => {
-    const { data } = await axios.get(baseUrl + "users/1", {
-      headers: {
-        access_token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoiSmVuc2hvbiIsImVtYWlsIjoiamVuc2hvbkBtYWlsLmNvbSIsIndlaWdodCI6NjAsImhlaWdodCI6MTYwLCJleHRyYSI6IiIsImNhbG9yaWVMaW1pdCI6MTUzNSwidGFyZ2V0V2VpZ2h0IjoiNTUiLCJhY3Rpdml0eUxldmVsIjoyLCJkYXRlQmlydGgiOiIyMDA5LTA5LTE0VDA5OjE4OjQ4LjE0OVoiLCJpYXQiOjE3MDA1NDA3NjN9.m1s7JdXtX1eeYt830T8WFn9aLUk-zXK0my1X4suq_gk",
-      },
-    });
-    setUser(data);
-  };
+  const baseUrl = "http://13.250.41.248/"
+  const access_token = userStore((state) => state.access_token)
+  
+  const dataUser = async() => {
+    const { data } = await axios.get(baseUrl + "users/1", {headers: {access_token}})
+    setUser(data)
+  }
 
-  const dataCalorie = async () => {
-    const { data } = await axios.get(baseUrl + "histories/now", {
-      headers: {
-        access_token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoiSmVuc2hvbiIsImVtYWlsIjoiamVuc2hvbkBtYWlsLmNvbSIsIndlaWdodCI6NjAsImhlaWdodCI6MTYwLCJleHRyYSI6IiIsImNhbG9yaWVMaW1pdCI6MTUzNSwidGFyZ2V0V2VpZ2h0IjoiNTUiLCJhY3Rpdml0eUxldmVsIjoyLCJkYXRlQmlydGgiOiIyMDA5LTA5LTE0VDA5OjE4OjQ4LjE0OVoiLCJpYXQiOjE3MDA1NDA3NjN9.m1s7JdXtX1eeYt830T8WFn9aLUk-zXK0my1X4suq_gk",
-      },
-    });
-    // console.log(data)
-    const percentage =
-      Math.round((data.calorieGain / data.calorieLimit) * 100) / 100;
-    setPercentagecal(percentage);
-    setCalorie(data);
-  };
+  const dataCalorie = async() => {
+    const { data } = await axios.get(baseUrl + "histories/now", {headers: {access_token}} )
+    const percentage = Math.round((data.calorieGain/data.calorieLimit) * 100) / 100
+    setPercentagecal(percentage)
+    setCalorie(data)
+  }
+
 
   useEffect(() => {
     dataUser();
@@ -97,12 +89,17 @@ export default function Home() {
   }, []);
 
   const touchNutrition = () => {
-    console.log("You touch Nutrition");
-  };
+
+    console.log("You touch Nutrition")
+    navigation.navigate('Recipes')
+  }
 
   const touchWeight = () => {
-    console.log("You touch Weight");
-  };
+    console.log("You touch Weight")
+    navigation.navigate('Graph', {user: user})
+
+  }
+
 
   return (
     <>

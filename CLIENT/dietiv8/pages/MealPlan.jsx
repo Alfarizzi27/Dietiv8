@@ -172,6 +172,7 @@ export default function Home() {
     getRecomend();
     console.log("halaman mealplan <<<<<<<<");
     console.log(usermenu, "<<data usermenu");
+
   }, []);
 
   useEffect(() => {
