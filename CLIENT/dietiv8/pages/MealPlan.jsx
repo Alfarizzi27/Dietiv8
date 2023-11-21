@@ -57,9 +57,13 @@ export default function Home() {
     }
   };
 
-  // useEffect(() => {
-  //   getRecomend();
-  // }, []);
+  const addFood = () => {
+    console.log(food);
+  };
+
+  useEffect(() => {
+    getRecomend();
+  }, []);
 
   return (
     <>
@@ -113,8 +117,9 @@ export default function Home() {
               color: "white",
               marginRight: 10,
             }}
+            onPress={addFood}
           >
-            Add
+            Addd
           </Text>
           <FontAwesome name="spoon" size={24} color="white" />
         </View>
