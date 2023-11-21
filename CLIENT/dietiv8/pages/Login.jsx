@@ -55,7 +55,7 @@ export default function Login() {
           </View>
           <Pressable
             style={styles.button}
-            onPress={() => navigation.navigate("password")}
+            onPress={() => navigation.navigate("maintab")}
           >
             <Text
               style={{

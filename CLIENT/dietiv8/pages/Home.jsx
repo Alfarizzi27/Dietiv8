@@ -55,7 +55,7 @@ export default function Home() {
                 labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
                 datasets: [
                   {
-                    data: [70, 65, 64, 60],
+                    data: [70, 75, 67, 65],
                   },
                 ],
               }}
