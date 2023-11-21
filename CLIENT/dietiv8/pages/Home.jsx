@@ -29,7 +29,6 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { Card } from "@rneui/themed";
-import { ProgressChart } from "react-native-chart-kit";
 import * as Progress from "react-native-progress";
 import axios from 'axios'
 

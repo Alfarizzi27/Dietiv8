@@ -35,7 +35,17 @@ export default function MainTab() {
           tabBarShowLabel: false,
         }}
 
-      />
+      >
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => {
+              return <Entypo name="home" size={size} color={color} />;
+            },
+          }}
+        />
       <Tab.Screen
         name="MealPlan"
         component={MealPlan}
@@ -90,6 +100,6 @@ export default function MainTab() {
         }}
       />
     </Tab.Navigator>
-
+</>
   );
 }
