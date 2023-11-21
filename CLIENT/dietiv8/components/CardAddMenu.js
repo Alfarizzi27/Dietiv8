@@ -1,13 +1,32 @@
 
-import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert} from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {useNavigation} from '@react-navigation/native'
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function CardAddMenus ({id, item}) {
     const [add, setAdd] = useState(false)
+    const navigation = useNavigation()
+    const addAlert = (id, food) => {
+        Alert.alert(`Wanna eat ${food}?`, 'Are you sure?', [
+            {
+                text: "No",
+                onPress: () => console.log('No Pressed'),
+                style: 'cancel'
+            },
+            {
+                text: "I'm sure",
+                onPress: () => {
+                    console.log("I'm sure Pressed", id)
+                    navigation.navigate('Home')
+                }
+            }
+        ])
+    }
     
     const changeHandler = (id) => {
         console.log(id)
@@ -29,14 +48,19 @@ export default function CardAddMenus ({id, item}) {
     }
 
     return (
-        <TouchableOpacity onPress={() => changeHandler(id)}>
+        <TouchableOpacity onPress={() => addAlert(id, item.name)}>
             <View style={styles.card}>
               <View>
                 <Text style={{ fontSize: 20, fontWeight:"500" }}>{item.name}</Text>
                 <Text style={{fontSize: 13}}>{item.calorie} cal</Text>
               </View>
               <View style={{marginRight:0}}>                
-                {addHandler()}
+                {/* {addHandler()} */}
+                <MaterialCommunityIcons
+                  name="food-fork-drink"
+                  size={35}
+                  color="#60935D"
+                />
               </View>
             </View>
         </TouchableOpacity>

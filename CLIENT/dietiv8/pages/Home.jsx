@@ -61,7 +61,7 @@ const chartConfig = {
   useShadowColorFromDataset: false, // optional
 };
 
-export default function Home() {
+export default function Home({navigation}) {
   const [user, setUser] = useState({})
   const [calorie, setCalorie] = useState({})
   const [percentageCal, setPercentagecal] = useState(0)
@@ -88,10 +88,13 @@ export default function Home() {
 
   const touchNutrition = () => {
     console.log("You touch Nutrition")
+    navigation.navigate('Recipes')
   }
 
   const touchWeight = () => {
     console.log("You touch Weight")
+    navigation.navigate('Graph', {user: user})
+
   }
 
   return (

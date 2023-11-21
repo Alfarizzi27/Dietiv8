@@ -16,6 +16,7 @@ import Profile from "../components/Profile";
 import Activity from "../components/Activity";
 import Goals from "../components/Goals";
 import Gender from "../components/Gender";
+import Graph from "../pages/Graph"
 
 
 
@@ -125,6 +126,15 @@ export default function MainStack() {
       <Stack.Screen
         name="Achievement"
         component={Achievement}
+      />
+      <Stack.Screen
+        name="Graph"
+        component={Graph}
+        options={{
+          headerShown: false,
+          animation: "slide_from_bottom",
+          
+        }}
       />
     </Stack.Navigator>
   );
