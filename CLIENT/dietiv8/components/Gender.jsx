@@ -21,8 +21,8 @@ export default function Gender() {
   const navigation = useNavigation();
   const getAll = registerStore((state) => state.getAll);
   const setGender = registerStore((state) => state.setGender);
-  const register = registerStore((state) => state.register)
-  const login = userStore((state) => state.login)
+  const register = registerStore((state) => state.register);
+  const login = userStore((state) => state.login);
   const [colors, setColors] = useState("#d9d9d9");
   const [colors2, setColors2] = useState("#d9d9d9");
   const [textColor, setTextColor] = useState("black");
@@ -40,7 +40,7 @@ export default function Gender() {
       setTextColor("black");
     }
   };
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
   async function goToMainTab() {
     try {
       setGender(gender);
@@ -58,12 +58,15 @@ export default function Gender() {
         gender: state.gender,
       };
       console.log(userRegister);
-      const test = await register(userRegister)
-      await login({email: userRegister.email, password: userRegister.password})
-      navigation.navigate("maintab")
+      const test = await register(userRegister);
+      await login({
+        email: userRegister.email,
+        password: userRegister.password,
+      });
+      navigation.navigate("maintab");
     } catch (error) {
-      setError(error)
-      console.log(error)
+      setError(error);
+      console.log(error.response.data);
     }
   }
 

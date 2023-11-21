@@ -6,6 +6,8 @@ import MealPlan from "../pages/MealPlan";
 import Recipes from "../pages/Recipes";
 import Profile from "../pages/Profile";
 import AddMenus from "../pages/AddMenus";
+import { useEffect } from "react";
+import userStore from "../stores/userStore";
 
 import {
   Entypo,
@@ -16,6 +18,16 @@ import {
 } from "@expo/vector-icons";
 
 export default function MainTab() {
+  const getAcc = userStore((state) => state.getAccessToken);
+  const getHistory = userStore((state) => state.getHistory);
+
+  // async function started() {
+  //   const access_token = await getAcc();
+  //   await getHistory(access_token);
+  // }
+  // useEffect(() => {
+  //   "dasddsa";
+  // }, []);
   const Tab = createBottomTabNavigator();
   return (
     <>
@@ -33,8 +45,8 @@ export default function MainTab() {
           //   fontWeight: 500,
           // },
           tabBarShowLabel: false,
+          unmountOnBlur: true,
         }}
-
       >
         <Tab.Screen
           name="Home"
@@ -46,60 +58,62 @@ export default function MainTab() {
             },
           }}
         />
-      <Tab.Screen
-        name="MealPlan"
-        component={MealPlan}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => {
-            return <Ionicons name="fast-food" size={size} color={color} />;
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Add"
-        component={AddMenus}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => {
-            return <FontAwesome name="plus-square" size={30} color="#81B722" />;
-          },
-          tabBarLabel: "",
-        }}
-      />
-      <Tab.Screen
-        name="Recipes"
-        component={Recipes}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => {
-            return (
-              <MaterialCommunityIcons
-                name="chef-hat"
-                size={size}
-                color={color}
-              />
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => {
-            return (
-              <MaterialCommunityIcons
-                name="account-circle"
-                size={size}
-                color={color}
-              />
-            );
-          },
-        }}
-      />
-    </Tab.Navigator>
-</>
+        <Tab.Screen
+          name="MealPlan"
+          component={MealPlan}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => {
+              return <Ionicons name="fast-food" size={size} color={color} />;
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Add"
+          component={AddMenus}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => {
+              return (
+                <FontAwesome name="plus-square" size={30} color="#81B722" />
+              );
+            },
+            tabBarLabel: "",
+          }}
+        />
+        <Tab.Screen
+          name="Recipes"
+          component={Recipes}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => {
+              return (
+                <MaterialCommunityIcons
+                  name="chef-hat"
+                  size={size}
+                  color={color}
+                />
+              );
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => {
+              return (
+                <MaterialCommunityIcons
+                  name="account-circle"
+                  size={size}
+                  color={color}
+                />
+              );
+            },
+          }}
+        />
+      </Tab.Navigator>
+    </>
   );
 }

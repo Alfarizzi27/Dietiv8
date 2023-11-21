@@ -30,8 +30,7 @@ import {
 } from "react-native-safe-area-context";
 import { Card } from "@rneui/themed";
 import * as Progress from "react-native-progress";
-import axios from 'axios'
-
+import axios from "axios";
 
 import { FontAwesome } from "@expo/vector-icons";
 import Body from "../components/Body";
@@ -62,6 +61,7 @@ const chartConfig = {
   useShadowColorFromDataset: false, // optional
 };
 
+
 export default function Home({navigation}) {
   const [user, setUser] = useState({})
   const [calorie, setCalorie] = useState({})
@@ -82,12 +82,14 @@ export default function Home({navigation}) {
     setCalorie(data)
   }
 
+
   useEffect(() => {
-    dataUser()
-    dataCalorie()
-  }, [])
+    dataUser();
+    dataCalorie();
+  }, []);
 
   const touchNutrition = () => {
+
     console.log("You touch Nutrition")
     navigation.navigate('Recipes')
   }
@@ -98,9 +100,10 @@ export default function Home({navigation}) {
 
   }
 
+
   return (
     <>
-      <View style={{flex: 1, backgroundColor: "#F7F7F7"}}>
+      <View style={{ flex: 1, backgroundColor: "#F7F7F7" }}>
         <SafeAreaView style={styles.container}>
           {/* Header */}
           <View style={styles.header}>
@@ -114,7 +117,7 @@ export default function Home({navigation}) {
               source={require("../assets/BackgroundProfile.png")}
               style={{
                 flex: 1.7,
-                width: windowWidth * 0.90,
+                width: windowWidth * 0.9,
                 alignItems: "center",
               }}
               borderRadius={20}
@@ -127,25 +130,59 @@ export default function Home({navigation}) {
                   marginTop: 0,
                   backgroundColor: "transparent",
                   shadowColor: "transparent",
-                  width: windowWidth * 0.90,
+                  width: windowWidth * 0.9,
                   alignItems: "center",
                 }}
-                wrapperStyle={{ backgroundColor: "transparent", width: windowWidth * 0.95, padding:20 }}
+                wrapperStyle={{
+                  backgroundColor: "transparent",
+                  width: windowWidth * 0.95,
+                  padding: 20,
+                }}
               >
                 <View style={{ marginVertical: 10, marginHorizontal: 8 }}>
-                  <Text style={{color:"white", fontWeight:"600", fontSize: 30}}>Feeling Better!</Text>
-                  <Text style={{color:"white"}}>Keep you healthy life with</Text>
-                  <Text style={{color:"white"}}>healthy food!</Text>
+                  <Text
+                    style={{ color: "white", fontWeight: "600", fontSize: 30 }}
+                  >
+                    Feeling Better!
+                  </Text>
+                  <Text style={{ color: "white" }}>
+                    Keep you healthy life with
+                  </Text>
+                  <Text style={{ color: "white" }}>healthy food!</Text>
                 </View>
 
-                <View style={{ flexDirection: "row", marginVertical: 10, marginHorizontal:8 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginVertical: 10,
+                    marginHorizontal: 8,
+                  }}
+                >
                   <View style={{ marginRight: 10 }}>
-                    <Text style={{color:"white", fontWeight:"600", fontSize: 20}}>{user.targetWeight}<Text style={{fontSize: 15}}>kg</Text></Text>
-                    <Text style={{color:"white"}}>Target Weight</Text>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: 20,
+                      }}
+                    >
+                      {user.targetWeight}
+                      <Text style={{ fontSize: 15 }}>kg</Text>
+                    </Text>
+                    <Text style={{ color: "white" }}>Target Weight</Text>
                   </View>
                   <View>
-                    <Text style={{color:"white", fontWeight:"600", fontSize: 20}}>{user.calorieLimit}<Text style={{fontSize: 15}}>cal</Text></Text>
-                    <Text style={{color:"white"}}>Calories Limit</Text>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: 20,
+                      }}
+                    >
+                      {user.calorieLimit}
+                      <Text style={{ fontSize: 15 }}>cal</Text>
+                    </Text>
+                    <Text style={{ color: "white" }}>Calories Limit</Text>
                   </View>
                 </View>
               </Card>
@@ -154,132 +191,143 @@ export default function Home({navigation}) {
 
           {/* Nutrition */}
           <View style={styles.nutrition}>
-            <View style={{ width: windowWidth * 0.8, marginLeft: 15, marginBottom:-10 }}>
+            <View
+              style={{
+                width: windowWidth * 0.8,
+                marginLeft: 15,
+                marginBottom: -10,
+              }}
+            >
               <Text style={{ fontSize: 18, fontWeight: "500" }}>Nutrition</Text>
             </View>
-          <Pressable onPress={()=>touchNutrition()}>
-            <Card
-              containerStyle={{
-                borderRadius: 20,
-                marginBottom: 0,
-                marginHorizontal: 10,
-              }}
-              wrapperStyle={{ height: windowHeight * 0.13 }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "start",
-                  alignItems: "center",
-                  height: windowHeight * 0.2,
-                  flex: 1,
+            <Pressable onPress={() => touchNutrition()}>
+              <Card
+                containerStyle={{
+                  borderRadius: 20,
+                  marginBottom: 0,
+                  marginHorizontal: 10,
                 }}
+                wrapperStyle={{ height: windowHeight * 0.13 }}
               >
-                <View style={{ flex: 1.5, alignItems: "center" }}>
-                  <Progress.Pie
-                    progress={percentageCal}
-                    size={90}
-                    borderWidth={2}
-                    color="#60935D"
-                  />
-                </View>
                 <View
                   style={{
-                    flex: 3,
                     flexDirection: "row",
-                    justifyContent: "space-between",
+                    justifyContent: "start",
+                    alignItems: "center",
+                    height: windowHeight * 0.2,
+                    flex: 1,
                   }}
                 >
-                  <View>
-                    <Text style={{ fontSize: 18, fontWeight: "500" }}>
-                      {calorie.calorieGain} of {calorie.calorieLimit}
-                    </Text>
-                    <Text style={{ color: "grey", fontSize: 10 }}>
-                      Cal Eaten
-                    </Text>
+                  <View style={{ flex: 1.5, alignItems: "center" }}>
+                    <Progress.Pie
+                      progress={percentageCal}
+                      size={90}
+                      borderWidth={2}
+                      color="#60935D"
+                    />
                   </View>
                   <View
                     style={{
-                      backgroundColor: "#60935D",
-                      marginRight: 20,
-                      width: 30,
-                      height: 30,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 50,
+                      flex: 3,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <Foundation name="graph-bar" size={20} color="white" />
+                    <View>
+                      <Text style={{ fontSize: 18, fontWeight: "500" }}>
+                        {calorie.calorieGain} of {calorie.calorieLimit}
+                      </Text>
+                      <Text style={{ color: "grey", fontSize: 10 }}>
+                        Cal Eaten
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        backgroundColor: "#60935D",
+                        marginRight: 20,
+                        width: 30,
+                        height: 30,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 50,
+                      }}
+                    >
+                      <Foundation name="graph-bar" size={20} color="white" />
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Card>
+              </Card>
             </Pressable>
           </View>
           {/* Weight */}
           <View style={styles.weight}>
-          <View style={{ width: windowWidth * 0.8, marginLeft: 15, marginBottom:-10 }}>
-              <Text style={{ fontSize: 18, fontWeight: "500" }}>Weight</Text>
-
-            </View>
-            <Pressable onPress={()=>touchWeight()}>
-            <Card
-              containerStyle={{
-                borderRadius: 20,
-                marginBottom: 0,
-                marginHorizontal: 10,
+            <View
+              style={{
+                width: windowWidth * 0.8,
+                marginLeft: 15,
+                marginBottom: -10,
               }}
-              wrapperStyle={{ height: windowHeight * 0.13 }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "start",
-                  alignItems: "center",
-                  height: windowHeight * 0.2,
-                  flex: 1,
+              <Text style={{ fontSize: 18, fontWeight: "500" }}>Weight</Text>
+            </View>
+            <Pressable onPress={() => touchWeight()}>
+              <Card
+                containerStyle={{
+                  borderRadius: 20,
+                  marginBottom: 0,
+                  marginHorizontal: 10,
                 }}
+                wrapperStyle={{ height: windowHeight * 0.13 }}
               >
-                <View style={{ flex: 1.5, alignItems: "center" }}>
-                  <FontAwesome5 name="weight" size={50} color="purple" />
-                </View>
                 <View
                   style={{
-                    flex: 3,
                     flexDirection: "row",
-                    justifyContent: "space-between",
+                    justifyContent: "start",
+                    alignItems: "center",
+                    height: windowHeight * 0.2,
+                    flex: 1,
                   }}
                 >
-                  <View>
-                    <View>
-                      <Text style={{ fontSize: 20, fontWeight: "500" }}>
-                        {user.weight} <Text style={{ fontSize: 15 }}>kg</Text>
-                      </Text>
-                    </View>
-                    <Text style={{ color: "grey", fontSize: 10 }}>
-                      Loss {user.weight - user.targetWeight} kg
-                    </Text>
+                  <View style={{ flex: 1.5, alignItems: "center" }}>
+                    <FontAwesome5 name="weight" size={50} color="purple" />
                   </View>
                   <View
                     style={{
-                      backgroundColor: "purple",
-                      marginRight: 20,
-                      width: 30,
-                      height: 30,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 50,
+                      flex: 3,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <MaterialCommunityIcons
-                      name="weight-kilogram"
-                      size={20}
-                      color="white"
-                    />
+                    <View>
+                      <View>
+                        <Text style={{ fontSize: 20, fontWeight: "500" }}>
+                          {user.weight} <Text style={{ fontSize: 15 }}>kg</Text>
+                        </Text>
+                      </View>
+                      <Text style={{ color: "grey", fontSize: 10 }}>
+                        Loss {user.weight - user.targetWeight} kg
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        backgroundColor: "purple",
+                        marginRight: 20,
+                        width: 30,
+                        height: 30,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 50,
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="weight-kilogram"
+                        size={20}
+                        color="white"
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Card>
+              </Card>
             </Pressable>
           </View>
 
@@ -295,12 +343,14 @@ export default function Home({navigation}) {
               wrapperStyle={styles.wrapperCardCarousel}
             >
               <ImageBackground
-              style={styles.carouselImage}
-              source={require('../assets/QuotesGreen.png')}
-              borderRadius={20}
+                style={styles.carouselImage}
+                source={require("../assets/QuotesGreen.png")}
+                borderRadius={20}
               >
-                <Text style={{color:"white", fontWeight:"600"}}>"Life is a tragedy of nutrition."</Text>
-                <Text style={{color:"white"}}>-Arnold Ehret</Text>
+                <Text style={{ color: "white", fontWeight: "600" }}>
+                  "Life is a tragedy of nutrition."
+                </Text>
+                <Text style={{ color: "white" }}>-Arnold Ehret</Text>
               </ImageBackground>
             </Card>
             <Card
@@ -308,12 +358,14 @@ export default function Home({navigation}) {
               wrapperStyle={styles.wrapperCardCarousel}
             >
               <ImageBackground
-              style={styles.carouselImage}
-              source={require('../assets/QuotesCream.png')}
-              borderRadius={20}
+                style={styles.carouselImage}
+                source={require("../assets/QuotesCream.png")}
+                borderRadius={20}
               >
-                <Text style={{color:"#60935D", fontWeight:"600"}}>"When in doubt, use nutrition first"</Text>
-                <Text style={{color:"#60935D"}}>-Roger Williams</Text>
+                <Text style={{ color: "#60935D", fontWeight: "600" }}>
+                  "When in doubt, use nutrition first"
+                </Text>
+                <Text style={{ color: "#60935D" }}>-Roger Williams</Text>
               </ImageBackground>
             </Card>
             <Card
@@ -321,13 +373,17 @@ export default function Home({navigation}) {
               wrapperStyle={styles.wrapperCardCarousel}
             >
               <ImageBackground
-              style={styles.carouselImage}
-              source={require('../assets/QuotesGreen.png')}
-              borderRadius={20}
+                style={styles.carouselImage}
+                source={require("../assets/QuotesGreen.png")}
+                borderRadius={20}
               >
-                <Text style={{color:"white", fontWeight:"600"}}>"You are what you eat. What</Text>
-                <Text style={{color:"white", fontWeight:"600"}}>would YOU like to be?"</Text>
-                <Text style={{color:"white"}}>-Julie Murphy</Text>
+                <Text style={{ color: "white", fontWeight: "600" }}>
+                  "You are what you eat. What
+                </Text>
+                <Text style={{ color: "white", fontWeight: "600" }}>
+                  would YOU like to be?"
+                </Text>
+                <Text style={{ color: "white" }}>-Julie Murphy</Text>
               </ImageBackground>
             </Card>
             <Card
@@ -335,18 +391,21 @@ export default function Home({navigation}) {
               wrapperStyle={styles.wrapperCardCarousel}
             >
               <ImageBackground
-              style={styles.carouselImage}
-              source={require('../assets/QuotesCream.png')}
-              borderRadius={20}
+                style={styles.carouselImage}
+                source={require("../assets/QuotesCream.png")}
+                borderRadius={20}
               >
-                <Text style={{color:"#60935D", fontWeight:"600"}}>"A healthy outside starts </Text>
-                <Text style={{color:"#60935D", fontWeight:"600"}}>from the inside."</Text>
+                <Text style={{ color: "#60935D", fontWeight: "600" }}>
+                  "A healthy outside starts{" "}
+                </Text>
+                <Text style={{ color: "#60935D", fontWeight: "600" }}>
+                  from the inside."
+                </Text>
 
-                <Text style={{color:"#60935D"}}>-Robert Urich</Text>
+                <Text style={{ color: "#60935D" }}>-Robert Urich</Text>
               </ImageBackground>
             </Card>
           </ScrollView>
-
         </SafeAreaView>
       </View>
     </>
@@ -363,14 +422,14 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 15,
     justifyContent: "center",
-    alignSelf:"flex-start",
+    alignSelf: "flex-start",
     flex: 0.3,
   },
   carousel: { flex: 0.8 },
   containerCardCarousel: {
     borderRadius: 20,
     padding: 0,
-    margin:10,
+    margin: 10,
     marginVertical: 0,
     justifyContent: "center",
     width: windowWidth * 0.8,
@@ -379,8 +438,8 @@ const styles = StyleSheet.create({
   carouselImage: {
     width: windowWidth * 0.8,
     height: windowHeight * 0.12,
-    alignItems:"center",
-    justifyContent:"center"
+    alignItems: "center",
+    justifyContent: "center",
   },
   wrapperCardCarousel: { justifyContent: "center", alignItems: "center" },
   nutrition: { flex: 1.5, justifyContent: "center", margin: 0 },

@@ -152,7 +152,10 @@ export default function Achievement() {
                 }}
               >
                 <Image
+
                   source={require("../assets/Logo2.png")}
+
+
                   style={{ width: 300, height: 300 }}
                 />
               </View>

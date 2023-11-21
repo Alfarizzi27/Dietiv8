@@ -22,10 +22,11 @@ export default function HistoryFood({ item }) {
       minute: "numeric",
     };
 
-    return new Intl.DateTimeFormat("en-US", options).format(newDate);
+    return new Intl.DateTimeFormat("id-ID", options).format(newDate);
   };
 
   useEffect(() => {
+    console.log(item, "<<<");
     setFormat(formatDate(item.createdAt));
   }, []);
 
