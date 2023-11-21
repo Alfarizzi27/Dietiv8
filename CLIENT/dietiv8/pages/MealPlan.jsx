@@ -16,8 +16,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
+import userStore from "../stores/userStore";
+import LottieView from "lottie-react-native";
 
 import Body from "../components/Body";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -25,6 +28,8 @@ const windowHeight = Dimensions.get("window").height;
 const baseUrl = "http://13.250.41.248/";
 
 export default function Home() {
+  const getAcc = userStore((state) => state.getAccessToken);
+  const accessToken = userStore((state) => state.access_token);
   const [food, setFood] = useState({
     breakfast: false,
     lunch: false,
@@ -33,24 +38,82 @@ export default function Home() {
   });
 
   const [checklist, setChecklist] = useState({});
-
   const [menu, setMenu] = useState({});
+  const [usermenu, setUsermenu] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [menuDatabase, setMenuDatabase] = useState(false);
+  const [historyId, setHistoryId] = useState(0);
 
-  const addSnack = (foods) => {
-    console.log(foods);
-    setFood((food) => {
-      return { ...food, [foods]: true };
-    });
+  const addSnack = async (foods) => {
+    try {
+      console.log(foods);
+      const dayEat = foods;
+      const nameFood = menu[foods];
+      const calorieFood = menu[foods + "Calorie"];
+      const patchFoodData = {
+        name: nameFood,
+        eaten: dayEat,
+        calorie: calorieFood,
+      };
+      console.log(patchFoodData);
+      const { data } = await axios({
+        method: "PATCH",
+        url: baseUrl + "menus/" + historyId,
+        data: patchFoodData,
+        headers: {
+          access_token: accessToken,
+        },
+      });
+      const whatEaten = foods + "Eaten";
+      setMenu((menu) => {
+        return { ...menu, [whatEaten]: true };
+      });
+      setFood((food) => {
+        return { ...food, [foods]: true };
+      });
+    } catch (error) {}
+  };
+
+  const fetchHistory = async (access_token) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(baseUrl + "histories/now", {
+        headers: {
+          access_token,
+        },
+      });
+      setHistoryId(data.id);
+      if (!data?.Menu) throw { name: "kosong" };
+      const menuData = data.Menu;
+      console.log(menuData);
+      setMenu(menuData);
+      setMenuDatabase(true);
+      return true;
+    } catch (error) {
+      console.log(error?.response?.data);
+      setMenuDatabase(false);
+      return false;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getRecomend = async () => {
+    const token = await getAcc();
+    const checkMenu = await fetchHistory(token);
+    // fetch history menu
+    // history menu ada ga jalan
+    // kalo ga ada yang bawah jalan
     try {
-      console.log("jalan");
+      console.log(checkMenu, "<<<<<<<<<<<<<<<<<<<<<<<<<<<,");
+      if (checkMenu) throw { name: "menu_database" };
+      console.log("jalan fetch aii");
+      setLoading(true);
       const { data } = await axios.get(baseUrl + "openai/menu", {
         headers: {
-          access_token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoiSmVuc2hvbiIsImVtYWlsIjoiamVuc2hvbkBtYWlsLmNvbSIsIndlaWdodCI6NjAsImhlaWdodCI6MTYwLCJleHRyYSI6IiIsImNhbG9yaWVMaW1pdCI6MTUzNSwidGFyZ2V0V2VpZ2h0IjoiNTUiLCJhY3Rpdml0eUxldmVsIjoyLCJkYXRlQmlydGgiOiIyMDA5LTA5LTE0VDA5OjE4OjQ4LjE0OVoiLCJpYXQiOjE3MDA1NDA1NjB9.pVwu-Zd_P0kbE5o5ncugPtgO3p8psakfOQlNcc_7Fec",
+          access_token: accessToken,
         },
+        timeout: 5000,
       });
       setMenu(data);
       setChecklist(() => {
@@ -59,35 +122,76 @@ export default function Home() {
         };
       });
     } catch (error) {
-      console.log(error);
+      if (error.code === "ECONNABORTED") {
+        console.log(error, "dari axios timeout");
+      } else if (error.name === "menu_database") {
+        console.log("Ada Menu Dari Database ");
+        return;
+      } else {
+        console.log(error?.response?.data);
+      }
+      const menuDefault = {
+        breakfast: "Bubur Ayam",
+        breakfastCalorie: 250,
+        lunch: "Ikan Panggang",
+        lunchCalorie: 200,
+        dinner: "Salad",
+        dinnerCalorie: 165,
+        snack: "Apple Fruit",
+        snackCalorie: 52,
+      };
+      setMenu(menuDefault);
+      setChecklist(menuDefault);
+    } finally {
+      setLoading(false);
     }
   };
 
   const addFood = async () => {
+    console.log("awal");
     try {
-      console.log("awal");
       const { data } = await axios({
         method: "post",
-        url: baseUrl + "menus/2",
+        url: baseUrl + "menus/" + historyId,
         data: checklist,
         headers: {
-          access_token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoiSmVuc2hvbiIsImVtYWlsIjoiamVuc2hvbkBtYWlsLmNvbSIsIndlaWdodCI6NjAsImhlaWdodCI6MTYwLCJleHRyYSI6IiIsImNhbG9yaWVMaW1pdCI6MTUzNSwidGFyZ2V0V2VpZ2h0IjoiNTUiLCJhY3Rpdml0eUxldmVsIjoyLCJkYXRlQmlydGgiOiIyMDA5LTA5LTE0VDA5OjE4OjQ4LjE0OVoiLCJpYXQiOjE3MDA1NDA1NjB9.pVwu-Zd_P0kbE5o5ncugPtgO3p8psakfOQlNcc_7Fec",
+          access_token: accessToken,
         },
       });
       console.log("jalan");
+      setUsermenu(data);
+      setMenuDatabase(true);
     } catch (error) {
-      console.log(error);
+      console.log(error?.response?.data, "<<<< error add food");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getRecomend();
+    console.log("halaman mealplan <<<<<<<<");
+    console.log(usermenu, "<<data usermenu");
   }, []);
 
   useEffect(() => {
     console.log(checklist, "<<<< ini POST BOS");
   }, [checklist]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <LottieView
+          autoPlay
+          style={{
+            width: 400,
+            height: 400,
+          }}
+          source={require("../assets/loading.json")}
+        />
+      </View>
+    );
+  }
 
   return (
     <>
@@ -118,35 +222,43 @@ export default function Home() {
           <Text style={{ fontSize: 24, fontWeight: "500", marginRight: 10 }}>
             List Food
           </Text>
-          <Pressable onPress={getRecomend}>
-            <FontAwesome name="refresh" size={24} color="green" />
-          </Pressable>
+          {!menuDatabase ? (
+            <Pressable onPress={getRecomend}>
+              <FontAwesome name="refresh" size={24} color="green" />
+            </Pressable>
+          ) : (
+            ""
+          )}
         </View>
-        <View
-          style={{
-            backgroundColor: "green",
-            marginLeft: 20,
-            padding: 5,
-            width: 70,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 7,
-            flexDirection: "row",
-          }}
-        >
-          <Text
+        {!menuDatabase ? (
+          <Pressable
             style={{
-              fontSize: 18,
-              fontWeight: "500",
-              color: "white",
-              marginRight: 10,
+              backgroundColor: "green",
+              marginLeft: 20,
+              padding: 5,
+              width: 70,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 7,
+              flexDirection: "row",
             }}
             onPress={addFood}
           >
-            Addd
-          </Text>
-          <FontAwesome name="spoon" size={24} color="white" />
-        </View>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "500",
+                color: "white",
+                marginRight: 10,
+              }}
+            >
+              Add
+            </Text>
+            <FontAwesome name="spoon" size={24} color="white" />
+          </Pressable>
+        ) : (
+          ""
+        )}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.containerContent}>
             {/* Breakfast */}
@@ -171,15 +283,19 @@ export default function Home() {
                   {menu?.breakfastCalorie || 0} Calories
                 </Text>
               </View>
-              {food.breakfast ? (
-                <AntDesign name="checkcircle" size={30} color="#60935D" />
+              {menuDatabase ? (
+                menu.breakfastEaten ? (
+                  <AntDesign name="checkcircle" size={30} color="#60935D" />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="food-fork-drink"
+                    size={35}
+                    color="#60935D"
+                    onPress={() => addSnack("breakfast")}
+                  />
+                )
               ) : (
-                <MaterialCommunityIcons
-                  name="food-fork-drink"
-                  size={35}
-                  color="#60935D"
-                  onPress={() => addSnack("breakfast")}
-                />
+                ""
               )}
             </View>
 
@@ -205,15 +321,19 @@ export default function Home() {
                   {menu?.lunchCalorie || 0} Calories
                 </Text>
               </View>
-              {food.lunch ? (
-                <AntDesign name="checkcircle" size={30} color="#60935D" />
+              {menuDatabase ? (
+                menu.lunchEaten ? (
+                  <AntDesign name="checkcircle" size={30} color="#60935D" />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="food-fork-drink"
+                    size={35}
+                    color="#60935D"
+                    onPress={() => addSnack("lunch")}
+                  />
+                )
               ) : (
-                <MaterialCommunityIcons
-                  name="food-fork-drink"
-                  size={35}
-                  color="#60935D"
-                  onPress={() => addSnack("lunch")}
-                />
+                ""
               )}
             </View>
 
@@ -239,18 +359,21 @@ export default function Home() {
                   {menu?.dinnerCalorie || 0} Calories
                 </Text>
               </View>
-              {food.dinner ? (
-                <AntDesign name="checkcircle" size={30} color="#60935D" />
+              {menuDatabase ? (
+                menu.dinnerEaten ? (
+                  <AntDesign name="checkcircle" size={30} color="#60935D" />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="food-fork-drink"
+                    size={35}
+                    color="#60935D"
+                    onPress={() => addSnack("dinner")}
+                  />
+                )
               ) : (
-                <MaterialCommunityIcons
-                  name="food-fork-drink"
-                  size={35}
-                  color="#60935D"
-                  onPress={() => addSnack("dinner")}
-                />
+                ""
               )}
             </View>
-
             {/* Snack */}
             <View style={styles.listFood}>
               <View>
@@ -273,15 +396,19 @@ export default function Home() {
                   {menu?.snackCalorie || 0} Calories
                 </Text>
               </View>
-              {food.snack ? (
-                <AntDesign name="checkcircle" size={30} color="#60935D" />
+              {menuDatabase ? (
+                menu.snackEaten ? (
+                  <AntDesign name="checkcircle" size={30} color="#60935D" />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="food-fork-drink"
+                    size={35}
+                    color="#60935D"
+                    onPress={() => addSnack("snack")}
+                  />
+                )
               ) : (
-                <MaterialCommunityIcons
-                  name="food-fork-drink"
-                  size={35}
-                  color="#60935D"
-                  onPress={() => addSnack("snack")}
-                />
+                ""
               )}
             </View>
           </View>
