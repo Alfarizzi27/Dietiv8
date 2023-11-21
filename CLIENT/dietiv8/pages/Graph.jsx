@@ -54,10 +54,16 @@ export default function Graph({ navigation, route }) {
   const [dateUpdated, setDateUpdated] = useState([""]);
   const [updateAchievement, setUpdateAchievement] = useState("");
   const [bmi, setBmi] = useState({})
+  const [user, setUser] = useState({})
 
-  const { user } = route.params;
+
   const baseUrl = "http://13.250.41.248/";
   const access_token = userStore((state) => state.access_token);
+
+  const dataUser = async() => {
+    const { data } = await axios.get(baseUrl + "users/1", {headers: {access_token}})
+    setUser(data)
+  }
   const getWeight = async () => {
     try {
       let { data } = await axios.get(baseUrl + "achievements", {
@@ -85,6 +91,7 @@ export default function Graph({ navigation, route }) {
 
   useEffect(() => {
     getWeight();
+    dataUser()
     getBmi()
   }, []);
 
@@ -109,6 +116,9 @@ export default function Graph({ navigation, route }) {
         { headers: {access_token} }
       );
       setUpdateAchievement("");
+      getWeight();
+      dataUser()
+      getBmi()
       setVisible(false);
     } catch (error) {
       console.log(error);
@@ -281,7 +291,7 @@ export default function Graph({ navigation, route }) {
                       Achievement
                     </Text>
                   </View>
-                  <Pressable onPress={() => navigation.navigate("Achievement")}>
+                  <Pressable onPress={() => navigation.navigate("Achievement", {user:user, weight:weight, latestData: latestData})}>
                     <View style={styles.updateWeight}>
                       <Image
                         source={require("../assets/Piala.png")}

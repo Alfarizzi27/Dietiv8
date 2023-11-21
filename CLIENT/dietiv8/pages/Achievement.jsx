@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
 import { captureRef } from "react-native-view-shot";
 import Body from "../components/Body";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Platform, PermissionsAndroid } from "react-native";
 import ViewShot from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
@@ -18,8 +18,63 @@ import * as Sharing from "expo-sharing";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function Achievement() {
+export default function Achievement({ route }) {
   const viewRef = useRef();
+  const { user, weight, latestData } = route.params;
+  const [loss, setLoss] = useState(0);
+  const [date, setDate] = useState("");
+  const [percentage, setPercentage] = useState(0)
+  const [indicator, setIndicator] = useState(0)
+
+  const getPercentage = () => {
+    const tes = (100 - Math.round((user.weight-user.targetWeight) * 100) / 100) / 100
+    setIndicator(tes)
+    setPercentage(Math.round((user.weight-user.targetWeight) * 100) / 100)
+  }
+
+  const getDate = () => {
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const now = new Date(latestData.Achievement.updatedAt.split("T")[0]);
+    setDate(
+      days[now.getDay()] +
+        ", " +
+        now.getDate() +
+        " " +
+        months[now.getMonth()] +
+        " " +
+        now.getFullYear()
+    );
+  };
+
+  useEffect(() => {
+    setLoss(
+      Number(weight[weight.length - 2] - Number(weight[weight.length - 1]))
+    );
+    getDate();
+    getPercentage()
+  }, []);
 
   // FOR PERMISSION
   //   if (Platform.OS === "android" && Platform.Version >= 23) {
@@ -84,7 +139,7 @@ export default function Achievement() {
                 flex: 1,
               }}
             >
-              <Text style={{ fontSize: 35, fontWeight: "500" }}>
+              <Text style={{ fontSize: 40, fontWeight: "500", color: "white" }}>
                 Achievement
               </Text>
             </View>
@@ -109,7 +164,13 @@ export default function Achievement() {
                   }}
                 >
                   <View style={{ justifyContent: "center" }}>
-                    <Text style={{ fontSize: 20, fontWeight: "500" }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "500",
+                        color: "white",
+                      }}
+                    >
                       Before
                     </Text>
                   </View>
@@ -119,8 +180,17 @@ export default function Achievement() {
                       alignSelf: "flex-end",
                     }}
                   >
-                    <Text style={{ fontSize: 30, fontWeight: "400" }}>
-                      65kg
+                    <Text
+                      style={{
+                        fontSize: 40,
+                        fontWeight: "600",
+                        color: "white",
+                      }}
+                    >
+                      {weight[weight.length - 2]}
+                      <Text style={{ fontSize: 20, fontWeight: "400" }}>
+                        kg
+                      </Text>
                     </Text>
                   </View>
                 </View>
@@ -134,11 +204,28 @@ export default function Achievement() {
                   }}
                 >
                   <View style={{ marginRight: 30, justifyContent: "center" }}>
-                    <Text style={{ fontSize: 20, fontWeight: "500" }}>Now</Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "500",
+                        color: "white",
+                      }}
+                    >
+                      Now
+                    </Text>
                   </View>
                   <View style={{ justifyContent: "center" }}>
-                    <Text style={{ fontSize: 30, fontWeight: "400" }}>
-                      60kg
+                    <Text
+                      style={{
+                        fontSize: 40,
+                        fontWeight: "600",
+                        color: "white",
+                      }}
+                    >
+                      {weight[weight.length - 1]}
+                      <Text style={{ fontSize: 20, fontWeight: "400" }}>
+                        kg
+                      </Text>
                     </Text>
                   </View>
                 </View>
@@ -152,10 +239,7 @@ export default function Achievement() {
                 }}
               >
                 <Image
-
                   source={require("../assets/Logo2.png")}
-
-
                   style={{ width: 300, height: 300 }}
                 />
               </View>
@@ -175,7 +259,8 @@ export default function Achievement() {
                 <Text>Congratulations</Text>
                 <View style={{ alignItems: "center", marginVertical: 20 }}>
                   <Text style={{ fontWeight: "500", fontSize: 25 }}>
-                    You have been lost 0.5 kg this week
+                    {user?.username || ""} currently lost {loss}
+                    <Text style={{ fontSize: 18 }}> kg</Text>
                   </Text>
                 </View>
               </View>
@@ -184,15 +269,15 @@ export default function Achievement() {
                 <View style={{ marginTop: 20 }}>
                   <View style={{ flexDirection: "row" }}>
                     <View>
-                      <Progress.Pie progress={0.9} size={70} color="black" />
+                      <Progress.Pie progress={indicator} size={70} color="#60935D" />
                     </View>
-                    <View style={{ marginLeft: 18 }}>
+                    <View style={{ marginLeft: 18, justifyContent:"center" }}>
                       <Text style={{ color: "black" }}>
                         Here's your progress on
                       </Text>
-                      <Text>20 November, 2023</Text>
+                      <Text>{date}</Text>
                       <Text style={{ marginTop: 0 }}>
-                        10% Remaining from your target
+                        {percentage}% Remaining from your target weight
                       </Text>
                     </View>
                   </View>
