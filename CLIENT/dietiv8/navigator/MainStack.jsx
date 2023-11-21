@@ -1,6 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HeaderStyleInterpolators } from "@react-navigation/stack";
 import Home from "../pages/Home";
+
+import Achievement from "../pages/Achievement"
+
 import Login from "../pages/Login";
 import MainTab from "./MainTab";
 import Register from "../pages/Register";
@@ -13,6 +16,7 @@ import Profile from "../components/Profile";
 import Activity from "../components/Activity";
 import Goals from "../components/Goals";
 import Gender from "../components/Gender";
+
 
 
 
@@ -117,6 +121,10 @@ export default function MainStack() {
           animationTypeForReplace: "push",
           animation: "slide_from_right",
         }}
+      />
+      <Stack.Screen
+        name="Achievement"
+        component={Achievement}
       />
     </Stack.Navigator>
   );

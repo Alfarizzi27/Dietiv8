@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+// import {Navi} from '@react-navigation/native'
 import {
   StyleSheet,
   Text,
@@ -8,6 +9,7 @@ import {
   FlatList,
   Dimensions,
   Image,
+  Button,
 } from "react-native";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -17,9 +19,11 @@ import Recipes from "../components/Recipes";
 import Food from "../assets/food.png";
 import HistoryFood from "../components/HistoryFood";
 
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const baseUrl = "http://13.250.41.248/";
+
 
 export default function Home() {
   const [history, setHistory] = useState({});

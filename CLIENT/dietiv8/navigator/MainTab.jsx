@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import MealPlan from "../pages/MealPlan";
 import Recipes from "../pages/Recipes";
 import Profile from "../pages/Profile";
+import AddMenus from "../pages/AddMenus";
 
 import {
   Entypo,
@@ -33,73 +34,62 @@ export default function MainTab() {
           // },
           tabBarShowLabel: false,
         }}
-      >
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ color, size }) => {
-              return <Entypo name="home" size={30} color={color} />;
-            },
-          }}
-        />
-        <Tab.Screen
-          name="MealPlan"
-          component={MealPlan}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ color, size }) => {
-              return <Ionicons name="fast-food" size={30} color={color} />;
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Add"
-          component={Recipes}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ color, size }) => {
-              return (
-                <FontAwesome name="plus-square" size={35} color="#81B722" />
-              );
-            },
-            tabBarLabel: "",
-          }}
-        />
-        <Tab.Screen
-          name="Recipes"
-          component={Recipes}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ color, size }) => {
-              return (
-                <MaterialCommunityIcons
-                  name="chef-hat"
-                  size={30}
-                  color={color}
-                />
-              );
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ color, size }) => {
-              return (
-                <MaterialCommunityIcons
-                  name="account-circle"
-                  size={30}
-                  color={color}
-                />
-              );
-            },
-          }}
-        />
-      </Tab.Navigator>
-    </>
+
+      />
+      <Tab.Screen
+        name="MealPlan"
+        component={MealPlan}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => {
+            return <Ionicons name="fast-food" size={size} color={color} />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Add"
+        component={AddMenus}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => {
+            return <FontAwesome name="plus-square" size={30} color="#81B722" />;
+          },
+          tabBarLabel: "",
+        }}
+      />
+      <Tab.Screen
+        name="Recipes"
+        component={Recipes}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <MaterialCommunityIcons
+                name="chef-hat"
+                size={size}
+                color={color}
+              />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <MaterialCommunityIcons
+                name="account-circle"
+                size={size}
+                color={color}
+              />
+            );
+          },
+        }}
+      />
+    </Tab.Navigator>
+
   );
 }

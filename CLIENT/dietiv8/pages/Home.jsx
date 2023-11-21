@@ -17,10 +17,31 @@ import {
   Dimensions,
   ProgressBarAndroid,
   Image,
+  ImageBackground,
+  TouchableOpacity,
+  Pressable,
+  TouchableHighlight,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  SafeAreaProvider,
+  SafeAreaInsetsContext,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { Card } from "@rneui/themed";
+import { ProgressChart } from "react-native-chart-kit";
+import * as Progress from "react-native-progress";
+import axios from 'axios'
+
+
 import { FontAwesome } from "@expo/vector-icons";
 import Body from "../components/Body";
+import {
+  Foundation,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -42,126 +63,289 @@ const chartConfig = {
 };
 
 export default function Home() {
+  const [user, setUser] = useState({})
+  const [calorie, setCalorie] = useState({})
+  const [percentageCal, setPercentagecal] = useState(0)
+
+  const baseUrl = "http://13.250.41.248/"
+  
+  const dataUser = async() => {
+    const { data } = await axios.get(baseUrl + "users/1", {headers: {access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDU0MTAwNH0.6HNf22qpFgWEi3AEm4mFRPNHwH6x_VfWPNQqP_Mcgdg"}})
+    setUser(data)
+  }
+
+  const dataCalorie = async() => {
+    const { data } = await axios.get(baseUrl + "histories/now", {headers: {access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDU0MTAwNH0.6HNf22qpFgWEi3AEm4mFRPNHwH6x_VfWPNQqP_Mcgdg"}} )
+    console.log(data)
+    const percentage = Math.round((data.calorieGain/data.calorieLimit) * 100) / 100
+    setPercentagecal(percentage)
+    setCalorie(data)
+  }
+
+  useEffect(() => {
+    dataUser()
+    dataCalorie()
+  }, [])
+
+  const touchNutrition = () => {
+    console.log("You touch Nutrition")
+  }
+
+  const touchWeight = () => {
+    console.log("You touch Weight")
+  }
+
   return (
     <>
-      <Body>
-        <SafeAreaView>
-          <View style={styles.container}>
-            <View style={styles.containerTitle}>
-              <Text style={styles.title}>Weight Progress</Text>
-            </View>
-            <LineChart
-              data={{
-                labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-                datasets: [
-                  {
-                    data: [70, 75, 67, 65],
-                  },
-                ],
-              }}
-              width={Dimensions.get("window").width - 30} // from react-native
-              height={210}
-              yAxisLabel=""
-              yAxisSuffix=" Kg"
-              yAxisInterval={1} // optional, defaults to 1
-              chartConfig={{
-                backgroundColor: "#e26a00",
-                backgroundGradientFrom: "#e3edce",
-                backgroundGradientTo: "#e3edce",
-                decimalPlaces: 0, // optional, defaults to 2dp
-                color: (opacity = 1) => `rgba(57, 82, 14, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                style: {
-                  borderRadius: 16,
-                },
-                propsForDots: {
-                  r: "5",
-                  strokeWidth: "1",
-                  stroke: "#39520e",
-                },
-              }}
-              bezier
-              style={{
-                borderRadius: 10,
-                marginTop: 20,
-              }}
-            />
-            <View style={styles.containerGoals}>
-              <View style={styles.goal}>
-                <Text style={styles.goalTxt}>
-                  65
-                  <Text
-                    style={{
-                      fontWeight: "400",
-                      fontSize: 14,
-                      color: "#616160",
-                    }}
-                  >
-                    kg
-                  </Text>
-                </Text>
-                <Text>Goals Weight</Text>
-                <ProgressBarAndroid
-                  styleAttr="Horizontal"
-                  indeterminate={false}
-                  progress={0.4}
-                  color={"orange"}
-                  style={{ marginTop: 10 }}
-                />
-              </View>
-              <View style={styles.current}>
-                <Text style={styles.goalTxt}>
-                  72
-                  <Text
-                    style={{
-                      fontWeight: "400",
-                      fontSize: 14,
-                      color: "#616160",
-                    }}
-                  >
-                    kg
-                  </Text>
-                </Text>
-                <Text>Current Weight</Text>
-                <ProgressBarAndroid
-                  styleAttr="Horizontal"
-                  indeterminate={false}
-                  progress={0.8}
-                  color={"green"}
-                  style={{ marginTop: 10 }}
-                />
-              </View>
-            </View>
-            <View style={styles.bmi}>
-              <Text style={{ fontWeight: "700", fontSize: 18 }}>
-                Body Mass Index
+      <View style={{flex: 1, backgroundColor: "#F7F7F7"}}>
+        <SafeAreaView style={styles.container}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerName}>
+              <Text style={{ fontSize: 20, fontWeight: "600" }}>
+                Hello, {user.username}!
               </Text>
             </View>
-            <View style={styles.containerBMI}>
-              <FontAwesome name="balance-scale" size={40} color="black" />
-              <View>
-                <Text
-                  style={{ fontWeight: "700", marginLeft: -60, fontSize: 18 }}
-                >
-                  BMI Score
-                </Text>
-                <Text
-                  style={{ fontWeight: "400", marginLeft: -60, color: "green" }}
-                >
-                  Normal
-                </Text>
-              </View>
-              <View style={styles.rectangle}>
-                <Text
-                  style={{ fontWeight: "700", fontSize: 24, color: "green" }}
-                >
-                  20.1
-                </Text>
-              </View>
-            </View>
+
+            <ImageBackground
+              source={require("../assets/BackgroundProfile.png")}
+              style={{
+                flex: 1.7,
+                width: windowWidth * 0.90,
+                alignItems: "center",
+              }}
+              borderRadius={20}
+            >
+              <Card
+                containerStyle={{
+                  flex: 1.7,
+                  justifyContent: "center",
+                  borderRadius: 20,
+                  marginTop: 0,
+                  backgroundColor: "transparent",
+                  shadowColor: "transparent",
+                  width: windowWidth * 0.90,
+                  alignItems: "center",
+                }}
+                wrapperStyle={{ backgroundColor: "transparent", width: windowWidth * 0.95, padding:20 }}
+              >
+                <View style={{ marginVertical: 10, marginHorizontal: 8 }}>
+                  <Text style={{color:"white", fontWeight:"600", fontSize: 30}}>Feeling Better!</Text>
+                  <Text style={{color:"white"}}>Keep you healthy life with</Text>
+                  <Text style={{color:"white"}}>healthy food!</Text>
+                </View>
+
+                <View style={{ flexDirection: "row", marginVertical: 10, marginHorizontal:8 }}>
+                  <View style={{ marginRight: 10 }}>
+                    <Text style={{color:"white", fontWeight:"600", fontSize: 20}}>{user.targetWeight}<Text style={{fontSize: 15}}>kg</Text></Text>
+                    <Text style={{color:"white"}}>Target Weight</Text>
+                  </View>
+                  <View>
+                    <Text style={{color:"white", fontWeight:"600", fontSize: 20}}>{user.calorieLimit}<Text style={{fontSize: 15}}>cal</Text></Text>
+                    <Text style={{color:"white"}}>Calories Limit</Text>
+                  </View>
+                </View>
+              </Card>
+            </ImageBackground>
           </View>
+
+          {/* Nutrition */}
+          <View style={styles.nutrition}>
+            <View style={{ width: windowWidth * 0.8, marginLeft: 15, marginBottom:-10 }}>
+              <Text style={{ fontSize: 18, fontWeight: "500" }}>Nutrition</Text>
+            </View>
+          <Pressable onPress={()=>touchNutrition()}>
+            <Card
+              containerStyle={{
+                borderRadius: 20,
+                marginBottom: 0,
+                marginHorizontal: 10,
+              }}
+              wrapperStyle={{ height: windowHeight * 0.13 }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "start",
+                  alignItems: "center",
+                  height: windowHeight * 0.2,
+                  flex: 1,
+                }}
+              >
+                <View style={{ flex: 1.5, alignItems: "center" }}>
+                  <Progress.Pie
+                    progress={percentageCal}
+                    size={90}
+                    borderWidth={2}
+                    color="#60935D"
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 3,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View>
+                    <Text style={{ fontSize: 18, fontWeight: "500" }}>
+                      {calorie.calorieGain} of {calorie.calorieLimit}
+                    </Text>
+                    <Text style={{ color: "grey", fontSize: 10 }}>
+                      Cal Eaten
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "#60935D",
+                      marginRight: 20,
+                      width: 30,
+                      height: 30,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 50,
+                    }}
+                  >
+                    <Foundation name="graph-bar" size={20} color="white" />
+                  </View>
+                </View>
+              </View>
+            </Card>
+            </Pressable>
+          </View>
+          {/* Weight */}
+          <View style={styles.weight}>
+          <View style={{ width: windowWidth * 0.8, marginLeft: 15, marginBottom:-10 }}>
+              <Text style={{ fontSize: 18, fontWeight: "500" }}>Weight</Text>
+
+            </View>
+            <Pressable onPress={()=>touchWeight()}>
+            <Card
+              containerStyle={{
+                borderRadius: 20,
+                marginBottom: 0,
+                marginHorizontal: 10,
+              }}
+              wrapperStyle={{ height: windowHeight * 0.13 }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "start",
+                  alignItems: "center",
+                  height: windowHeight * 0.2,
+                  flex: 1,
+                }}
+              >
+                <View style={{ flex: 1.5, alignItems: "center" }}>
+                  <FontAwesome5 name="weight" size={50} color="purple" />
+                </View>
+                <View
+                  style={{
+                    flex: 3,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View>
+                    <View>
+                      <Text style={{ fontSize: 20, fontWeight: "500" }}>
+                        {user.weight} <Text style={{ fontSize: 15 }}>kg</Text>
+                      </Text>
+                    </View>
+                    <Text style={{ color: "grey", fontSize: 10 }}>
+                      Loss {user.weight - user.targetWeight} kg
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "purple",
+                      marginRight: 20,
+                      width: 30,
+                      height: 30,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 50,
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="weight-kilogram"
+                      size={20}
+                      color="white"
+                    />
+                  </View>
+                </View>
+              </View>
+            </Card>
+            </Pressable>
+          </View>
+
+          {/* Carousel Tips */}
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled={false}
+            style={styles.carousel}
+          >
+            <Card
+              containerStyle={styles.containerCardCarousel}
+              wrapperStyle={styles.wrapperCardCarousel}
+            >
+              <ImageBackground
+              style={styles.carouselImage}
+              source={require('../assets/QuotesGreen.png')}
+              borderRadius={20}
+              >
+                <Text style={{color:"white", fontWeight:"600"}}>"Life is a tragedy of nutrition."</Text>
+                <Text style={{color:"white"}}>-Arnold Ehret</Text>
+              </ImageBackground>
+            </Card>
+            <Card
+              containerStyle={styles.containerCardCarousel}
+              wrapperStyle={styles.wrapperCardCarousel}
+            >
+              <ImageBackground
+              style={styles.carouselImage}
+              source={require('../assets/QuotesCream.png')}
+              borderRadius={20}
+              >
+                <Text style={{color:"#60935D", fontWeight:"600"}}>"When in doubt, use nutrition first"</Text>
+                <Text style={{color:"#60935D"}}>-Roger Williams</Text>
+              </ImageBackground>
+            </Card>
+            <Card
+              containerStyle={styles.containerCardCarousel}
+              wrapperStyle={styles.wrapperCardCarousel}
+            >
+              <ImageBackground
+              style={styles.carouselImage}
+              source={require('../assets/QuotesGreen.png')}
+              borderRadius={20}
+              >
+                <Text style={{color:"white", fontWeight:"600"}}>"You are what you eat. What</Text>
+                <Text style={{color:"white", fontWeight:"600"}}>would YOU like to be?"</Text>
+                <Text style={{color:"white"}}>-Julie Murphy</Text>
+              </ImageBackground>
+            </Card>
+            <Card
+              containerStyle={styles.containerCardCarousel}
+              wrapperStyle={styles.wrapperCardCarousel}
+            >
+              <ImageBackground
+              style={styles.carouselImage}
+              source={require('../assets/QuotesCream.png')}
+              borderRadius={20}
+              >
+                <Text style={{color:"#60935D", fontWeight:"600"}}>"A healthy outside starts </Text>
+                <Text style={{color:"#60935D", fontWeight:"600"}}>from the inside."</Text>
+
+                <Text style={{color:"#60935D"}}>-Robert Urich</Text>
+              </ImageBackground>
+            </Card>
+          </ScrollView>
+
         </SafeAreaView>
-      </Body>
+      </View>
     </>
   );
 }
@@ -169,90 +353,33 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: windowWidth,
-    flexDirection: "row",
-    flexWrap: "wrap",
+    marginHorizontal: 8,
+  },
+  header: { flex: 2, alignItems: "center", marginHorizontal: 8 },
+  headerName: {
+    marginTop: 15,
+    marginLeft: 15,
     justifyContent: "center",
+    alignSelf:"flex-start",
+    flex: 0.3,
   },
-  containerTitle: {
-    width: windowWidth,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 20,
-    marginBottom: 20,
-    marginLeft: 30,
-  },
-  containerGoals: {
-    flexDirection: "row",
-    marginTop: 30,
-    backgroundColor: "white",
-    width: windowWidth - 30,
-    height: 120,
-    borderRadius: 10,
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.18,
-    shadowRadius: 4.59,
-    elevation: 5,
-    overflow: "hidden",
-  },
-  goal: {
-    width: "50%",
-    height: "100%",
-    padding: 15,
-  },
-  goalTxt: {
-    fontWeight: "700",
-    fontSize: 28,
-  },
-  current: {
-    width: "50%",
-    height: "100%",
-    padding: 15,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "700",
-  },
-  rectangle: {
-    height: 90,
-    width: 90,
-    borderRadius: 50,
-    borderColor: "green",
-    borderStyle: "solid",
-    borderWidth: 12,
+  carousel: { flex: 0.8 },
+  containerCardCarousel: {
+    borderRadius: 20,
+    padding: 0,
+    margin:10,
+    marginVertical: 0,
     justifyContent: "center",
-    alignItems: "center",
+    width: windowWidth * 0.8,
+    height: windowHeight * 0.12,
   },
-  containerBMI: {
-    flexDirection: "row",
-    marginTop: 10,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingLeft: 20,
-    paddingRight: 30,
-    width: windowWidth - 30,
-    height: 120,
-    borderRadius: 10,
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.18,
-    shadowRadius: 4.59,
-    elevation: 5,
-    overflow: "hidden",
+  carouselImage: {
+    width: windowWidth * 0.8,
+    height: windowHeight * 0.12,
+    alignItems:"center",
+    justifyContent:"center"
   },
-  bmi: {
-    flexDirection: "row",
-    height: 30,
-    width: windowWidth - 30,
-    marginTop: 20,
-    justifyContent: "flex-start",
-  },
+  wrapperCardCarousel: { justifyContent: "center", alignItems: "center" },
+  nutrition: { flex: 1.5, justifyContent: "center", margin: 0 },
+  weight: { flex: 1.5 },
 });
