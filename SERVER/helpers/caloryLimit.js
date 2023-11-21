@@ -7,20 +7,7 @@ async function setCaloryLimit(user, currentWeight) {
   let year = age_dt.getUTCFullYear();
   let age = Math.abs(year - 1970);
   // console.log(user.activityLevel,'<<<<<<<<<<<<<<<<');
-  let activitylevel = "";
-  if (user.activityLevel == 1) {
-    activitylevel = "level_1";
-  } else if (user.activityLevel == 2) {
-    activitylevel = "level_2";
-  } else if (user.activityLevel == 3) {
-    activitylevel = "level_3";
-  } else if (user.activityLevel == 4) {
-    activitylevel = "level_4";
-  } else if (user.activityLevel == 5) {
-    activitylevel = "level_5";
-  } else if (user.activityLevel == 6) {
-    activitylevel = "level_6";
-  }
+  let activitylevel = "level_" + user.activityLevel;
 //   console.log('age=',age,'|| gender==',user.gender,'|| height=',user.height,'|| weight==',currentWeight,'||activityLevel==',activitylevel);
   const options = {
     method: "GET",

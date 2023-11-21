@@ -24,9 +24,9 @@ class OpenAiController {
         //old countCalorie
         `Count the food/drink calorie of ${food}`
       );
-      if(!countCalorieAgent){
-        throw{name:'agent_error'}
-        }
+      // if(!countCalorieAgent){
+      //   throw{name:'agent_error'}
+      //   }
       return countCalorieAgent; //old countCalorie
     } catch (error) {
       next(error);

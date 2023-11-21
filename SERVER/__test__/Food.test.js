@@ -36,6 +36,9 @@ beforeAll(async () => {
     dateBirth: "1997-01-26T00:00:00.000Z",
   };
   validToken = createToken(payload);
+  const respond = await request(app)
+        .get("/histories/now")
+        .set("access_token", validToken);
 });
 afterAll(async () => {
   await sequelize.queryInterface.bulkDelete("Users", null, {
@@ -72,7 +75,7 @@ describe("Foods ", () => {
   describe("Post /foods ", () => {
     it("succcess", async () => {
       const body = {
-        food: "Mie Ayam",
+        food: "Nasi Padang",
       };
       const respond = await request(app)
         .post("/foods/1")

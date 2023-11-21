@@ -5,7 +5,7 @@ const { sequelize } = require("../models");
 const bc = require("bcryptjs");
 const { createToken } = require("../helpers/jwt");
 const { User } = require("../models");
-const openaicontroller = require('../controllers/OpenAiController')
+const openaicontroller = require("../controllers/OpenAiController");
 let validToken;
 beforeAll(async () => {
   const user = await User.create({
@@ -69,33 +69,46 @@ describe("Histories ", () => {
       //set by param
       const respond = await request(app)
         .get("/histories/now")
-        .set("access_token", 'aADSFdasfsdafDSAFSADF13432453tgREG$#QGFGDSFgq3rg');
-        expect(respond.status).toBe(401);
-        expect(respond.body).toBeInstanceOf(Object);
-        expect(respond.body).toHaveProperty("message","Invalid Token");
+        .set(
+          "access_token",
+          "aADSFdasfsdafDSAFSADF13432453tgREG$#QGFGDSFgq3rg"
+        );
+      expect(respond.status).toBe(401);
+      expect(respond.body).toBeInstanceOf(Object);
+      expect(respond.body).toHaveProperty("message", "Invalid Token");
     });
   });
 });
 describe("Menu ", () => {
   describe("get /openai/menu ", () => {
-const mock = jest.fn(openaicontroller.getMenu)
+    const mock = jest.fn(openaicontroller.getMenu);
     it("succcess", async () => {
       const respond = await request(app)
         .get("/openai/menu")
         .set("access_token", validToken);
-     // expect(respond.status).toBe(201);
+      // expect(respond.status).toBe(201);
       // expect(respond.body).toBeInstanceOf(Object);
       // expect(respond.body).toHaveProperty("breakfast");
-        expect(mock).toHaveBeenCalled()
-
+      expect(mock).toHaveBeenCalled();
     });
     it("invalid token", async () => {
       const respond = await request(app)
         .get("/openai/menu")
-        .set("access_token", 'ASDFSDAFEWWFSDAfdsfdsaGAGAFG123');
+        .set("access_token", "ASDFSDAFEWWFSDAfdsfdsaGAGAFG123");
       expect(respond.status).toBe(401);
       expect(respond.body).toBeInstanceOf(Object);
-      expect(respond.body).toHaveProperty("message","Invalid Token");
+      expect(respond.body).toHaveProperty("message", "Invalid Token");
+    });
+  });
+  describe("GET /menus/:historyId Before POST /menus/:historyId", () => {
+    it("fail", async () => {
+      //set by param
+      const respond = await request(app)
+        .get("/menus/1")
+        .set("access_token", validToken);
+      expect(respond.status).toBe(404);
+      expect(respond.body).toBeInstanceOf(Object);
+      expect(respond.body).toHaveProperty("message");
     });
   });
   describe("POST /menus/:historyId", () => {
@@ -131,13 +144,12 @@ const mock = jest.fn(openaicontroller.getMenu)
       };
       const respond = await request(app)
         .post("/menus/1")
-        .set("access_token", 'adfdasfasdf14rEWFDTQ@$FASDGQ@$TGQWARGSGsd')
+        .set("access_token", "adfdasfasdf14rEWFDTQ@$FASDGQ@$TGQWARGSGsd")
         .send(bodyData);
       expect(respond.status).toBe(401);
       expect(respond.body).toBeInstanceOf(Object);
-      expect(respond.body).toHaveProperty("message","Invalid Token");
+      expect(respond.body).toHaveProperty("message", "Invalid Token");
     });
-
   });
   describe("GET /menus/:historyId", () => {
     it("succcess", async () => {
@@ -160,7 +172,7 @@ const mock = jest.fn(openaicontroller.getMenu)
     it("invalid token", async () => {
       const respond = await request(app)
         .get("/menus/1")
-        .set("access_token", '')
+        .set("access_token", "");
       expect(respond.status).toBe(401);
       expect(respond.body).toBeInstanceOf(Object);
       expect(respond.body).toHaveProperty("message", "Invalid Token");
@@ -172,6 +184,7 @@ const mock = jest.fn(openaicontroller.getMenu)
       const bodyData = {
         eaten: "breakfast",
         calorie: 300,
+        name: "Nasi Padang"
       };
       const respond = await request(app)
         .patch("/menus/1")
@@ -205,7 +218,7 @@ const mock = jest.fn(openaicontroller.getMenu)
     it("eaten null", async () => {
       const bodyData = {
         eaten: "breakfast",
-        calorie: '',
+        calorie: "",
       };
       const respond = await request(app)
         .patch("/menus/1")
@@ -222,7 +235,7 @@ const mock = jest.fn(openaicontroller.getMenu)
       };
       const respond = await request(app)
         .patch("/menus/1")
-        .set("access_token", '')
+        .set("access_token", "")
         .send(bodyData);
       expect(respond.status).toBe(401);
       expect(respond.body).toBeInstanceOf(Object);

@@ -42,11 +42,7 @@ class HistoryController {
           calorieGain: 0,
         },
       });
-      if (created) {
-        res.status(201).json(history);
-      } else {
         res.status(200).json(history);
-      }
     } catch (error) {
       // return res.json(error)
       next(error);
