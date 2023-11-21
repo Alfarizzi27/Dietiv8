@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HeaderStyleInterpolators } from "@react-navigation/stack";
 import Home from "../pages/Home";
+import Login from "../pages/Login";
 import MainTab from "./MainTab";
 import Register from "../pages/Register";
 import Name from "../components/Name";
@@ -32,9 +33,9 @@ export default function MainStack() {
         options={{ headerShown: false, animation: "slide_from_right" }}
       />
       <Stack.Screen
-        name="Splash"
-        component={Splash}
-        options={{ headerShown: false }}
+        name="Login"
+        component={Login}
+        options={{ headerShown: false, animation: "slide_from_right" }}
       />
       <Stack.Screen
         name="Name"
