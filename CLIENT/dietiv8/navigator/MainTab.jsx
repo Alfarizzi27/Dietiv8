@@ -3,6 +3,7 @@ import MainStack from "./MainStack";
 import MealPlan from "../pages/MealPlan";
 import Recipes from "../pages/Recipes";
 import Profile from "../pages/Profile";
+import AddMenus from "../pages/AddMenus";
 
 import {
   Entypo,
@@ -52,7 +53,7 @@ export default function MainTab() {
       />
       <Tab.Screen
         name="Add"
-        component={Recipes}
+        component={AddMenus}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => {
