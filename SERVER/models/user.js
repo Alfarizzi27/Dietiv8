@@ -101,13 +101,6 @@ module.exports = (sequelize, DataTypes) => {
           user.password = bc.hashSync(user.password);
         },
       },
-      // validate: {
-      //   lengthPassword() {
-      //     if (this.password.length < 5) {
-      //       throw new Error(`password must be 5 or greater`);
-      //     }
-      //   },
-      // },
       sequelize,
       modelName: "User",
     }

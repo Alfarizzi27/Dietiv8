@@ -25,7 +25,6 @@ class FitnesController {
 
       const {data} = await axios.request(options);
       const response = data.data
-      console.log(response)
       const bmiRange = response.healthy_bmi_range.split(" ")
       const bmiMin = Number(bmiRange[0])
       const bmiMax = Number(bmiRange[2])

@@ -5,8 +5,6 @@ const { sequelize } = require("../models");
 const bc = require("bcryptjs");
 const { createToken } = require("../helpers/jwt");
 const { User } = require("../models");
-// let validToken =
-//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoiZGlraWQiLCJlbWFpbCI6ImRpa2lkMTIzZml4QG1haWwuY29tIiwid2VpZ2h0Ijo2MCwiaGVpZ2h0IjoxNTAsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjpudWxsLCJ0YXJnZXRXZWlnaHQiOiI3MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTYtMDUtMjNUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ2NDY0Nn0.ymkgaxyKUh0Th6QSvWJnP4MfiMCZvR9EKPIl5NrK6uU";
 let validToken;
 beforeAll(async () => {
   const user = await User.create({
@@ -47,7 +45,7 @@ afterAll(async () => {
     truncate: true,
   });
 });
-describe.skip("ACHIEVEMENTS ",()=>{
+describe("ACHIEVEMENTS ",()=>{
 describe("Post /achievements ", () => {
   it("succcess", async () => {
     const bodyData = {
@@ -62,6 +60,21 @@ describe("Post /achievements ", () => {
     expect(respond.body).toHaveProperty(
       "message",
       "Berhasil Menambahkan Achievement"
+    );
+  });
+  it("current weight null", async () => {
+    const bodyData = {
+      currentWeight: '',
+    };
+    const respond = await request(app)
+      .post("/achievements")
+      .set("access_token", validToken)
+      .send(bodyData);
+    expect(respond.status).toBe(400);
+    expect(respond.body).toBeInstanceOf(Object);
+    expect(respond.body).toHaveProperty(
+      "message",
+      "Current Weight is required"
     );
   });
 });

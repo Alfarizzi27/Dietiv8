@@ -18,6 +18,7 @@ List of available endpoints:
 - `GET /foods`
 - `POST /foods/:historyId`
 - `GET /fitnes/bmi`
+- `GET /users/:id`
 
 
   &nbsp;
@@ -675,7 +676,43 @@ _200 - Ok_
 ````
 
 &nbsp;
+## 15. GET /users/:id
 
+Description:
+
+- Get user by access token
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+	"id": "integer",
+	"username": "string",
+	"gender": "string",
+	"email": "string",
+	"weight": "integer",
+	"height": "integer",
+	"dateBirth": "date",
+	"activityLevel": "integer",
+	"targetWeight": "integer",
+	"extra": "string",
+	"calorieLimit": "integer",
+	"createdAt": "date",
+	"updatedAt": "date"
+}
+```
+
+&nbsp;
 ## Global Error
 
 _Response (401 - Unauthorized)_

@@ -4,8 +4,11 @@ class MenuController {
   static async getMenu(req, res, next) {
     try {
       const { historyId } = req.params;
+      if(historyId){
+        throw{name:'history_not_found'}
+      }
       const menuTarget = await Menu.findOne({ where: { historyId } });
-      if(!menuTarget) throw({name: "menu_not_found"})
+      if (!menuTarget) throw { name: "menu_not_found" };
       res.status(200).json(menuTarget);
     } catch (error) {
       next(error);
@@ -15,7 +18,7 @@ class MenuController {
   static async createMenu(req, res, next) {
     try {
       const { historyId } = req.params;
-      const listEat = req.body
+      const listEat = req.body;
       const newMenu = await Menu.create({
         breakfastEaten: false,
         lunchEaten: false,
@@ -35,6 +38,12 @@ class MenuController {
     try {
       const { historyId } = req.params;
       const { eaten, calorie } = req.body;
+      if (calorie=='') {
+        throw { name: "calorie_null" };
+      }
+      if (eaten=='') {
+        throw { name: "eaten_null" };
+      }
       const eatenBool = `${eaten}Eaten`;
       const historyTarget = await History.findByPk(historyId);
       const calorieGain = historyTarget.calorieGain + calorie;

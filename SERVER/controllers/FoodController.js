@@ -8,13 +8,14 @@ class FoodController {
     try {
       let option = {}
       let { filter } = req.query
-      console.log(req.query)
       if(filter) {
         option.where = { name: {[Op.iLike]: `%${filter}%`}}
       }
       option.order = [["name", 'ASC']]
-      console.log(option)
       const foods = await Food.findAll(option)
+      // if(!foods){
+      // throw{name:'internal server error'}
+      // }
       res.status(200).json(foods)
     } catch(error) {
       next(error)
@@ -25,14 +26,23 @@ class FoodController {
     const t = await sequelize.transaction()
     try {
       const { historyId } = req.params
+      // if(historyId)
       const { food } = req.body
+      if(!food){
+        throw{name:'food_null'}
+      }
       const historyTarget = await History.findByPk(historyId)
+
+      if(!historyTarget){
+      throw{name:'history_not_found'}
+      }
+
       let foodEaten = await Food.findOne({
         where: { name: {[Op.iLike]: food} },
       })
       if(!foodEaten) {
         const { name, calorie, isError, errorMessage } = await OpenAiController.countCalorie(food)
-        if(isError) throw({name: "invalid_food", message: errorMessage})
+        if(isError) throw({name: "invalid_food", message: errorMessage}) //for testing
         foodEaten = await Food.create({name, calorie}, {transaction: t})
       }
     const calorieGain = historyTarget.calorieGain + foodEaten.calorie

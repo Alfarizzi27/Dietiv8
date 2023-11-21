@@ -45,7 +45,7 @@ afterAll(async () => {
     truncate: true,
   });
 });
-describe.skip("Fitnes ",()=>{
+describe("Fitnes ",()=>{
 describe("get /fitnes/bmi ", () => {
   it("succcess", async () => {
     const respond = await request(app)
@@ -55,6 +55,17 @@ describe("get /fitnes/bmi ", () => {
     expect(respond.body).toBeInstanceOf(Object);
     expect(respond.body).toHaveProperty(
       "bmiMax"
+    );
+  });
+  it("invalid token", async () => {
+    validToken=''
+    const respond = await request(app)
+      .get("/fitnes/bmi")
+      .set("access_token", validToken)
+    expect(respond.status).toBe(401);
+    expect(respond.body).toBeInstanceOf(Object);
+    expect(respond.body).toHaveProperty(
+      "message",'Invalid Token'
     );
   });
 });

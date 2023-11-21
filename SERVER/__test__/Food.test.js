@@ -44,7 +44,7 @@ afterAll(async () => {
     truncate: true,
   });
 });
-describe.skip("Foods ", () => {
+describe("Foods ", () => {
   describe("Get /foods ", () => {
     it("succcess", async () => {
       const respond = await request(app)
@@ -52,19 +52,83 @@ describe.skip("Foods ", () => {
         .set("access_token", validToken);
       expect(respond.status).toBe(200);
       expect(Array.isArray(respond.body)).toBeTruthy();
-      // expect(respond.body.length).toBeGreaterThan(0);
-      // done();
+    });
+    it("succcess with filter", async () => {
+      const respond = await request(app)
+        .get("/foods?filter=Ayam")
+        .set("access_token", validToken);
+      expect(respond.status).toBe(200);
+      expect(Array.isArray(respond.body)).toBeTruthy();
+    });
+    it("invalid Token", async () => {
+      const respond = await request(app)
+        .get("/foods")
+        .set("access_token", "adafDASFDASF54254^@@^#esfgsfdgfsdgdfsgdf");
+      expect(respond.status).toBe(401);
+      expect(respond.body).toBeInstanceOf(Object);
+      expect(respond.body).toHaveProperty("message", "Invalid Token");
     });
   });
   describe("Post /foods ", () => {
     it("succcess", async () => {
+      const body = {
+        food: "Mie Ayam",
+      };
       const respond = await request(app)
-        .get("/foods")
-        .set("access_token", validToken);
-      expect(respond.status).toBe(200);
-      expect(Array.isArray(respond.body)).toBeTruthy();
-      // expect(respond.body.length).toBeGreaterThan(0);
-      // done();
+        .post("/foods/1")
+        .set("access_token", validToken)
+        .send(body);
+      expect(respond.status).toBe(201);
+      expect(respond.body).toBeInstanceOf(Object);
+      expect(respond.body).toHaveProperty("message", "Food has been inputed");
+    });
+    it("food null", async () => {
+      const body = {
+        food: "",
+      };
+      const respond = await request(app)
+        .post("/foods/1")
+        .set("access_token", validToken)
+        .send(body);
+      expect(respond.status).toBe(400);
+      expect(respond.body).toBeInstanceOf(Object);
+      expect(respond.body).toHaveProperty("message", "Food is required");
+    });
+    it("food gak jelas", async () => {
+      const body = {
+        food: "asdsadsadasdqwrfqw",
+      };
+      const respond = await request(app)
+        .post("/foods/1")
+        .set("access_token", validToken)
+        .send(body);
+      expect(respond.status).toBe(400);
+      expect(respond.body).toBeInstanceOf(Object);
+      expect(respond.body).toHaveProperty("message", "Food is required");
+    });
+    it("History not found", async () => {
+      const body = {
+        food: "Mie Ayam",
+      };
+      const respond = await request(app)
+        .post("/foods/1000")
+        .set("access_token", validToken)
+        .send(body);
+      expect(respond.status).toBe(404);
+      expect(respond.body).toBeInstanceOf(Object);
+      expect(respond.body).toHaveProperty("message", "History Is Not Found");
+    });
+    it("invalid Token", async () => {
+      const body = {
+        food: "Mie Ayam",
+      };
+      const respond = await request(app)
+        .post("/foods/1")
+        .set("access_token", "adafDASFDASF54254^@@^#esfgsfdgfsdgdfsgdf")
+        .send(body);
+      expect(respond.status).toBe(401);
+      expect(respond.body).toBeInstanceOf(Object);
+      expect(respond.body).toHaveProperty("message", "Invalid Token");
     });
   });
 });

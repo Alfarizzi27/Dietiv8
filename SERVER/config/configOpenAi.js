@@ -32,11 +32,14 @@ async function agent(userInput) {
       messages: messages,
       functions: functionDefinition,
     });
+    // if(!response){//for test
+    // throw{name:'agent_error'}
+    // }
     const responseJSON = response.choices[0].message.function_call.arguments;
     const resultData = JSON.parse(responseJSON);
     return resultData;
   } catch (error) {
-    throw error;
+    // throw error;
   }
 }
 
