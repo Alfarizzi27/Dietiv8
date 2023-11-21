@@ -36,6 +36,7 @@ export default function Home() {
 
   useEffect(() => {
     getFood();
+    console.log("jalan");
   }, []);
 
   return (
@@ -43,7 +44,7 @@ export default function Home() {
       <Recipes>
         <View
           style={{
-            backgroundColor: "#e0e0e0",
+            backgroundColor: "white",
             flex: 1,
             marginTop: 100,
             borderTopLeftRadius: 40,
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
   },
   card: {
     marginTop: 30,
-    height: 400,
+    height: 470,
     width: 400,
     // backgroundColor: "grey",
     // borderRadius: 12,

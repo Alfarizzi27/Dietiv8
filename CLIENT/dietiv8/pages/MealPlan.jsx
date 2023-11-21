@@ -7,11 +7,13 @@ import {
   FlatList,
   Dimensions,
   Image,
+  Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState, useRef } from "react";
 import { recomendation } from "../components/Image";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 
@@ -20,7 +22,7 @@ import Body from "../components/Body";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const baseUrl = "https://88c1-182-253-90-97.ngrok-free.app/";
+const baseUrl = "http://13.250.41.248/openai/menu";
 
 export default function Home() {
   const [food, setFood] = useState({
@@ -40,9 +42,23 @@ export default function Home() {
   };
 
   const getRecomend = async () => {
-    const { data } = await axios.get(baseUrl + "openai/menu");
-    setMenu(data);
-    console.log(data);
+    try {
+      console.log("jalan");
+      const { data } = await axios.get(baseUrl, {
+        headers: {
+          access_token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ2NDkzMX0.2Xg9amRNtrgWScHbKAZPeGsM8xC0e1cFTbVmDvpuALs",
+        },
+      });
+      setMenu(data);
+      console.log(data, "<<<");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addFood = () => {
+    console.log(food);
   };
 
   useEffect(() => {
@@ -66,12 +82,49 @@ export default function Home() {
           </SafeAreaView>
           <Image source={recomendation} style={styles.image}></Image>
         </View>
-        <ScrollView>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginLeft: 20,
+            marginTop: 20,
+            marginBottom: 5,
+          }}
+        >
+          <Text style={{ fontSize: 24, fontWeight: "500", marginRight: 10 }}>
+            List Food
+          </Text>
+          <Pressable onPress={getRecomend}>
+            <FontAwesome name="refresh" size={24} color="green" />
+          </Pressable>
+        </View>
+        <View
+          style={{
+            backgroundColor: "green",
+            marginLeft: 20,
+            padding: 5,
+            width: 70,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 7,
+            flexDirection: "row",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "500",
+              color: "white",
+              marginRight: 10,
+            }}
+            onPress={addFood}
+          >
+            Addd
+          </Text>
+          <FontAwesome name="spoon" size={24} color="white" />
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.containerContent}>
-            <Text style={{ fontSize: 24, fontWeight: "500", marginTop: 10 }}>
-              List Food
-            </Text>
-
             {/* Breakfast */}
             <View style={styles.listFood}>
               <View>
@@ -237,6 +290,7 @@ const styles = StyleSheet.create({
   },
   containerContent: {
     padding: 20,
+    paddingTop: 0,
     zIndex: -1,
     // backgroundColor: "red",
   },
@@ -258,5 +312,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4.59,
     elevation: 5,
     overflow: "hidden",
+  },
+  button: {
+    backgroundColor: "transparent",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  btn: {
+    padding: 10,
+    backgroundColor: "blue",
   },
 });
