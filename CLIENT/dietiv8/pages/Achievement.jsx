@@ -61,7 +61,7 @@ export default function Achievement() {
             justifyContent: "center",
             alignItems: "center",
             flex: 1,
-            backgroundColor: "#31CF4E",
+            backgroundColor: "#60935D",
           }}
         >
           <ViewShot
@@ -69,7 +69,7 @@ export default function Achievement() {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: "#31CF4E",
+              backgroundColor: "#60935D",
               width: windowWidth,
               flex: 1,
               paddingHorizontal: 20,
@@ -78,7 +78,7 @@ export default function Achievement() {
           >
             <View
               style={{
-                backgroundColor: "#31CF4E",
+                backgroundColor: "#60935D",
                 alignSelf: "flex-start",
                 justifyContent: "center",
                 flex: 1,

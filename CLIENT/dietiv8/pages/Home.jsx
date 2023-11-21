@@ -8,6 +8,9 @@ import {
   Dimensions,
   Image,
   ImageBackground,
+  TouchableOpacity,
+  Pressable,
+  TouchableHighlight,
 } from "react-native";
 import {
   SafeAreaView,
@@ -18,6 +21,7 @@ import {
 import { Card } from "@rneui/themed";
 import { ProgressChart } from "react-native-chart-kit";
 import * as Progress from "react-native-progress";
+import axios from 'axios'
 
 import Body from "../components/Body";
 import {
@@ -25,25 +29,53 @@ import {
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Home() {
-  // each value represents a goal ring in Progress chart
-  const data = {
-    labels: ["Bike"], // optional
-    data: [0.6],
-  };
+  const [user, setUser] = useState({})
+  const [calorie, setCalorie] = useState({})
+  const [percentageCal, setPercentagecal] = useState(0)
+
+  const baseUrl = "http://13.250.41.248/"
+  
+  const dataUser = async() => {
+    const { data } = await axios.get(baseUrl + "users/1", {headers: {access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDU0MTAwNH0.6HNf22qpFgWEi3AEm4mFRPNHwH6x_VfWPNQqP_Mcgdg"}})
+    setUser(data)
+  }
+
+  const dataCalorie = async() => {
+    const { data } = await axios.get(baseUrl + "histories/now", {headers: {access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDU0MTAwNH0.6HNf22qpFgWEi3AEm4mFRPNHwH6x_VfWPNQqP_Mcgdg"}} )
+    console.log(data)
+    const percentage = Math.round((data.calorieGain/data.calorieLimit) * 100) / 100
+    setPercentagecal(percentage)
+    setCalorie(data)
+  }
+
+  useEffect(() => {
+    dataUser()
+    dataCalorie()
+  }, [])
+
+  const touchNutrition = () => {
+    console.log("You touch Nutrition")
+  }
+
+  const touchWeight = () => {
+    console.log("You touch Weight")
+  }
+
   return (
     <>
-      <Body>
+      <View style={{flex: 1, backgroundColor: "#F7F7F7"}}>
         <SafeAreaView style={styles.container}>
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.headerName}>
               <Text style={{ fontSize: 20, fontWeight: "600" }}>
-                Hello, M R Amrinaldi!
+                Hello, {user.username}!
               </Text>
             </View>
 
@@ -51,7 +83,7 @@ export default function Home() {
               source={require("../assets/BackgroundProfile.png")}
               style={{
                 flex: 1.7,
-                width: windowWidth * 0.88,
+                width: windowWidth * 0.90,
                 alignItems: "center",
               }}
               borderRadius={20}
@@ -64,7 +96,7 @@ export default function Home() {
                   marginTop: 0,
                   backgroundColor: "transparent",
                   shadowColor: "transparent",
-                  width: windowWidth * 0.95,
+                  width: windowWidth * 0.90,
                   alignItems: "center",
                 }}
                 wrapperStyle={{ backgroundColor: "transparent", width: windowWidth * 0.95, padding:20 }}
@@ -77,11 +109,11 @@ export default function Home() {
 
                 <View style={{ flexDirection: "row", marginVertical: 10, marginHorizontal:8 }}>
                   <View style={{ marginRight: 10 }}>
-                    <Text style={{color:"white", fontWeight:"600", fontSize: 20}}>270<Text style={{fontSize: 15}}>cal</Text></Text>
-                    <Text style={{color:"white"}}>Calories Eaten</Text>
+                    <Text style={{color:"white", fontWeight:"600", fontSize: 20}}>{user.targetWeight}<Text style={{fontSize: 15}}>kg</Text></Text>
+                    <Text style={{color:"white"}}>Target Weight</Text>
                   </View>
                   <View>
-                    <Text style={{color:"white", fontWeight:"600", fontSize: 20}}>1052<Text style={{fontSize: 15}}>cal</Text></Text>
+                    <Text style={{color:"white", fontWeight:"600", fontSize: 20}}>{user.calorieLimit}<Text style={{fontSize: 15}}>cal</Text></Text>
                     <Text style={{color:"white"}}>Calories Limit</Text>
                   </View>
                 </View>
@@ -94,6 +126,7 @@ export default function Home() {
             <View style={{ width: windowWidth * 0.8, marginLeft: 15, marginBottom:-10 }}>
               <Text style={{ fontSize: 18, fontWeight: "500" }}>Nutrition</Text>
             </View>
+          <Pressable onPress={()=>touchNutrition()}>
             <Card
               containerStyle={{
                 borderRadius: 20,
@@ -113,7 +146,7 @@ export default function Home() {
               >
                 <View style={{ flex: 1.5, alignItems: "center" }}>
                   <Progress.Pie
-                    progress={0.4}
+                    progress={percentageCal}
                     size={90}
                     borderWidth={2}
                     color="#60935D"
@@ -128,7 +161,7 @@ export default function Home() {
                 >
                   <View>
                     <Text style={{ fontSize: 18, fontWeight: "500" }}>
-                      1000 of 2600
+                      {calorie.calorieGain} of {calorie.calorieLimit}
                     </Text>
                     <Text style={{ color: "grey", fontSize: 10 }}>
                       Cal Eaten
@@ -150,14 +183,15 @@ export default function Home() {
                 </View>
               </View>
             </Card>
+            </Pressable>
           </View>
-
           {/* Weight */}
           <View style={styles.weight}>
           <View style={{ width: windowWidth * 0.8, marginLeft: 15, marginBottom:-10 }}>
               <Text style={{ fontSize: 18, fontWeight: "500" }}>Weight</Text>
 
             </View>
+            <Pressable onPress={()=>touchWeight()}>
             <Card
               containerStyle={{
                 borderRadius: 20,
@@ -188,11 +222,11 @@ export default function Home() {
                   <View>
                     <View>
                       <Text style={{ fontSize: 20, fontWeight: "500" }}>
-                        60 <Text style={{ fontSize: 15 }}>kg</Text>
+                        {user.weight} <Text style={{ fontSize: 15 }}>kg</Text>
                       </Text>
                     </View>
                     <Text style={{ color: "grey", fontSize: 10 }}>
-                      Loss 10 kg
+                      Loss {user.weight - user.targetWeight} kg
                     </Text>
                   </View>
                   <View
@@ -215,6 +249,7 @@ export default function Home() {
                 </View>
               </View>
             </Card>
+            </Pressable>
           </View>
 
           {/* Carousel Tips */}
@@ -281,7 +316,7 @@ export default function Home() {
             </Card>
           </ScrollView>
         </SafeAreaView>
-      </Body>
+      </View>
     </>
   );
 }
@@ -289,7 +324,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 8
+    marginHorizontal: 8,
   },
   header: { flex: 2, alignItems: "center", marginHorizontal: 8 },
   headerName: {

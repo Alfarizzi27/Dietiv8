@@ -19,19 +19,36 @@ import {
 } from "react-native-safe-area-context";
 import { Card } from "@rneui/themed";
 import Body from "../components/Body";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
+import axios from "axios";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Home() {
-  const [edit, setEdit] = useState({
-    name: "M R Amrinaldi",
-  });
+  const [user, setUser] = useState({})
+  const [age, setAge] = useState(0)
+  const baseUrl = "http://13.250.41.248/users/1"
+  
+  const dataUser = async() => {
+    const { data } = await axios.get(baseUrl, {headers: {access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ3NDk2NH0.QIYc8Y6dxqIuvvHyeAO5LVRqG9uLuAEgSZHke6fWel0"}})
+    let dob = new Date(data.dateBirth).getFullYear()
+    let now = new Date().getFullYear()
+    let activityLevel = data.activityLevel
+    if(activityLevel == 1) data.activityLevel = "Sedentary"
+    else if (activityLevel == 2) data.activityLevel = "Exercise 1-3 times/week"
+    else if (activityLevel == 3) data.activityLevel = "Exercise 4-5 times/week"
+    else if (activityLevel == 4) data.activityLevel = "Daily exercise"
+    else if (activityLevel == 5) data.activityLevel = "Intense exercise 6-7 times/week"
+    else if (activityLevel == 6) data.activityLevel = "Very intense exercise daily"
+    setAge(now - dob)
+    setUser(data)
+  }
 
-  const editedValue = () => {
-    console.log(edit.name);
-  };
+  useEffect(() => {
+    dataUser()
+  }, [])
+
 
   return (
     <>
@@ -52,7 +69,7 @@ export default function Home() {
                   <View style={styles.cardWrapper}>
                     <Text style={{ fontSize: 10 }}>Your Weight</Text>
                     <Text style={{ fontWeight: "bold", fontSize: 20 }}>
-                      60 kg
+                      {user.weight} kg
                     </Text>
                   </View>
                 </View>
@@ -72,13 +89,13 @@ export default function Home() {
                   <View style={styles.cardWrapper}>
                     <Text style={{ fontSize: 10 }}>Target Weight</Text>
                     <Text style={{ fontWeight: "bold", fontSize: 20 }}>
-                      55 kg
+                      {user.targetWeight} kg
                     </Text>
                   </View>
                 </View>
               </View>
               <View style={styles.headerUsername}>
-                <Text style={styles.profileName}>M R Amrinaldi</Text>
+                <Text style={styles.profileName}>{user.username}</Text>
               </View>
             </View>
           </View>
@@ -94,7 +111,7 @@ export default function Home() {
               <View style={styles.detailBody}>
                 <View style={styles.detailContent}>
                   <Text style={styles.detailName}>Gender</Text>
-                  <Text style={styles.detailValue}>Male</Text>
+                  <Text style={styles.detailValue}>{user.gender}</Text>
                 </View>
                 <View
                   style={{
@@ -104,7 +121,7 @@ export default function Home() {
                 />
                 <View style={styles.detailContent}>
                   <Text style={styles.detailName}>Name</Text>
-                  <Text style={styles.detailValue}>M R Amrinaldi</Text>
+                  <Text style={styles.detailValue}>{user.username}</Text>
                 </View>
                 <View
                   style={{
@@ -114,7 +131,7 @@ export default function Home() {
                 />
                 <View style={styles.detailContent}>
                   <Text style={styles.detailName}>Age</Text>
-                  <Text style={styles.detailValue}>25</Text>
+                  <Text style={styles.detailValue}>{age}</Text>
                 </View>
                 <View
                   style={{
@@ -124,7 +141,7 @@ export default function Home() {
                 />
                 <View style={styles.detailContent}>
                   <Text style={styles.detailName}>Height</Text>
-                  <Text style={styles.detailValue}>170 cm</Text>
+                  <Text style={styles.detailValue}>{user.height} cm</Text>
                 </View>
                 <View
                   style={{
@@ -134,7 +151,7 @@ export default function Home() {
                 />
                 <View style={styles.detailContent}>
                   <Text style={styles.detailName}>Current Weight</Text>
-                  <Text style={styles.detailValue}>60 kg</Text>
+                  <Text style={styles.detailValue}>{user.weight} kg</Text>
                 </View>
                 <View
                   style={{
@@ -144,7 +161,7 @@ export default function Home() {
                 />
                 <View style={styles.detailContent}>
                   <Text style={styles.detailName}>Activity Level</Text>
-                  <Text style={styles.detailValue}>Sedentary</Text>
+                  <Text style={styles.detailValue}>{user.activityLevel}</Text>
                 </View>
                 <View
                   style={{
@@ -164,7 +181,7 @@ export default function Home() {
               <View style={styles.detailBody}>
                 <View style={styles.detailContent}>
                   <Text style={styles.detailName}>Target Weight</Text>
-                  <Text style={styles.detailValue}>55 kg</Text>
+                  <Text style={styles.detailValue}>{user.targetWeight} kg</Text>
                 </View>
                 <View
                   style={{
@@ -174,7 +191,7 @@ export default function Home() {
                 />
                 <View style={styles.detailContent}>
                   <Text style={styles.detailName}>Calories a day</Text>
-                  <Text style={styles.detailValue}>2600cal</Text>
+                  <Text style={styles.detailValue}>{user.calorieLimit} cal</Text>
                 </View>
                 <View
                   style={{
