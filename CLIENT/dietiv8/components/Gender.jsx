@@ -12,34 +12,67 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { male, female, malee, femalee } from "./Image";
-
+import registerStore from "../stores/registerStore";
+import userStore from "../stores/userStore";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Gender() {
   const navigation = useNavigation();
+  const getAll = registerStore((state) => state.getAll);
+  const setGender = registerStore((state) => state.setGender);
+  const register = registerStore((state) => state.register)
+  const login = userStore((state) => state.login)
   const [colors, setColors] = useState("#d9d9d9");
   const [colors2, setColors2] = useState("#d9d9d9");
   const [textColor, setTextColor] = useState("black");
   const [textColor2, setTextColor2] = useState("black");
-
-  const change = (lvl) => {
-    if (lvl === 1) {
+  const [gender, setGenderPage] = useState("");
+  const change = (gender) => {
+    setGenderPage(gender);
+    if (gender === "male") {
       setColors("#adadad");
       setColors2("#d9d9d9");
       setTextColor2("black");
-    } else if (lvl === 2) {
+    } else if (gender === "female") {
       setColors2("#adadad");
       setColors("#d9d9d9");
       setTextColor("black");
     }
   };
+  const [error, setError] = useState("")
+  async function goToMainTab() {
+    try {
+      setGender(gender);
+      const state = getAll();
+      const userRegister = {
+        username: state.username,
+        email: state.email,
+        password: state.password,
+        weight: state.weight,
+        height: state.height,
+        dateBirth: state.dateBirth,
+        activityLevel: state.activityLevel,
+        targetWeight: state.targetWeight,
+        extra: state.extra,
+        gender: state.gender,
+      };
+      console.log(userRegister);
+      const test = await register(userRegister)
+      await login({email: userRegister.email, password: userRegister.password})
+      navigation.navigate("maintab")
+    } catch (error) {
+      setError(error)
+      console.log(error)
+    }
+  }
 
   return (
     <>
       <View style={styles.container}>
         <Text style={styles.text}>What's your gender?</Text>
         <View style={styles.containerContent}>
+          {/* {error ? <Text>{error}</Text>: ""} */}
           <View
             style={{
               height: 600,
@@ -49,7 +82,7 @@ export default function Gender() {
             <Pressable
               style={[styles.weight, { backgroundColor: colors }]}
               onPress={() => {
-                change(1);
+                change("male");
               }}
             >
               <View style={styles.activity}>
@@ -89,7 +122,7 @@ export default function Gender() {
             <Pressable
               style={[styles.weight, { backgroundColor: colors2 }]}
               onPress={() => {
-                change(2);
+                change("female");
               }}
             >
               <View style={styles.activity}>
@@ -127,12 +160,13 @@ export default function Gender() {
             </Pressable>
           </View>
           <View style={{ height: 50 }}>
-            <Pressable
-              style={styles.btn}
-              onPress={() => navigation.navigate("maintab")}
-            >
-              <Text style={styles.txtBtn}>Continue</Text>
-            </Pressable>
+            {gender ? (
+              <Pressable style={styles.btn} onPress={goToMainTab}>
+                <Text style={styles.txtBtn}>Continue</Text>
+              </Pressable>
+            ) : (
+              ""
+            )}
           </View>
         </View>
       </View>

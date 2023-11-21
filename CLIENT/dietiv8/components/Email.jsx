@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
+import registerStore from "../stores/registerStore";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -16,6 +17,12 @@ const windowHeight = Dimensions.get("window").height;
 export default function Email() {
   const [text, onChangeText] = useState("");
   const navigation = useNavigation();
+  const setEmail = registerStore((state) => state.setEmail)
+
+  function goToPassword() {
+    setEmail(text)
+    navigation.navigate("password")
+  }
   return (
     <>
       <View style={styles.container}>
@@ -33,7 +40,7 @@ export default function Email() {
         {text && (
           <Pressable
             style={styles.button}
-            onPress={() => navigation.navigate("password")}
+            onPress={goToPassword}
           >
             <Text
               style={{

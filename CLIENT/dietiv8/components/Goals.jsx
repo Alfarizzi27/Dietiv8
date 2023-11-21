@@ -24,8 +24,10 @@ export default function Goals() {
   const [textColor, setTextColor] = useState("black");
   const [textColor2, setTextColor2] = useState("black");
   const [textColor3, setTextColor3] = useState("black");
+  const [goals, setGoals] = useState("");
 
   const change = (lvl) => {
+    setGoals(lvl);
     if (lvl === 1) {
       setColors("#850c20");
       setColors2("#d9d9d9");
@@ -146,12 +148,16 @@ export default function Goals() {
             </Pressable>
           </View>
           <View style={{ height: 50 }}>
-            <Pressable
-              style={styles.btn}
-              onPress={() => navigation.navigate("gender")}
-            >
-              <Text style={styles.txtBtn}>Continue</Text>
-            </Pressable>
+            {goals ? (
+              <Pressable
+                style={styles.btn}
+                onPress={() => navigation.navigate("gender")}
+              >
+                <Text style={styles.txtBtn}>Continue</Text>
+              </Pressable>
+            ) : (
+              ""
+            )}
           </View>
         </View>
       </View>

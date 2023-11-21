@@ -12,14 +12,64 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import Body from "../components/Body";
 import { useState } from "react";
+import userStore from "../stores/userStore";
 
 export default function Login() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passError, setPassError] = useState("");
+  const [error, setError] = useState("");
+  const login = userStore((state) => state.login);
+
+    function removeMessage() {
+        setError()
+    }
+
+  async function loginUser() {
+    setEmailError("");
+    setPassError("");
+    setError("");
+    if (!email) setEmailError("Email Cannot Be Empty");
+    if (!password) setPassError("Password Cannot Be Empty");
+    if (!email && !password) return 0;
+    console.log(emailError);
+    try {
+      const success = await login({
+        email,
+        password,
+      });
+      if (success) navigation.navigate("maintab");
+    } catch (error) {
+      setError(error);
+    }
+  }
   return (
     <>
       <Body>
+            { error ? <View style={styles.errorBackground}></View> : "" }
+            {error ? (
+              <View>
+                <View style={styles.errorMessage}>
+                  <Text style={styles.errorText}>Invalid Email/Password</Text>
+                  <Pressable style={styles.button} onPress={removeMessage}>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "700",
+                        fontSize: 20,
+                      }}
+                    >
+                      OK
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+
+            ) : (
+              ""
+            )}
         <View style={styles.container}>
           <Text style={{ fontSize: 28, fontWeight: "700", marginBottom: 12 }}>
             Login
@@ -43,6 +93,11 @@ export default function Login() {
               inputMode="email"
               placeholder="email@example.com"
             />
+            {emailError ? (
+              <Text style={{ color: "#850c20" }}>{emailError}</Text>
+            ) : (
+              ""
+            )}
             <TextInput
               style={[styles.input, { marginTop: 10 }]}
               onChangeText={setPassword}
@@ -52,11 +107,13 @@ export default function Login() {
               inputMode="email"
               placeholder="input password here"
             />
+            {passError ? (
+              <Text style={{ color: "#850c20" }}>{passError}</Text>
+            ) : (
+              ""
+            )}
           </View>
-          <Pressable
-            style={styles.button}
-            onPress={() => navigation.navigate("password")}
-          >
+          <Pressable style={styles.button} onPress={loginUser}>
             <Text
               style={{
                 color: "white",
@@ -102,4 +159,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 15,
   },
+  errorMessage: {
+    position: "absolute",
+    backgroundColor: "white",
+    padding: "8%",
+    top: 300,
+    width: 400,
+    textAlign: "center",
+    zIndex: 2
+  },
+  errorBackground: {
+    backgroundColor: "black",
+    position: "absolute",
+    zIndex: 1,
+    width: "100%",
+    height: "100%",
+    opacity: 0.5
+  },
+  errorText: {
+    alignContent: "center",
+    justifyContent: "center",
+    width: "100%",
+    paddingTop: 20,
+    fontSize: 29,
+  }
 });
