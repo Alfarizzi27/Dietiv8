@@ -1,5 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import MainStack from "./MainStack";
+// import MainStack from "./MainStack";
+import Register from "../pages/Register";
+import Home from "../pages/Home";
 import MealPlan from "../pages/MealPlan";
 import Recipes from "../pages/Recipes";
 import Profile from "../pages/Profile";
@@ -16,30 +18,23 @@ import {
 export default function MainTab() {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarStyle: { position: "absolute" },
-        tabBarActiveTintColor: "#81B722",
-        tabBarStyle: {
-          height: 60,
-        },
-        tabBarLabelStyle: {
-          marginTop: -5,
-          marginBottom: 5,
-          fontSize: 12,
-          fontWeight: 500,
-        },
-      }}
-    >
-      <Tab.Screen
-        name="Main"
-        component={MainStack}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => {
-            return <Entypo name="home" size={size} color={color} />;
+    <>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: { position: "absolute" },
+          tabBarActiveTintColor: "#81B722",
+          tabBarStyle: {
+            height: 62,
           },
+          // tabBarLabelStyle: {
+          //   marginTop: -5,
+          //   marginBottom: 5,
+          //   fontSize: 12,
+          //   fontWeight: 500,
+          // },
+          tabBarShowLabel: false,
         }}
+
       />
       <Tab.Screen
         name="MealPlan"
@@ -95,5 +90,6 @@ export default function MainTab() {
         }}
       />
     </Tab.Navigator>
+
   );
 }
