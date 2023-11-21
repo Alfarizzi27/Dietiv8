@@ -32,6 +32,7 @@ export default function Home() {
       },
     });
     setHistory(data.Food);
+    console.log(data);
   };
 
   useEffect(() => {

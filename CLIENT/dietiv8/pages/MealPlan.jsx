@@ -22,7 +22,7 @@ import Body from "../components/Body";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const baseUrl = "http://13.250.41.248/openai/menu";
+const baseUrl = "http://13.250.41.248/";
 
 export default function Home() {
   const [food, setFood] = useState({
@@ -31,6 +31,8 @@ export default function Home() {
     dinner: false,
     snack: false,
   });
+
+  const [checklist, setChecklist] = useState({});
 
   const [menu, setMenu] = useState({});
 
@@ -44,26 +46,48 @@ export default function Home() {
   const getRecomend = async () => {
     try {
       console.log("jalan");
-      const { data } = await axios.get(baseUrl, {
+      const { data } = await axios.get(baseUrl + "openai/menu", {
         headers: {
           access_token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ2NDkzMX0.2Xg9amRNtrgWScHbKAZPeGsM8xC0e1cFTbVmDvpuALs",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoiSmVuc2hvbiIsImVtYWlsIjoiamVuc2hvbkBtYWlsLmNvbSIsIndlaWdodCI6NjAsImhlaWdodCI6MTYwLCJleHRyYSI6IiIsImNhbG9yaWVMaW1pdCI6MTUzNSwidGFyZ2V0V2VpZ2h0IjoiNTUiLCJhY3Rpdml0eUxldmVsIjoyLCJkYXRlQmlydGgiOiIyMDA5LTA5LTE0VDA5OjE4OjQ4LjE0OVoiLCJpYXQiOjE3MDA1NDA1NjB9.pVwu-Zd_P0kbE5o5ncugPtgO3p8psakfOQlNcc_7Fec",
         },
       });
       setMenu(data);
-      console.log(data, "<<<");
+      setChecklist(() => {
+        return {
+          ...data,
+        };
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const addFood = () => {
-    console.log(food);
+  const addFood = async () => {
+    try {
+      console.log("awal");
+      const { data } = await axios({
+        method: "post",
+        url: baseUrl + "menus/2",
+        data: checklist,
+        headers: {
+          access_token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoiSmVuc2hvbiIsImVtYWlsIjoiamVuc2hvbkBtYWlsLmNvbSIsIndlaWdodCI6NjAsImhlaWdodCI6MTYwLCJleHRyYSI6IiIsImNhbG9yaWVMaW1pdCI6MTUzNSwidGFyZ2V0V2VpZ2h0IjoiNTUiLCJhY3Rpdml0eUxldmVsIjoyLCJkYXRlQmlydGgiOiIyMDA5LTA5LTE0VDA5OjE4OjQ4LjE0OVoiLCJpYXQiOjE3MDA1NDA1NjB9.pVwu-Zd_P0kbE5o5ncugPtgO3p8psakfOQlNcc_7Fec",
+        },
+      });
+      console.log("jalan");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     getRecomend();
   }, []);
+
+  useEffect(() => {
+    console.log(checklist, "<<<< ini POST BOS");
+  }, [checklist]);
 
   return (
     <>
