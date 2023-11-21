@@ -17,6 +17,7 @@ import {
   Dimensions,
   ProgressBarAndroid,
   Image,
+  Alert,
   Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,6 +26,7 @@ import Body from "../components/Body";
 import userStore from "../stores/userStore";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Dialog from "react-native-dialog";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -45,19 +47,23 @@ const chartConfig = {
   useShadowColorFromDataset: false, // optional
 };
 
-export default function Home({ navigation, user }) {
-    console.log(user)
+export default function Graph({ navigation, route }) {
+  const [visible, setVisible] = useState(false);
+  const [latestData, setLatestData] = useState({});
+  const [weight, setWeight] = useState([0]);
+  const [dateUpdated, setDateUpdated] = useState([""]);
+  const [updateAchievement, setUpdateAchievement] = useState("");
+  const [bmi, setBmi] = useState({})
+
+  const { user } = route.params;
   const baseUrl = "http://13.250.41.248/";
   const access_token = userStore((state) => state.access_token);
-  const [latestData, setLatestData] = useState({})
-  const [weight, setWeight] = useState([0]);
-  const [dateUpdated, setDateUpdated] = useState(['']);
   const getWeight = async () => {
     try {
       let { data } = await axios.get(baseUrl + "achievements", {
         headers: { access_token },
       });
-      setLatestData(data[data.length-1])
+      setLatestData(data[data.length - 1]);
       let dateUpdate = [];
       data = data.map((el) => {
         let event = new Date(el.Achievement.updatedAt);
@@ -72,9 +78,43 @@ export default function Home({ navigation, user }) {
     }
   };
 
+  const getBmi = async() => {
+    const { data } = await axios.get(baseUrl + "fitnes/bmi", {headers: {access_token}})
+    setBmi(data)
+  }
+
   useEffect(() => {
     getWeight();
+    getBmi()
   }, []);
+
+  // munculin prompt buat add achievement
+  const showDialog = () => {
+    setVisible(true);
+  };
+  const handleCancel = () => {
+    setUpdateAchievement("");
+    setVisible(false);
+  };
+
+  const handleSubmit = async () => {
+    try {
+        if(!updateAchievement){
+            return setVisible(false);
+        }
+      console.log(updateAchievement);
+      const response = await axios.post(
+        baseUrl + "achievements",
+        { currentWeight: updateAchievement },
+        { headers: {access_token} }
+      );
+      setUpdateAchievement("");
+      setVisible(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Body>
@@ -122,7 +162,7 @@ export default function Home({ navigation, user }) {
             <View style={styles.containerGoals}>
               <View style={styles.goal}>
                 <Text style={styles.goalTxt}>
-                  65
+                  {user?.targetWeight || 0}
                   <Text
                     style={{
                       fontWeight: "400",
@@ -144,7 +184,7 @@ export default function Home({ navigation, user }) {
               </View>
               <View style={styles.current}>
                 <Text style={styles.goalTxt}>
-                  {latestData?.Achievement?.currentWeight || 0}
+                  {user?.weight || 0}
                   <Text
                     style={{
                       fontWeight: "400",
@@ -181,14 +221,14 @@ export default function Home({ navigation, user }) {
                 <Text
                   style={{ fontWeight: "400", marginLeft: -60, color: "green" }}
                 >
-                  Normal
+                  {bmi?.health || ""}
                 </Text>
               </View>
               <View style={styles.rectangle}>
                 <Text
                   style={{ fontWeight: "700", fontSize: 24, color: "green" }}
                 >
-                  20.1
+                  {bmi?.bmi || 0}
                 </Text>
               </View>
             </View>
@@ -208,13 +248,32 @@ export default function Home({ navigation, user }) {
                     <Text style={{ fontWeight: "700", fontSize: 18 }}>
                       Update your weight
                     </Text>
+                    {/* prompt dialog buat add */}
+                    <Dialog.Container visible={visible}>
+                      <Dialog.Title>Update Your Weight</Dialog.Title>
+                      {/* <Dialog.Description>
+                        Do you want to delete this account? You cannot undo this
+                        action.
+                      </Dialog.Description> */}
+                      <Dialog.Input
+                        name="currentWeight"
+                        onChangeText={(text) => setUpdateAchievement(text)}
+                        placeholder="example: 60"
+                        inputMode="numeric"
+                        value={updateAchievement}
+                      ></Dialog.Input>
+                      <Dialog.Button label="Cancel" onPress={handleCancel} />
+                      <Dialog.Button label="Submit" onPress={handleSubmit} />
+                    </Dialog.Container>
                   </View>
-                  <View style={styles.updateWeight}>
-                    <Image
-                      source={require("../assets/Timbangan.png")}
-                      style={styles.cardImage}
-                    />
-                  </View>
+                  <Pressable onPress={() => showDialog()}>
+                    <View style={styles.updateWeight}>
+                      <Image
+                        source={require("../assets/Timbangan.png")}
+                        style={styles.cardImage}
+                      />
+                    </View>
+                  </Pressable>
                 </View>
                 <View>
                   <View style={styles.footerTitle}>

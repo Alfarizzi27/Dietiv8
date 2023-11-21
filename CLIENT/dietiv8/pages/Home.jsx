@@ -41,6 +41,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
+import userStore from "../stores/userStore";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -67,15 +68,15 @@ export default function Home({navigation}) {
   const [percentageCal, setPercentagecal] = useState(0)
 
   const baseUrl = "http://13.250.41.248/"
+  const access_token = userStore((state) => state.access_token)
   
   const dataUser = async() => {
-    const { data } = await axios.get(baseUrl + "users/1", {headers: {access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDU0MTAwNH0.6HNf22qpFgWEi3AEm4mFRPNHwH6x_VfWPNQqP_Mcgdg"}})
+    const { data } = await axios.get(baseUrl + "users/1", {headers: {access_token}})
     setUser(data)
   }
 
   const dataCalorie = async() => {
-    const { data } = await axios.get(baseUrl + "histories/now", {headers: {access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDU0MTAwNH0.6HNf22qpFgWEi3AEm4mFRPNHwH6x_VfWPNQqP_Mcgdg"}} )
-    console.log(data)
+    const { data } = await axios.get(baseUrl + "histories/now", {headers: {access_token}} )
     const percentage = Math.round((data.calorieGain/data.calorieLimit) * 100) / 100
     setPercentagecal(percentage)
     setCalorie(data)
