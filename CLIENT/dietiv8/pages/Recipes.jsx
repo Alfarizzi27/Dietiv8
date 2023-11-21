@@ -17,30 +17,35 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Recipes from "../components/Recipes";
 import Food from "../assets/food.png";
 import HistoryFood from "../components/HistoryFood";
-
+import userStore from "../stores/userStore";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const baseUrl = "http://13.250.41.248/";
 
-
 export default function Home() {
+  const getAcc = userStore((state) => state.getAccessToken);
+  const accessToken = userStore((state) => state.access_token);
+  const dataHistory = userStore((state) => state.dataHistory);
   const [history, setHistory] = useState({});
 
   const getFood = async () => {
-    const { data } = await axios.get(baseUrl + "histories/now", {
-      headers: {
-        access_token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ2NDkzMX0.2Xg9amRNtrgWScHbKAZPeGsM8xC0e1cFTbVmDvpuALs",
-      },
-    });
-    setHistory(data.Food);
-    console.log(data);
+    await getAcc();
+    try {
+      const { data } = await axios.get(baseUrl + "histories/now", {
+        headers: {
+          access_token: accessToken,
+        },
+      });
+      setHistory(data.Food);
+      console.log(data);
+    } catch (error) {
+      console.log(error.response.data);
+    }
   };
 
   useEffect(() => {
     getFood();
-    console.log("jalan");
   }, []);
 
   return (

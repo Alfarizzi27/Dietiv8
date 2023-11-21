@@ -10,6 +10,7 @@ import {
   Dimensions,
   Image,
   TextInput,
+  Pressable,
 } from "react-native";
 import {
   SafeAreaView,
@@ -21,34 +22,53 @@ import { Card } from "@rneui/themed";
 import Body from "../components/Body";
 import { Fragment, useState, useEffect } from "react";
 import axios from "axios";
+import userStore from "../stores/userStore";
+import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Home() {
-  const [user, setUser] = useState({})
-  const [age, setAge] = useState(0)
-  const baseUrl = "http://13.250.41.248/users/1"
-  
-  const dataUser = async() => {
-    const { data } = await axios.get(baseUrl, {headers: {access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ3NDk2NH0.QIYc8Y6dxqIuvvHyeAO5LVRqG9uLuAEgSZHke6fWel0"}})
-    let dob = new Date(data.dateBirth).getFullYear()
-    let now = new Date().getFullYear()
-    let activityLevel = data.activityLevel
-    if(activityLevel == 1) data.activityLevel = "Sedentary"
-    else if (activityLevel == 2) data.activityLevel = "Exercise 1-3 times/week"
-    else if (activityLevel == 3) data.activityLevel = "Exercise 4-5 times/week"
-    else if (activityLevel == 4) data.activityLevel = "Daily exercise"
-    else if (activityLevel == 5) data.activityLevel = "Intense exercise 6-7 times/week"
-    else if (activityLevel == 6) data.activityLevel = "Very intense exercise daily"
-    setAge(now - dob)
-    setUser(data)
-  }
+  const navigation = useNavigation();
+  const [user, setUser] = useState({});
+  const [age, setAge] = useState(0);
+  const baseUrl = "http://13.250.41.248/users/1";
+  const logoutUser = userStore((state) => state.logout);
+  const dataUser = async () => {
+    const { data } = await axios.get(baseUrl, {
+      headers: {
+        access_token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ3NDk2NH0.QIYc8Y6dxqIuvvHyeAO5LVRqG9uLuAEgSZHke6fWel0",
+      },
+    });
+    let dob = new Date(data.dateBirth).getFullYear();
+    let now = new Date().getFullYear();
+    let activityLevel = data.activityLevel;
+    if (activityLevel == 1) data.activityLevel = "Sedentary";
+    else if (activityLevel == 2) data.activityLevel = "Exercise 1-3 times/week";
+    else if (activityLevel == 3) data.activityLevel = "Exercise 4-5 times/week";
+    else if (activityLevel == 4) data.activityLevel = "Daily exercise";
+    else if (activityLevel == 5)
+      data.activityLevel = "Intense exercise 6-7 times/week";
+    else if (activityLevel == 6)
+      data.activityLevel = "Very intense exercise daily";
+    setAge(now - dob);
+    setUser(data);
+  };
+
+  const logout = async () => {
+    try {
+      await logoutUser();
+      navigation.navigate("Register");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    dataUser()
-  }, [])
-
+    dataUser();
+  }, []);
 
   return (
     <>
@@ -101,105 +121,139 @@ export default function Home() {
           </View>
 
           {/* Form */}
-          <ScrollView style={styles.detail}>
-            {/* General */}
-            <View>
-              <View style={styles.detailheader}>
-                <Ionicons name="md-person" size={20} color="white" />
-                <Text style={styles.detailTitle}>General</Text>
+          <ScrollView>
+            <View style={styles.detail}>
+              {/* General */}
+              <View>
+                <View style={styles.detailheader}>
+                  <Ionicons name="md-person" size={20} color="white" />
+                  <Text style={styles.detailTitle}>General</Text>
+                </View>
+                <View style={styles.detailBody}>
+                  <View style={styles.detailContent}>
+                    <Text style={styles.detailName}>Gender</Text>
+                    <Text style={styles.detailValue}>{user.gender}</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                    }}
+                  />
+                  <View style={styles.detailContent}>
+                    <Text style={styles.detailName}>Name</Text>
+                    <Text style={styles.detailValue}>{user.username}</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                    }}
+                  />
+                  <View style={styles.detailContent}>
+                    <Text style={styles.detailName}>Age</Text>
+                    <Text style={styles.detailValue}>{age}</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                    }}
+                  />
+                  <View style={styles.detailContent}>
+                    <Text style={styles.detailName}>Height</Text>
+                    <Text style={styles.detailValue}>{user.height} cm</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                    }}
+                  />
+                  <View style={styles.detailContent}>
+                    <Text style={styles.detailName}>Current Weight</Text>
+                    <Text style={styles.detailValue}>{user.weight} kg</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                    }}
+                  />
+                  <View style={styles.detailContent}>
+                    <Text style={styles.detailName}>Activity Level</Text>
+                    <Text style={styles.detailValue}>{user.activityLevel}</Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                    }}
+                  />
+                </View>
               </View>
-              <View style={styles.detailBody}>
-                <View style={styles.detailContent}>
-                  <Text style={styles.detailName}>Gender</Text>
-                  <Text style={styles.detailValue}>{user.gender}</Text>
-                </View>
-                <View
-                  style={{
-                    borderBottomColor: "black",
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                  }}
-                />
-                <View style={styles.detailContent}>
-                  <Text style={styles.detailName}>Name</Text>
-                  <Text style={styles.detailValue}>{user.username}</Text>
-                </View>
-                <View
-                  style={{
-                    borderBottomColor: "black",
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                  }}
-                />
-                <View style={styles.detailContent}>
-                  <Text style={styles.detailName}>Age</Text>
-                  <Text style={styles.detailValue}>{age}</Text>
-                </View>
-                <View
-                  style={{
-                    borderBottomColor: "black",
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                  }}
-                />
-                <View style={styles.detailContent}>
-                  <Text style={styles.detailName}>Height</Text>
-                  <Text style={styles.detailValue}>{user.height} cm</Text>
-                </View>
-                <View
-                  style={{
-                    borderBottomColor: "black",
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                  }}
-                />
-                <View style={styles.detailContent}>
-                  <Text style={styles.detailName}>Current Weight</Text>
-                  <Text style={styles.detailValue}>{user.weight} kg</Text>
-                </View>
-                <View
-                  style={{
-                    borderBottomColor: "black",
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                  }}
-                />
-                <View style={styles.detailContent}>
-                  <Text style={styles.detailName}>Activity Level</Text>
-                  <Text style={styles.detailValue}>{user.activityLevel}</Text>
-                </View>
-                <View
-                  style={{
-                    borderBottomColor: "black",
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                  }}
-                />
-              </View>
-            </View>
 
-            {/* Goals */}
-            <View style={{ marginTop: 20 }}>
-              <View style={styles.detailheader}>
-                <MaterialCommunityIcons name="target" size={20} color="white" />
-                <Text style={styles.detailTitle}>Goals</Text>
-              </View>
-              <View style={styles.detailBody}>
-                <View style={styles.detailContent}>
-                  <Text style={styles.detailName}>Target Weight</Text>
-                  <Text style={styles.detailValue}>{user.targetWeight} kg</Text>
+              {/* Goals */}
+              <View style={{ marginTop: 20 }}>
+                <View style={styles.detailheader}>
+                  <MaterialCommunityIcons
+                    name="target"
+                    size={20}
+                    color="white"
+                  />
+                  <Text style={styles.detailTitle}>Goals</Text>
                 </View>
-                <View
-                  style={{
-                    borderBottomColor: "black",
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                  }}
-                />
-                <View style={styles.detailContent}>
-                  <Text style={styles.detailName}>Calories a day</Text>
-                  <Text style={styles.detailValue}>{user.calorieLimit} cal</Text>
+                <View style={styles.detailBody}>
+                  <View style={styles.detailContent}>
+                    <Text style={styles.detailName}>Target Weight</Text>
+                    <Text style={styles.detailValue}>
+                      {user.targetWeight} kg
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                    }}
+                  />
+                  <View style={styles.detailContent}>
+                    <Text style={styles.detailName}>Calories a day</Text>
+                    <Text style={styles.detailValue}>
+                      {user.calorieLimit} cal
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                    }}
+                  />
                 </View>
-                <View
-                  style={{
-                    borderBottomColor: "black",
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                  }}
-                />
               </View>
+              {/* Logout */}
+              <Pressable onPress={logout}>
+                <View style={{ marginTop: 20 }}>
+                  <View
+                    style={[styles.detailBody, { backgroundColor: "#a60a0f" }]}
+                  >
+                    <View
+                      style={[
+                        styles.detailContent,
+                        { justifyContent: "center" },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.detailName,
+                          { color: "white", fontWeight: "600" },
+                        ]}
+                      >
+                        Logout
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </Pressable>
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -211,7 +265,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:"white"
+    backgroundColor: "white",
   },
   header: {
     height: windowHeight * 0.3,
@@ -235,7 +289,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     padding: 20,
-    height: windowHeight * 0.7,
   },
   cardContainer: {
     height: 80,
@@ -254,7 +307,12 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 
-  detailTitle: { fontSize: 20, fontWeight: "500", marginLeft: 7, color:"white" },
+  detailTitle: {
+    fontSize: 20,
+    fontWeight: "500",
+    marginLeft: 7,
+    color: "white",
+  },
   detailName: { fontSize: 18, fontWeight: "400" },
   detailValue: { fontSize: 18 },
 
@@ -275,7 +333,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 15,
-    marginBottom: 8
+    marginBottom: 8,
   },
   detailBody: {
     backgroundColor: "white",
