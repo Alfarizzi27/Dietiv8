@@ -10,8 +10,8 @@ export default function App() {
     <NavigationContainer>
       {/* <Register /> */}
       {/* <MainStack /> */}
-      {/* <News /> */}
-      <MainTab />
+      <News />
+      {/* <MainTab /> */}
     </NavigationContainer>
   );
 }

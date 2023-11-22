@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HeaderStyleInterpolators } from "@react-navigation/stack";
 import Home from "../pages/Home";
 
-import Achievement from "../pages/Achievement"
+import Achievement from "../pages/Achievement";
 
 import Login from "../pages/Login";
 import MainTab from "./MainTab";
@@ -16,16 +16,13 @@ import Profile from "../components/Profile";
 import Activity from "../components/Activity";
 import Goals from "../components/Goals";
 import Gender from "../components/Gender";
-import Graph from "../pages/Graph"
-
-
-
+import Graph from "../pages/Graph";
 
 export default function MainStack() {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
-    initialRouteName="Register"
+      initialRouteName="Register"
       screenOptions={{
         headerTitleStyle: {
           fontWeight: "bold",
@@ -48,7 +45,6 @@ export default function MainStack() {
         options={{
           headerShown: false,
           animation: "slide_from_bottom",
-          
         }}
       />
       <Stack.Screen
@@ -123,17 +119,13 @@ export default function MainStack() {
           animation: "slide_from_right",
         }}
       />
-      <Stack.Screen
-        name="Achievement"
-        component={Achievement}
-      />
+      <Stack.Screen name="Achievement" component={Achievement} />
       <Stack.Screen
         name="Graph"
         component={Graph}
         options={{
           headerShown: false,
           animation: "slide_from_bottom",
-          
         }}
       />
     </Stack.Navigator>

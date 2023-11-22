@@ -61,6 +61,7 @@ export default function Home({ navigation }) {
 
   const dataUser = async () => {
     try {
+      console.log(access_token, "<<<<ACCESS TOKEN");
       const { data } = await axios.get(baseUrl + "users/1", {
         headers: { access_token },
       });

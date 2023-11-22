@@ -15,3 +15,4 @@ export const female = require("../assets/female.png");
 export const malee = require("../assets/malee.png");
 export const femalee = require("../assets/femalee.png");
 export const food = require("../assets/food.png");
+export const ditTitle = require("../assets/dietTitle.jpg");
