@@ -33,13 +33,15 @@ export default function Home() {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [age, setAge] = useState(0);
-  const baseUrl = "http://13.250.41.248/users/1";
+  const [calorie, setCalorie] = useState({});
+
+  const baseUrl = "http://13.250.41.248/";
+  const access_token = userStore((state) => state.access_token);
   const logoutUser = userStore((state) => state.logout);
   const dataUser = async () => {
-    const { data } = await axios.get(baseUrl, {
+    const { data } = await axios.get(baseUrl + 'users/1', {
       headers: {
-        access_token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ3NDk2NH0.QIYc8Y6dxqIuvvHyeAO5LVRqG9uLuAEgSZHke6fWel0",
+        access_token: access_token,
       },
     });
     let dob = new Date(data.dateBirth).getFullYear();
@@ -57,6 +59,17 @@ export default function Home() {
     setUser(data);
   };
 
+  const dataCalorie = async () => {
+    try {
+      const { data } = await axios.get(baseUrl + "histories/now", {
+        headers: { access_token },
+      });
+      setCalorie(data);
+    } catch (error) {
+      console.log(error, `<<<<<<<<ERROR`);
+    }
+  };
+
   const logout = async () => {
     try {
       await logoutUser();
@@ -68,6 +81,7 @@ export default function Home() {
 
   useEffect(() => {
     dataUser();
+    dataCalorie();
   }, []);
 
   return (
@@ -219,7 +233,7 @@ export default function Home() {
                   <View style={styles.detailContent}>
                     <Text style={styles.detailName}>Calories a day</Text>
                     <Text style={styles.detailValue}>
-                      {user.calorieLimit} cal
+                      {calorie.calorieLimit} cal
                     </Text>
                   </View>
                   <View

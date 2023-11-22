@@ -11,7 +11,7 @@ import * as Progress from "react-native-progress";
 import { captureRef } from "react-native-view-shot";
 import Body from "../components/Body";
 import { useEffect, useRef, useState } from "react";
-import { Platform, PermissionsAndroid } from "react-native";
+import { Platform, PermissionsAndroid } from "react-native"; // buat permission, jgn dulu delete
 import ViewShot from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 
@@ -259,7 +259,7 @@ export default function Achievement({ route }) {
                 <Text>Congratulations</Text>
                 <View style={{ alignItems: "center", marginVertical: 20 }}>
                   <Text style={{ fontWeight: "500", fontSize: 25 }}>
-                    {user?.username || ""} currently lost {loss}
+                    {user?.username || ""} recently lost {loss}
                     <Text style={{ fontSize: 18 }}> kg</Text>
                   </Text>
                 </View>

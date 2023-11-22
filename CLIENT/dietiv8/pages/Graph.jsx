@@ -55,6 +55,14 @@ export default function Graph({ navigation, route }) {
   const [updateAchievement, setUpdateAchievement] = useState("");
   const [bmi, setBmi] = useState({})
   const [user, setUser] = useState({})
+  const [percentage, setPercentage] = useState(0)
+  const [indicator, setIndicator] = useState(0)
+
+  const getPercentage = (data) => {
+    const tes = (100 - Math.round((Number(data.weight)-Number(data.targetWeight)) * 100) / 100) / 100
+    setIndicator(tes)
+    setPercentage(1 - tes)
+  }
 
 
   const baseUrl = "http://13.250.41.248/";
@@ -62,6 +70,7 @@ export default function Graph({ navigation, route }) {
 
   const dataUser = async() => {
     const { data } = await axios.get(baseUrl + "users/1", {headers: {access_token}})
+    getPercentage(data)
     setUser(data)
   }
   const getWeight = async () => {
@@ -104,6 +113,22 @@ export default function Graph({ navigation, route }) {
     setVisible(false);
   };
 
+  const alertSuccess = () => {
+    Alert.alert(
+      'Success',
+      'Update weight success',
+      [        
+        {
+          cancelable: true,
+          onDismiss: () =>
+            Alert.alert(
+              'This alert was dismissed by tapping outside of the alert dialog.',
+            ),
+        }
+      ]
+    )
+  }
+
   const handleSubmit = async () => {
     try {
         if(!updateAchievement){
@@ -120,6 +145,7 @@ export default function Graph({ navigation, route }) {
       dataUser()
       getBmi()
       setVisible(false);
+      alertSuccess()
     } catch (error) {
       console.log(error);
     }
@@ -187,8 +213,8 @@ export default function Graph({ navigation, route }) {
                 <ProgressBarAndroid
                   styleAttr="Horizontal"
                   indeterminate={false}
-                  progress={0.4}
-                  color={"orange"}
+                  progress={indicator}
+                  color={"green"}
                   style={{ marginTop: 10 }}
                 />
               </View>
@@ -209,8 +235,8 @@ export default function Graph({ navigation, route }) {
                 <ProgressBarAndroid
                   styleAttr="Horizontal"
                   indeterminate={false}
-                  progress={0.8}
-                  color={"green"}
+                  progress={percentage}
+                  color={"orange"}
                   style={{ marginTop: 10 }}
                 />
               </View>
@@ -261,14 +287,13 @@ export default function Graph({ navigation, route }) {
                     {/* prompt dialog buat add */}
                     <Dialog.Container visible={visible}>
                       <Dialog.Title>Update Your Weight</Dialog.Title>
-                      {/* <Dialog.Description>
-                        Do you want to delete this account? You cannot undo this
-                        action.
-                      </Dialog.Description> */}
+                      <Dialog.Description>
+                        Your weight before is {user?.weight || 0}kg
+                      </Dialog.Description>
                       <Dialog.Input
                         name="currentWeight"
                         onChangeText={(text) => setUpdateAchievement(text)}
-                        placeholder="example: 60"
+                        placeholder="example: 55"
                         inputMode="numeric"
                         value={updateAchievement}
                       ></Dialog.Input>
