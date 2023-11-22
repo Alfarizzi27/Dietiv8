@@ -17,11 +17,11 @@ const windowHeight = Dimensions.get("window").height;
 export default function Email() {
   const [text, onChangeText] = useState("");
   const navigation = useNavigation();
-  const setEmail = registerStore((state) => state.setEmail)
+  const setEmail = registerStore((state) => state.setEmail);
 
   function goToPassword() {
-    setEmail(text)
-    navigation.navigate("password")
+    setEmail(text);
+    navigation.navigate("password");
   }
   return (
     <>
@@ -38,10 +38,7 @@ export default function Email() {
           inputMode="email"
         />
         {text && (
-          <Pressable
-            style={styles.button}
-            onPress={goToPassword}
-          >
+          <Pressable style={styles.button} onPress={goToPassword}>
             <Text
               style={{
                 color: "white",

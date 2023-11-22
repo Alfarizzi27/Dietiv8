@@ -1,13 +1,3 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
-
 import {
   StyleSheet,
   Text,
@@ -61,27 +51,34 @@ const chartConfig = {
   useShadowColorFromDataset: false, // optional
 };
 
+export default function Home({ navigation }) {
+  const [user, setUser] = useState({});
+  const [calorie, setCalorie] = useState({});
+  const [percentageCal, setPercentagecal] = useState(0);
 
-export default function Home({navigation}) {
-  const [user, setUser] = useState({})
-  const [calorie, setCalorie] = useState({})
-  const [percentageCal, setPercentagecal] = useState(0)
+  const baseUrl = "http://13.250.41.248/";
+  const access_token = userStore((state) => state.access_token);
 
-  const baseUrl = "http://13.250.41.248/"
-  const access_token = userStore((state) => state.access_token)
-  
-  const dataUser = async() => {
-    const { data } = await axios.get(baseUrl + "users/1", {headers: {access_token}})
-    setUser(data)
-  }
+  const dataUser = async () => {
+    try {
+      const { data } = await axios.get(baseUrl + "users/1", {
+        headers: { access_token },
+      });
+      setUser(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const dataCalorie = async() => {
-    const { data } = await axios.get(baseUrl + "histories/now", {headers: {access_token}} )
-    const percentage = Math.round((data.calorieGain/data.calorieLimit) * 100) / 100
-    setPercentagecal(percentage)
-    setCalorie(data)
-  }
-
+  const dataCalorie = async () => {
+    const { data } = await axios.get(baseUrl + "histories/now", {
+      headers: { access_token },
+    });
+    const percentage =
+      Math.round((data.calorieGain / data.calorieLimit) * 100) / 100;
+    setPercentagecal(percentage);
+    setCalorie(data);
+  };
 
   useEffect(() => {
     dataUser();
@@ -89,17 +86,14 @@ export default function Home({navigation}) {
   }, []);
 
   const touchNutrition = () => {
-
-    console.log("You touch Nutrition")
-    navigation.navigate('Recipes')
-  }
+    console.log("You touch Nutrition");
+    navigation.navigate("Recipes");
+  };
 
   const touchWeight = () => {
-    console.log("You touch Weight")
-    navigation.navigate('Graph', {user: user})
-
-  }
-
+    console.log("You touch Weight");
+    navigation.navigate("Graph", { user: user });
+  };
 
   return (
     <>

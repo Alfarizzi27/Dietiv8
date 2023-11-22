@@ -3,72 +3,121 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   FlatList,
   Dimensions,
-  Image,
-  TouchableOpacity,
+  Pressable,
 } from "react-native";
-import {
-  SafeAreaView,
-  SafeAreaProvider,
-  SafeAreaInsetsContext,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchBar } from "@rneui/themed";
 
 import Body from "../components/Body";
 import CardAddMenus from "../components/CardAddMenu";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import userStore from "../stores/userStore";
+import { AntDesign } from "@expo/vector-icons";
+import Dialog from "react-native-dialog";
+import { FontAwesome5 } from "@expo/vector-icons";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+const baseUrl = "http://13.250.41.248/";
+
 export default function AddMenus() {
+  const accessToken = userStore((state) => state.access_token);
   const [search, setSearch] = useState("");
+  const [historyId, setHistoryId] = useState("");
+  const [foods, setFoods] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [text, onChangeText] = useState("");
+
   const updateSearch = (search) => {
     setSearch(search);
   };
+  const inputMenu = () => {};
 
-  const [foods, setFoods] = useState([]);
+  const showDialog = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const handleAdd = async () => {
+    // The user has pressed the "Delete" button, so here you can do your own logic.
+    // ...Your logic
+    // setVisible(false);
+    try {
+      // await axios.post(baseUrl + "foods" + historyId, { food: text });
+      const { data } = await axios({
+        method: "post",
+        url: baseUrl + "foods/" + historyId,
+        data: {
+          food: text,
+        },
+        headers: {
+          access_token: accessToken,
+        },
+      });
+      if (data.message === "Food has been inputed") {
+        setVisible(false);
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const fetchHistory = async (access_token) => {
+    try {
+      const { data } = await axios.get(baseUrl + "histories/now", {
+        headers: {
+          access_token: accessToken,
+        },
+      });
+      setHistoryId(data.id);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
 
   const fetchFoods = async () => {
     try {
-      const response = await axios.get("http://13.250.41.248/foods", {
+      const response = await axios.get(baseUrl + "foods", {
         headers: {
-          access_token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ3NDk2NH0.QIYc8Y6dxqIuvvHyeAO5LVRqG9uLuAEgSZHke6fWel0",
+          access_token: accessToken,
         },
       });
-      setFoods(response.data)
+      setFoods(response.data);
     } catch (error) {
       console.log(error);
     }
   };
-  
-  useEffect(()=> {
-    fetchFoods()
-  }, []);
- 
 
-  const searchEnter = async() => {
+  useEffect(() => {
+    fetchFoods();
+    fetchHistory();
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(text);
+  // }, [text]);
+
+  const searchEnter = async () => {
     console.log(search);
     try {
-      const response = await axios.get("http://13.250.41.248/foods?filter=" + search, {
-        headers: {
-          access_token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZ2VuZGVyIjoibWFsZSIsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQG1haWwuY29tIiwid2VpZ2h0Ijo3MCwiaGVpZ2h0IjoxNjUsImV4dHJhIjoiIiwiY2Fsb3JpZUxpbWl0IjoxNjA2LCJ0YXJnZXRXZWlnaHQiOiI2MCIsImFjdGl2aXR5TGV2ZWwiOjEsImRhdGVCaXJ0aCI6IjE5OTctMDEtMjZUMDA6MDA6MDAuMDAwWiIsImlhdCI6MTcwMDQ3NDk2NH0.QIYc8Y6dxqIuvvHyeAO5LVRqG9uLuAEgSZHke6fWel0",
-        },
-      });
-      setFoods(response.data)
+      const response = await axios.get(
+        "http://13.250.41.248/foods?filter=" + search,
+        {
+          headers: {
+            access_token: accessToken,
+          },
+        }
+      );
+      setFoods(response.data);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const addHandler = (id) => {
-    console.log(id);
   };
 
   return (
@@ -86,15 +135,38 @@ export default function AddMenus() {
               inputStyle={{ color: "black" }}
               round={true}
               onSubmitEditing={() => searchEnter()}
-              onClear={()=>fetchFoods()}
+              onClear={() => fetchFoods()}
             />
           </View>
           <FlatList
-          data={foods}
-          renderItem={({item}) => (
-            <CardAddMenus key={item.id} item={item} id={item.id}/>
-          )}
-          />                    
+            data={foods}
+            renderItem={({ item }) => (
+              <CardAddMenus key={item.id} item={item} id={item.id} />
+            )}
+          />
+          <Pressable style={styles.newMenu} onPress={showDialog}>
+            <AntDesign name="pluscircle" size={60} color="green" />
+          </Pressable>
+
+          <Dialog.Container visible={visible}>
+            <Dialog.Title>Enter Your Food</Dialog.Title>
+            <Dialog.Input
+              cursorColor={"green"}
+              style={styles.inputStyle}
+              value={text}
+              onChangeText={onChangeText}
+            />
+            <Dialog.Button
+              label="Cancel"
+              onPress={handleCancel}
+              style={{ color: "green" }}
+            />
+            <Dialog.Button
+              label="Save"
+              onPress={handleAdd}
+              style={{ color: "green" }}
+            />
+          </Dialog.Container>
         </SafeAreaView>
       </Body>
     </>
@@ -106,4 +178,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
+  newMenu: {
+    position: "absolute",
+    top: windowHeight - 130,
+    left: windowWidth - 90,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 60,
+  },
+  inputStyle: {},
 });
