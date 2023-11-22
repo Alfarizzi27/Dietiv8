@@ -19,15 +19,15 @@ import {
 
 export default function MainTab() {
   const getAcc = userStore((state) => state.getAccessToken);
-  const getHistory = userStore((state) => state.getHistory);
+  // const getHistory = userStore((state) => state.getHistory);
 
   // async function started() {
-  //   const access_token = await getAcc();
-  //   await getHistory(access_token);
+  //   await getAcc();
+  //   // await getHistory(access_token);
   // }
-  // useEffect(() => {
-  //   "dasddsa";
-  // }, []);
+  useEffect(() => {
+    getAcc()
+  }, []);
   const Tab = createBottomTabNavigator();
   return (
     <>

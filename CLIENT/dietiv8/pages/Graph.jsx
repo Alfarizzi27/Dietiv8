@@ -80,13 +80,14 @@ export default function Graph({ navigation, route }) {
       });
       setLatestData(data[data.length - 1]);
       let dateUpdate = [];
-      data = data.map((el) => {
+      const weightBefore = data.map((el) => {
         let event = new Date(el.Achievement.updatedAt);
         event = event.getDate() + "-" + (Number(event.getMonth()) + 1);
         dateUpdate.push(event);
         return el.Achievement.weightBefore;
       });
-      setWeight(data);
+      weightBefore.push(data[data.length-1].Achievement.currentWeight)
+      setWeight(weightBefore);
       setDateUpdated(dateUpdate);
     } catch (error) {
       console.log(error, `<<<<<<<<<<<<<<<ERROR`);
