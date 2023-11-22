@@ -24,10 +24,13 @@ export default function Home() {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [age, setAge] = useState(0);
-  const baseUrl = "http://13.250.41.248/users/1";
+  const [calorie, setCalorie] = useState({});
+
+  const baseUrl = "http://13.250.41.248/";
+  const access_token = userStore((state) => state.access_token);
   const logoutUser = userStore((state) => state.logout);
   const dataUser = async () => {
-    const { data } = await axios.get(baseUrl, {
+    const { data } = await axios.get(baseUrl + 'users/1', {
       headers: {
         access_token: accessToken,
       },
@@ -47,6 +50,17 @@ export default function Home() {
     setUser(data);
   };
 
+  const dataCalorie = async () => {
+    try {
+      const { data } = await axios.get(baseUrl + "histories/now", {
+        headers: { access_token },
+      });
+      setCalorie(data);
+    } catch (error) {
+      console.log(error, `<<<<<<<<ERROR`);
+    }
+  };
+
   const logout = async () => {
     try {
       await logoutUser();
@@ -58,6 +72,7 @@ export default function Home() {
 
   useEffect(() => {
     dataUser();
+    dataCalorie();
   }, []);
 
   return (
@@ -209,7 +224,7 @@ export default function Home() {
                   <View style={styles.detailContent}>
                     <Text style={styles.detailName}>Calories a day</Text>
                     <Text style={styles.detailValue}>
-                      {user.calorieLimit} cal
+                      {calorie.calorieLimit} cal
                     </Text>
                   </View>
                   <View

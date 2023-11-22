@@ -173,7 +173,7 @@ export default function Home({ navigation }) {
                         fontSize: 20,
                       }}
                     >
-                      {user.calorieLimit}
+                      {calorie.calorieLimit}
                       <Text style={{ fontSize: 15 }}>cal</Text>
                     </Text>
                     <Text style={{ color: "white" }}>Calories Limit</Text>
