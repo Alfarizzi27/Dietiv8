@@ -43,7 +43,7 @@ export default function Goals() {
       setTextColor2("white");
       setTextColor3("black");
     } else {
-      setColors3("#0c7a22");
+      setColors3("#55a64e");
       setColors("#d9d9d9");
       setColors2("#d9d9d9");
       setTextColor("black");

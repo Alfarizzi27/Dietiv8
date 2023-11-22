@@ -17,24 +17,23 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Profile() {
-  const setActivityLevel = registerStore((state) => state.setActivityLevel)
+  const setActivityLevel = registerStore((state) => state.setActivityLevel);
   const navigation = useNavigation();
 
   const [level, setLevel] = useState("");
 
   const setLvl = (lvl) => {
-    setActivityLevel(lvl)
-    setLevel(lvl)
+    setActivityLevel(lvl);
+    setLevel(lvl);
   };
 
   function gotoGoals() {
-
-    navigation.navigate("goals")
+    navigation.navigate("goals");
   }
 
-    // useEffect(() => {
-    //   console.log(level, "<<ini level");
-    // }, ["level"]);
+  // useEffect(() => {
+  //   console.log(level, "<<ini level");
+  // }, ["level"]);
 
   return (
     <>
@@ -61,8 +60,16 @@ export default function Profile() {
               >
                 <View style={styles.activity}>
                   <View>
-                    <Text style={level === 1 ? styles.selectedText : styles.textTitle}>Level 1</Text>
-                    <Text style={level === 1 ? styles.descSelected : styles.desc}>
+                    <Text
+                      style={
+                        level === 1 ? styles.selectedText : styles.textTitle
+                      }
+                    >
+                      Level 1
+                    </Text>
+                    <Text
+                      style={level === 1 ? styles.descSelected : styles.desc}
+                    >
                       Sedentary: little or no exercise
                     </Text>
                   </View>
@@ -86,8 +93,16 @@ export default function Profile() {
               >
                 <View style={styles.activity}>
                   <View>
-                  <Text style={level === 2 ? styles.selectedText : styles.textTitle}>Level 2</Text>
-                    <Text style={level === 2 ? styles.descSelected : styles.desc}>
+                    <Text
+                      style={
+                        level === 2 ? styles.selectedText : styles.textTitle
+                      }
+                    >
+                      Level 2
+                    </Text>
+                    <Text
+                      style={level === 2 ? styles.descSelected : styles.desc}
+                    >
                       Exercise 1-3 times/week
                     </Text>
                   </View>
@@ -110,8 +125,16 @@ export default function Profile() {
               >
                 <View style={styles.activity}>
                   <View>
-                  <Text style={level === 3 ? styles.selectedText : styles.textTitle}>Level 3</Text>
-                    <Text style={level === 3 ? styles.descSelected : styles.desc}>
+                    <Text
+                      style={
+                        level === 3 ? styles.selectedText : styles.textTitle
+                      }
+                    >
+                      Level 3
+                    </Text>
+                    <Text
+                      style={level === 3 ? styles.descSelected : styles.desc}
+                    >
                       Exercise 4-5 times/week
                     </Text>
                   </View>
@@ -134,11 +157,21 @@ export default function Profile() {
               >
                 <View style={styles.activity}>
                   <View>
-                  <Text style={level === 4 ? styles.selectedText : styles.textTitle}>Level 4</Text>
-                    <Text style={level === 4 ? styles.descSelected : styles.desc}>
+                    <Text
+                      style={
+                        level === 4 ? styles.selectedText : styles.textTitle
+                      }
+                    >
+                      Level 4
+                    </Text>
+                    <Text
+                      style={level === 4 ? styles.descSelected : styles.desc}
+                    >
                       Daily exercise or intense exercise
                     </Text>
-                    <Text style={level === 4 ? styles.descSelected : styles.desc}>
+                    <Text
+                      style={level === 4 ? styles.descSelected : styles.desc}
+                    >
                       3-4 times/week
                     </Text>
                   </View>
@@ -162,8 +195,16 @@ export default function Profile() {
               >
                 <View style={styles.activity}>
                   <View>
-                  <Text style={level === 5 ? styles.selectedText : styles.textTitle}>Level 5</Text>
-                    <Text style={level === 5 ? styles.descSelected : styles.desc}>
+                    <Text
+                      style={
+                        level === 5 ? styles.selectedText : styles.textTitle
+                      }
+                    >
+                      Level 5
+                    </Text>
+                    <Text
+                      style={level === 5 ? styles.descSelected : styles.desc}
+                    >
                       Intense exercise 6-7 times/week
                     </Text>
                   </View>
@@ -186,11 +227,21 @@ export default function Profile() {
               >
                 <View style={styles.activity}>
                   <View>
-                  <Text style={level === 6 ? styles.selectedText : styles.textTitle}>Level 6</Text>
-                    <Text style={level === 6 ? styles.descSelected : styles.desc}>
+                    <Text
+                      style={
+                        level === 6 ? styles.selectedText : styles.textTitle
+                      }
+                    >
+                      Level 6
+                    </Text>
+                    <Text
+                      style={level === 6 ? styles.descSelected : styles.desc}
+                    >
                       Very intense exercise daily,
                     </Text>
-                    <Text style={level === 6 ? styles.descSelected : styles.desc}>
+                    <Text
+                      style={level === 6 ? styles.descSelected : styles.desc}
+                    >
                       or physical job
                     </Text>
                   </View>
@@ -209,13 +260,13 @@ export default function Profile() {
             </View>
           </ScrollView>
           <View style={{ height: 50 }}>
-            {level ?  <Pressable
-              style={styles.btn}
-              onPress={gotoGoals}
-            >
-              <Text style={styles.txtBtn}>Continue</Text>
-            </Pressable> : "" }
-           
+            {level ? (
+              <Pressable style={styles.btn} onPress={gotoGoals}>
+                <Text style={styles.txtBtn}>Continue</Text>
+              </Pressable>
+            ) : (
+              ""
+            )}
           </View>
         </View>
       </View>
@@ -302,17 +353,17 @@ const styles = StyleSheet.create({
   },
   selectedText: {
     color: "white",
-    fontWeight: "500"
+    fontWeight: "500",
   },
   textTitle: {
-    fontWeight: "500"
+    fontWeight: "500",
   },
   desc: {
     fontWeight: "400",
-    color: "grey"
+    color: "grey",
   },
   descSelected: {
-    fontWeight: "400", 
-    color: "lightgrey"
-  }
+    fontWeight: "400",
+    color: "lightgrey",
+  },
 });
