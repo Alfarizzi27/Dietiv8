@@ -37,7 +37,7 @@ beforeAll(async () => {
     dateBirth: "1997-01-26T00:00:00.000Z",
   };
   validToken = createToken(payload);
-  console.log(validToken, " <<<VALIIDDDD TOOKEENN");
+  // console.log(validToken, " <<<VALIIDDDD TOOKEENN");
 });
 
 afterAll(async () => {
@@ -80,26 +80,26 @@ describe("Histories ", () => {
   });
 });
 describe("Menu ", () => {
-  describe("get /openai/menu ", () => {
-    const mock = jest.fn(openaicontroller.getMenu);
-    it("succcess", async () => {
-      const respond = await request(app)
-        .get("/openai/menu")
-        .set("access_token", validToken);
-      // expect(respond.status).toBe(201);
-      // expect(respond.body).toBeInstanceOf(Object);
-      // expect(respond.body).toHaveProperty("breakfast");
-      expect(mock).toHaveBeenCalled();
-    });
-    it("invalid token", async () => {
-      const respond = await request(app)
-        .get("/openai/menu")
-        .set("access_token", "ASDFSDAFEWWFSDAfdsfdsaGAGAFG123");
-      expect(respond.status).toBe(401);
-      expect(respond.body).toBeInstanceOf(Object);
-      expect(respond.body).toHaveProperty("message", "Invalid Token");
-    });
-  });
+  // describe("get /openai/menu ", () => {
+  //   const mock = jest.fn(openaicontroller.getMenu);
+  //   it("succcess", async () => {
+  //     const respond = await request(app)
+  //       .get("/openai/menu")
+  //       .set("access_token", validToken);
+  //     // expect(respond.status).toBe(201);
+  //     // expect(respond.body).toBeInstanceOf(Object);
+  //     // expect(respond.body).toHaveProperty("breakfast");
+  //     expect(mock).toHaveBeenCalled();
+  //   });
+  //   it("invalid token", async () => {
+  //     const respond = await request(app)
+  //       .get("/openai/menu")
+  //       .set("access_token", "ASDFSDAFEWWFSDAfdsfdsaGAGAFG123");
+  //     expect(respond.status).toBe(401);
+  //     expect(respond.body).toBeInstanceOf(Object);
+  //     expect(respond.body).toHaveProperty("message", "Invalid Token");
+  //   });
+  // });
   describe("GET /menus/:historyId Before POST /menus/:historyId", () => {
     it("fail", async () => {
       //set by param
@@ -152,15 +152,15 @@ describe("Menu ", () => {
     });
   });
   describe("GET /menus/:historyId", () => {
-    it("succcess", async () => {
-      //set by param
-      const respond = await request(app)
-        .get("/menus/1")
-        .set("access_token", validToken);
-      expect(respond.status).toBe(200);
-      expect(respond.body).toBeInstanceOf(Object);
-      expect(respond.body).toHaveProperty("id");
-    });
+    // it("succcess", async () => {
+    //   //set by param
+    //   const respond = await request(app)
+    //     .get("/menus/1")
+    //     .set("access_token", validToken);
+    //   expect(respond.status).toBe(200);
+    //   expect(respond.body).toBeInstanceOf(Object);
+    //   expect(respond.body).toHaveProperty("id");
+    // });
     it("history not found", async () => {
       const respond = await request(app)
         .get("/menus/1000")

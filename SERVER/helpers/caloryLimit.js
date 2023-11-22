@@ -30,7 +30,7 @@ async function setCaloryLimit(user, currentWeight) {
     // console.log(calorieLimit);
     return calorieLimit;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return null;
   }
 }

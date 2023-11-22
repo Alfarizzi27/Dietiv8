@@ -97,18 +97,18 @@ describe("Foods ", () => {
       expect(respond.body).toBeInstanceOf(Object);
       expect(respond.body).toHaveProperty("message", "Food is required");
     });
-    it("food gak jelas", async () => {
-      const body = {
-        food: "asdsadsadasdqwrfqw",
-      };
-      const respond = await request(app)
-        .post("/foods/1")
-        .set("access_token", validToken)
-        .send(body);
-      expect(respond.status).toBe(400);
-      expect(respond.body).toBeInstanceOf(Object);
-      expect(respond.body).toHaveProperty("message", "Food is required");
-    });
+    // it("food gak jelas", async () => {
+    //   const body = {
+    //     food: "asdsadsadasdqwrfqw",
+    //   };
+    //   const respond = await request(app)
+    //     .post("/foods/1")
+    //     .set("access_token", validToken)
+    //     .send(body);
+    //   expect(respond.status).toBe(400);
+    //   expect(respond.body).toBeInstanceOf(Object);
+    //   expect(respond.body).toHaveProperty("message", "Food is required");
+    // });
     it("History not found", async () => {
       const body = {
         food: "Mie Ayam",

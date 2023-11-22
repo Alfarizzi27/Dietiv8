@@ -14,8 +14,8 @@ app.use("/", router);
 app.use(errorHandler);
 
 //comment app.listen untuk melakukan testing
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
 
 module.exports = app
