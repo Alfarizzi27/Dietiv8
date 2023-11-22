@@ -198,8 +198,8 @@ const styles = StyleSheet.create({
   card: {
     marginTop: 30,
     height: 470,
-    width: 400,
-    // backgroundColor: "grey",
+    width: 350,
+    // backgroundColor: "red",
     // borderRadius: 12,
   },
   icon: {

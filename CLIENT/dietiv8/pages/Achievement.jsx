@@ -73,7 +73,7 @@ export default function Achievement({ route }) {
     if (loss >= 0) {
       return (
         <>
-          <View style={{ marginVertical: 20 }}>
+          <View style={{ marginVertical: 20, alignItems: "center" }}>
             <Text>Congratulations</Text>
             <View style={{ alignItems: "center", marginVertical: 20 }}>
               <Text style={{ fontWeight: "500", fontSize: 25 }}>
@@ -84,7 +84,7 @@ export default function Achievement({ route }) {
           </View>
         </>
       );
-    }else if(loss < 0){
+    } else if (loss < 0) {
       return (
         <>
           <View style={{ marginVertical: 20 }}>
@@ -97,7 +97,7 @@ export default function Achievement({ route }) {
             </View>
           </View>
         </>
-      )
+      );
     }
   };
   useEffect(() => {
@@ -190,9 +190,8 @@ export default function Achievement({ route }) {
                 <View
                   style={{
                     flexDirection: "row",
+                    width: 150,
                     justifyContent: "space-between",
-                    alignSelf: "flex-start",
-                    width: 125,
                   }}
                 >
                   <View style={{ justifyContent: "center" }}>
@@ -232,7 +231,7 @@ export default function Achievement({ route }) {
                     justifyContent: "space-between",
                     alignSelf: "flex-start",
                     marginTop: 20,
-                    width: 125,
+                    width: 150,
                   }}
                 >
                   <View style={{ marginRight: 30, justifyContent: "center" }}>
@@ -297,7 +296,7 @@ export default function Achievement({ route }) {
                 </View>
               </View> */}
               {isCongratulation()}
-              <View>
+              <View style={{ alignItems: "center" }}>
                 <Text>Progress</Text>
                 <View style={{ marginTop: 20 }}>
                   <View style={{ flexDirection: "row" }}>

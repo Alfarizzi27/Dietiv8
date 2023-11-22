@@ -30,7 +30,7 @@ export default function Home() {
   const access_token = userStore((state) => state.access_token);
   const logoutUser = userStore((state) => state.logout);
   const dataUser = async () => {
-    const { data } = await axios.get(baseUrl + 'users/1', {
+    const { data } = await axios.get(baseUrl + "users/1", {
       headers: {
         access_token: accessToken,
       },
@@ -239,7 +239,7 @@ export default function Home() {
               <Pressable onPress={logout}>
                 <View style={{ marginTop: 20 }}>
                   <View
-                    style={[styles.detailBody, { backgroundColor: "#a60a0f" }]}
+                    style={[styles.detailBody, { backgroundColor: "#A71D31" }]}
                   >
                     <View
                       style={[

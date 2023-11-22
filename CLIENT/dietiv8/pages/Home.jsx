@@ -55,7 +55,7 @@ export default function Home({ navigation }) {
   const [user, setUser] = useState({});
   const [calorie, setCalorie] = useState({});
   const [percentageCal, setPercentagecal] = useState(0);
-  const [colorProgress, setColorProgress] = useState("#60935D")
+  const [colorProgress, setColorProgress] = useState("#60935D");
 
   const baseUrl = "http://13.250.41.248/";
   const getAcc = userStore((state) => state.getAccessToken);
@@ -63,13 +63,13 @@ export default function Home({ navigation }) {
 
   const dataUser = async () => {
     try {
-      await getAcc()
+      await getAcc();
       const { data } = await axios.get(baseUrl + "users/1", {
         headers: { access_token },
       });
       setUser(data);
     } catch (error) {
-      console.log(error);
+      console.log(error.response, "<<<<<<>>>>>>>");
     }
   };
 
@@ -79,29 +79,29 @@ export default function Home({ navigation }) {
         headers: { access_token },
       });
       const percentage =
-        Math.round((data.calorieGain / data.calorieLimit) * 100) / 100;
-        if(data.calorieGain > data.calorieLimit - 250){
-          setColorProgress("red")
-        }else{
-          setColorProgress("#60935D")
-        }
+        Math.round((data?.calorieGain / data?.calorieLimit) * 100) / 100;
+      if (data?.calorieGain > data?.calorieLimit - 250) {
+        setColorProgress("#A71D31");
+      } else {
+        setColorProgress("#60935D");
+      }
       setPercentagecal(percentage);
       setCalorie(data);
     } catch (error) {
-      console.log(error)
+      console.log(error.response, "========");
     }
   };
 
   useEffect(() => {
     // dataUser();
     // dataCalorie();
-    getAcc()
+    getAcc();
   }, []);
 
   useEffect(() => {
     dataUser();
     dataCalorie();
-  }, [access_token])
+  }, [access_token]);
 
   const touchNutrition = () => {
     console.log("You touch Nutrition");
@@ -121,7 +121,7 @@ export default function Home({ navigation }) {
           <View style={styles.header}>
             <View style={styles.headerName}>
               <Text style={{ fontSize: 20, fontWeight: "600" }}>
-                Hello, {user.username}!
+                Hello, {user?.username}!
               </Text>
             </View>
 
@@ -178,7 +178,7 @@ export default function Home({ navigation }) {
                         fontSize: 20,
                       }}
                     >
-                      {user.targetWeight}
+                      {user?.targetWeight}
                       <Text style={{ fontSize: 15 }}>kg</Text>
                     </Text>
                     <Text style={{ color: "white" }}>Target Weight</Text>
@@ -191,7 +191,7 @@ export default function Home({ navigation }) {
                         fontSize: 20,
                       }}
                     >
-                      {calorie.calorieLimit}
+                      {calorie?.calorieLimit}
                       <Text style={{ fontSize: 15 }}>cal</Text>
                     </Text>
                     <Text style={{ color: "white" }}>Calories Limit</Text>
@@ -247,7 +247,7 @@ export default function Home({ navigation }) {
                   >
                     <View>
                       <Text style={{ fontSize: 18, fontWeight: "500" }}>
-                        {calorie.calorieGain} of {calorie.calorieLimit}
+                        {calorie?.calorieGain} of {calorie?.calorieLimit}
                       </Text>
                       <Text style={{ color: "grey", fontSize: 10 }}>
                         Cal Eaten
@@ -313,11 +313,12 @@ export default function Home({ navigation }) {
                     <View>
                       <View>
                         <Text style={{ fontSize: 20, fontWeight: "500" }}>
-                          {user.weight} <Text style={{ fontSize: 15 }}>kg</Text>
+                          {user?.weight}{" "}
+                          <Text style={{ fontSize: 15 }}>kg</Text>
                         </Text>
                       </View>
                       <Text style={{ color: "grey", fontSize: 10 }}>
-                        Loss {user.weight - user.targetWeight} kg
+                        Loss {user?.weight - user?.targetWeight} kg
                       </Text>
                     </View>
                     <View

@@ -6,18 +6,18 @@ import { useNavigation } from "@react-navigation/native";
 import userStore from "../stores/userStore";
 import { useEffect } from "react";
 
-export default function Register({coba}) {
+export default function Register({ coba }) {
   const navigation = useNavigation();
-  const getAccessToken = userStore((state) => state.getAccessToken)
-  
+  const getAccessToken = userStore((state) => state.getAccessToken);
+
   async function checkLogin() {
-    const access = await getAccessToken()
-    if(access) navigation.navigate("maintab")
+    const access = await getAccessToken();
+    if (access) navigation.navigate("maintab");
   }
 
   useEffect(() => {
-    checkLogin()
-  }, [])
+    checkLogin();
+  }, []);
   return (
     <>
       <View style={styles.container}>
@@ -27,30 +27,30 @@ export default function Register({coba}) {
               <View style={{ justifyContent: "center", alignItems: "center" }}>
                 <Text
                   style={{
-                    color: "white",
+                    color: "#60935d",
                     textAlign: "center",
-                    marginTop: 40,
-                    fontSize: 26,
+                    marginTop: 90,
+                    fontSize: 30,
                     width: 280,
-                    borderRadius: 7,
-                    padding: 7,
-                    backgroundColor: "#60935d",
-                    fontWeight: "500",
+                    // borderRadius: 7,
+                    // padding: 7,
+                    // backgroundColor: "#60935d",
+                    fontWeight: "800",
                   }}
                 >
                   Welcome to DIETIV8
                 </Text>
                 <Text
                   style={{
-                    color: "white",
+                    color: "#60935d",
                     textAlign: "center",
-                    marginTop: 20,
                     fontSize: 26,
                     width: 280,
-                    borderRadius: 7,
-                    padding: 7,
-                    backgroundColor: "#60935d",
-                    fontWeight: "500",
+                    // borderRadius: 7,
+                    // padding: 7,
+                    // backgroundColor: "#60935d",
+                    fontWeight: "800",
+                    marginBottom: 20,
                   }}
                 >
                   Nutrition Program
@@ -60,7 +60,7 @@ export default function Register({coba}) {
                     color: "#60935d",
                     textAlign: "center",
                     textAlignVertical: "center",
-                    marginTop: 120,
+                    marginTop: 110,
                     fontSize: 30,
                     width: 280,
                     height: 65,
@@ -73,10 +73,14 @@ export default function Register({coba}) {
                 >
                   Get Started
                 </Text>
-                <Text style={{ color: "green", marginTop: 10 }}>
+                <Text style={{ color: "green", marginTop: 10, fontSize: 15 }}>
                   Already have an account?{" "}
                   <Text
-                    style={{ color: "blue", textDecorationLine: "underline" }}
+                    style={{
+                      color: "green",
+                      fontWeight: "700",
+                      textDecorationLine: "underline",
+                    }}
                     onPress={() => navigation.navigate("Login")}
                   >
                     Log in

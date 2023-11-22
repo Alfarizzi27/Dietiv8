@@ -53,7 +53,7 @@ export default function HistoryFood({ item }) {
             justifyContent: "space-between",
           }}
         >
-          <View>
+          <View style={{ width: 230 }}>
             <Text style={{ fontWeight: 500, fontSize: 18, color: "#084205" }}>
               {item.name}
             </Text>

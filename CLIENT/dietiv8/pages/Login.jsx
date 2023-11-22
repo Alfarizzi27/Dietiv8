@@ -23,9 +23,9 @@ export default function Login() {
   const [error, setError] = useState("");
   const login = userStore((state) => state.login);
 
-    function removeMessage() {
-        setError()
-    }
+  function removeMessage() {
+    setError();
+  }
 
   async function loginUser() {
     setEmailError("");
@@ -48,28 +48,27 @@ export default function Login() {
   return (
     <>
       <Body>
-            { error ? <View style={styles.errorBackground}></View> : "" }
-            {error ? (
-              <View>
-                <View style={styles.errorMessage}>
-                  <Text style={styles.errorText}>Invalid Email/Password</Text>
-                  <Pressable style={styles.button} onPress={removeMessage}>
-                    <Text
-                      style={{
-                        color: "white",
-                        fontWeight: "700",
-                        fontSize: 20,
-                      }}
-                    >
-                      OK
-                    </Text>
-                  </Pressable>
-                </View>
-              </View>
-
-            ) : (
-              ""
-            )}
+        {error ? <View style={styles.errorBackground}></View> : ""}
+        {error ? (
+          <View>
+            <View style={styles.errorMessage}>
+              <Text style={styles.errorText}>Invalid Email/Password</Text>
+              <Pressable style={styles.button} onPress={removeMessage}>
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "700",
+                    fontSize: 20,
+                  }}
+                >
+                  OK
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        ) : (
+          ""
+        )}
         <View style={styles.container}>
           <Text style={{ fontSize: 28, fontWeight: "700", marginBottom: 12 }}>
             Login
@@ -104,7 +103,9 @@ export default function Login() {
               value={password}
               cursorColor={"#88bd1e"}
               disableFullscreenUI={true}
-              inputMode="email"
+              inputMode="text"
+              secureTextEntry={true}
+              passwordRules={true}
               placeholder="input password here"
             />
             {passError ? (
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
     top: 300,
     width: 400,
     textAlign: "center",
-    zIndex: 2
+    zIndex: 2,
   },
   errorBackground: {
     backgroundColor: "black",
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     width: "100%",
     height: "100%",
-    opacity: 0.5
+    opacity: 0.5,
   },
   errorText: {
     alignContent: "center",
@@ -182,5 +183,5 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingTop: 20,
     fontSize: 29,
-  }
+  },
 });

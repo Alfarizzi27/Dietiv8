@@ -53,26 +53,31 @@ export default function Graph({ navigation, route }) {
   const [weight, setWeight] = useState([0]);
   const [dateUpdated, setDateUpdated] = useState([""]);
   const [updateAchievement, setUpdateAchievement] = useState("");
-  const [bmi, setBmi] = useState({})
-  const [user, setUser] = useState({})
-  const [percentage, setPercentage] = useState(0)
-  const [indicator, setIndicator] = useState(0)
+  const [bmi, setBmi] = useState({});
+  const [user, setUser] = useState({});
+  const [percentage, setPercentage] = useState(0);
+  const [indicator, setIndicator] = useState(0);
 
   const getPercentage = (data) => {
-    const tes = (100 - Math.round((Number(data.weight)-Number(data.targetWeight)) * 100) / 100) / 100
-    setIndicator(tes)
-    setPercentage(1 - tes)
-  }
-
+    const tes =
+      (100 -
+        Math.round((Number(data.weight) - Number(data.targetWeight)) * 100) /
+          100) /
+      100;
+    setIndicator(tes);
+    setPercentage(1 - tes);
+  };
 
   const baseUrl = "http://13.250.41.248/";
   const access_token = userStore((state) => state.access_token);
 
-  const dataUser = async() => {
-    const { data } = await axios.get(baseUrl + "users/1", {headers: {access_token}})
-    getPercentage(data)
-    setUser(data)
-  }
+  const dataUser = async () => {
+    const { data } = await axios.get(baseUrl + "users/1", {
+      headers: { access_token },
+    });
+    getPercentage(data);
+    setUser(data);
+  };
   const getWeight = async () => {
     try {
       let { data } = await axios.get(baseUrl + "achievements", {
@@ -86,7 +91,15 @@ export default function Graph({ navigation, route }) {
         dateUpdate.push(event);
         return el.Achievement.weightBefore;
       });
-      weightBefore.push(data[data.length-1].Achievement.currentWeight)
+      let latestUpdateDate = new Date(
+        data[data.length - 1].Achievement.updatedAt
+      );
+      latestUpdateDate =
+        latestUpdateDate.getDate() +
+        "-" +
+        (Number(latestUpdateDate.getMonth()) + 1);
+      dateUpdate.push(latestUpdateDate);
+      weightBefore.push(data[data.length - 1].Achievement.currentWeight);
       setWeight(weightBefore);
       setDateUpdated(dateUpdate);
     } catch (error) {
@@ -94,15 +107,17 @@ export default function Graph({ navigation, route }) {
     }
   };
 
-  const getBmi = async() => {
-    const { data } = await axios.get(baseUrl + "fitnes/bmi", {headers: {access_token}})
-    setBmi(data)
-  }
+  const getBmi = async () => {
+    const { data } = await axios.get(baseUrl + "fitnes/bmi", {
+      headers: { access_token },
+    });
+    setBmi(data);
+  };
 
   useEffect(() => {
     getWeight();
-    dataUser()
-    getBmi()
+    dataUser();
+    getBmi();
   }, []);
 
   // munculin prompt buat add achievement
@@ -115,38 +130,34 @@ export default function Graph({ navigation, route }) {
   };
 
   const alertSuccess = () => {
-    Alert.alert(
-      'Success',
-      'Update weight success',
-      [        
-        {
-          cancelable: true,
-          onDismiss: () =>
-            Alert.alert(
-              'This alert was dismissed by tapping outside of the alert dialog.',
-            ),
-        }
-      ]
-    )
-  }
+    Alert.alert("Success", "Update weight success", [
+      {
+        cancelable: true,
+        onDismiss: () =>
+          Alert.alert(
+            "This alert was dismissed by tapping outside of the alert dialog."
+          ),
+      },
+    ]);
+  };
 
   const handleSubmit = async () => {
     try {
-        if(!updateAchievement){
-            return setVisible(false);
-        }
+      if (!updateAchievement) {
+        return setVisible(false);
+      }
       console.log(updateAchievement);
       const response = await axios.post(
         baseUrl + "achievements",
         { currentWeight: updateAchievement },
-        { headers: {access_token} }
+        { headers: { access_token } }
       );
       setUpdateAchievement("");
       getWeight();
-      dataUser()
-      getBmi()
+      dataUser();
+      getBmi();
       setVisible(false);
-      alertSuccess()
+      alertSuccess();
     } catch (error) {
       console.log(error);
     }
@@ -256,14 +267,18 @@ export default function Graph({ navigation, route }) {
                   BMI Score
                 </Text>
                 <Text
-                  style={{ fontWeight: "400", marginLeft: -60, color: "green" }}
+                  style={{
+                    fontWeight: "400",
+                    marginLeft: -60,
+                    color: "green",
+                  }}
                 >
                   {bmi?.health || ""}
                 </Text>
               </View>
               <View style={styles.rectangle}>
                 <Text
-                  style={{ fontWeight: "700", fontSize: 24, color: "green" }}
+                  style={{ fontWeight: "700", fontSize: 18, color: "green" }}
                 >
                   {bmi?.bmi || 0}
                 </Text>
@@ -317,7 +332,15 @@ export default function Graph({ navigation, route }) {
                       Achievement
                     </Text>
                   </View>
-                  <Pressable onPress={() => navigation.navigate("Achievement", {user:user, weight:weight, latestData: latestData})}>
+                  <Pressable
+                    onPress={() =>
+                      navigation.navigate("Achievement", {
+                        user: user,
+                        weight: weight,
+                        latestData: latestData,
+                      })
+                    }
+                  >
                     <View style={styles.updateWeight}>
                       <Image
                         source={require("../assets/Piala.png")}
