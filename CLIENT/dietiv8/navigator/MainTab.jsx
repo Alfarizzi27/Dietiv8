@@ -8,6 +8,7 @@ import Profile from "../pages/Profile";
 import AddMenus from "../pages/AddMenus";
 import { useEffect } from "react";
 import userStore from "../stores/userStore";
+import News from "../pages/News";
 
 import {
   Entypo,
@@ -26,7 +27,7 @@ export default function MainTab() {
   //   // await getHistory(access_token);
   // }
   useEffect(() => {
-    getAcc()
+    getAcc();
   }, []);
   const Tab = createBottomTabNavigator();
   return (
@@ -82,8 +83,8 @@ export default function MainTab() {
           }}
         />
         <Tab.Screen
-          name="Recipes"
-          component={Recipes}
+          name="News"
+          component={News}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => {
