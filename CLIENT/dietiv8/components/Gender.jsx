@@ -31,11 +31,11 @@ export default function Gender() {
   const change = (gender) => {
     setGenderPage(gender);
     if (gender === "male") {
-      setColors("#adadad");
+      setColors("#55a64e");
       setColors2("#d9d9d9");
       setTextColor2("black");
     } else if (gender === "female") {
-      setColors2("#adadad");
+      setColors2("#55a64e");
       setColors("#d9d9d9");
       setTextColor("black");
     }

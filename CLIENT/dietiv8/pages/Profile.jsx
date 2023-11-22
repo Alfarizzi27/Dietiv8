@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -6,30 +5,22 @@ import {
   Text,
   View,
   ScrollView,
-  FlatList,
   Dimensions,
   Image,
-  TextInput,
   Pressable,
 } from "react-native";
-import {
-  SafeAreaView,
-  SafeAreaProvider,
-  SafeAreaInsetsContext,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
-import { Card } from "@rneui/themed";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Body from "../components/Body";
-import { Fragment, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import userStore from "../stores/userStore";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialIcons } from "@expo/vector-icons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Home() {
+  const accessToken = userStore((state) => state.access_token);
   const navigation = useNavigation();
   const [user, setUser] = useState({});
   const [age, setAge] = useState(0);
@@ -41,7 +32,7 @@ export default function Home() {
   const dataUser = async () => {
     const { data } = await axios.get(baseUrl + 'users/1', {
       headers: {
-        access_token: access_token,
+        access_token: accessToken,
       },
     });
     let dob = new Date(data.dateBirth).getFullYear();

@@ -28,6 +28,9 @@ export default function Home() {
   const accessToken = userStore((state) => state.access_token);
   const dataHistory = userStore((state) => state.dataHistory);
   const [history, setHistory] = useState({});
+  const [calorie, setCalorie] = useState("");
+  const [user, setUser] = useState({});
+  const [bmi, setBmi] = useState({});
 
   const getFood = async () => {
     await getAcc();
@@ -38,14 +41,42 @@ export default function Home() {
         },
       });
       setHistory(data.Food);
-      console.log(data);
+      setCalorie(data.calorieLimit);
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
+  const getUser = async () => {
+    try {
+      const { data } = await axios.get(baseUrl + "users/1", {
+        headers: {
+          access_token: accessToken,
+        },
+      });
+      setUser(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getBMI = async () => {
+    try {
+      const { data } = await axios.get(baseUrl + "fitnes/bmi", {
+        headers: {
+          access_token: accessToken,
+        },
+      });
+      setBmi(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getFood();
+    getUser();
+    getBMI();
   }, []);
 
   return (
@@ -84,7 +115,7 @@ export default function Home() {
                   fontSize: 14,
                 }}
               >
-                1200 cal
+                {calorie} cal
               </Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -97,7 +128,7 @@ export default function Home() {
                   fontSize: 14,
                 }}
               >
-                60 kg
+                {user.weight} kg
               </Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -114,7 +145,7 @@ export default function Home() {
                   fontSize: 14,
                 }}
               >
-                20.6 bmi
+                {bmi.bmi} bmi
               </Text>
             </View>
           </View>

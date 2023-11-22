@@ -20,7 +20,7 @@ import userStore from "../stores/userStore";
 import LottieView from "lottie-react-native";
 
 import Body from "../components/Body";
-import { useIsFocused } from "@react-navigation/native";
+// import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -105,6 +105,14 @@ export default function Home() {
     // history menu ada ga jalan
     // kalo ga ada yang bawah jalan
     try {
+      //! Ini fungsi ketika fetch berjalan lama maka akan throw error
+      function newAbortSignal(timeoutMs) {
+        const abortController = new AbortController();
+        setTimeout(() => abortController.abort(), timeoutMs || 0);
+
+        return abortController.signal;
+      }
+
       console.log(checkMenu, "<<<<<<<<<<<<<<<<<<<<<<<<<<<,");
       if (checkMenu) throw { name: "menu_database" };
       console.log("jalan fetch aii");
@@ -113,8 +121,22 @@ export default function Home() {
         headers: {
           access_token: accessToken,
         },
-        timeout: 5000,
+        // timeout: 5000,
+        signal: newAbortSignal(5000), // ini nyambung sama yang fungsi fetch berjalan lama
       });
+      console.log("<-- setelah fetch");
+      if (
+        !data.breakfast ||
+        !data.breakfastCalorie ||
+        !data.lunch ||
+        !data.lunchCalorie ||
+        !data.dinner ||
+        !data.dinnerCalorie ||
+        !data.snack ||
+        !data.snackCalorie
+      ) {
+        throw { name: "data kosong" };
+      }
       setMenu(data);
       setChecklist(() => {
         return {
@@ -122,6 +144,7 @@ export default function Home() {
         };
       });
     } catch (error) {
+      console.log(error, "<-- error di catch");
       if (error.code === "ECONNABORTED") {
         console.log(error, "dari axios timeout");
       } else if (error.name === "menu_database") {
@@ -143,6 +166,7 @@ export default function Home() {
       setMenu(menuDefault);
       setChecklist(menuDefault);
     } finally {
+      console.log("<-- sampai finally");
       setLoading(false);
     }
   };
@@ -172,7 +196,6 @@ export default function Home() {
     getRecomend();
     console.log("halaman mealplan <<<<<<<<");
     console.log(usermenu, "<<data usermenu");
-
   }, []);
 
   useEffect(() => {

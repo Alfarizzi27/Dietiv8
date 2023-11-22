@@ -27,7 +27,7 @@ export default function HistoryFood({ item }) {
 
   useEffect(() => {
     console.log(item, "<<<");
-    setFormat(formatDate(item.createdAt));
+    setFormat(formatDate(item.FoodEaten.createdAt));
   }, []);
 
   return (
