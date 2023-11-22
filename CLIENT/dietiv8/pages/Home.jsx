@@ -80,7 +80,7 @@ export default function Home({ navigation }) {
       });
       const percentage =
         Math.round((data.calorieGain / data.calorieLimit) * 100) / 100;
-        if(data.calorieGain > data.calorieLimit){
+        if(data.calorieGain > data.calorieLimit - 250){
           setColorProgress("red")
         }else{
           setColorProgress("#60935D")
@@ -255,7 +255,7 @@ export default function Home({ navigation }) {
                     </View>
                     <View
                       style={{
-                        backgroundColor: {colorProgress},
+                        backgroundColor: colorProgress,
                         marginRight: 20,
                         width: 30,
                         height: 30,
