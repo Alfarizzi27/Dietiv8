@@ -55,12 +55,15 @@ export default function Home({ navigation }) {
   const [user, setUser] = useState({});
   const [calorie, setCalorie] = useState({});
   const [percentageCal, setPercentagecal] = useState(0);
+  const [colorProgress, setColorProgress] = useState("#60935D")
 
   const baseUrl = "http://13.250.41.248/";
+  const getAcc = userStore((state) => state.getAccessToken);
   const access_token = userStore((state) => state.access_token);
 
   const dataUser = async () => {
     try {
+      await getAcc()
       const { data } = await axios.get(baseUrl + "users/1", {
         headers: { access_token },
       });
@@ -71,19 +74,34 @@ export default function Home({ navigation }) {
   };
 
   const dataCalorie = async () => {
-    const { data } = await axios.get(baseUrl + "histories/now", {
-      headers: { access_token },
-    });
-    const percentage =
-      Math.round((data.calorieGain / data.calorieLimit) * 100) / 100;
-    setPercentagecal(percentage);
-    setCalorie(data);
+    try {
+      const { data } = await axios.get(baseUrl + "histories/now", {
+        headers: { access_token },
+      });
+      const percentage =
+        Math.round((data.calorieGain / data.calorieLimit) * 100) / 100;
+        if(data.calorieGain > data.calorieLimit){
+          setColorProgress("red")
+        }else{
+          setColorProgress("#60935D")
+        }
+      setPercentagecal(percentage);
+      setCalorie(data);
+    } catch (error) {
+      console.log(error)
+    }
   };
+
+  useEffect(() => {
+    // dataUser();
+    // dataCalorie();
+    getAcc()
+  }, []);
 
   useEffect(() => {
     dataUser();
     dataCalorie();
-  }, []);
+  }, [access_token])
 
   const touchNutrition = () => {
     console.log("You touch Nutrition");
@@ -217,7 +235,7 @@ export default function Home({ navigation }) {
                       progress={percentageCal}
                       size={90}
                       borderWidth={2}
-                      color="#60935D"
+                      color={colorProgress}
                     />
                   </View>
                   <View
@@ -237,7 +255,7 @@ export default function Home({ navigation }) {
                     </View>
                     <View
                       style={{
-                        backgroundColor: "#60935D",
+                        backgroundColor: {colorProgress},
                         marginRight: 20,
                         width: 30,
                         height: 30,

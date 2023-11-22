@@ -9,9 +9,9 @@ export default function App() {
   return (
     <NavigationContainer>
       {/* <Register /> */}
-      {/* <MainStack /> */}
+      <MainStack />
       {/* <News /> */}
-      <MainTab />
+      {/* <MainTab /> */}
     </NavigationContainer>
   );
 }

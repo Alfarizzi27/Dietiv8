@@ -23,14 +23,15 @@ export default function Achievement({ route }) {
   const { user, weight, latestData } = route.params;
   const [loss, setLoss] = useState(0);
   const [date, setDate] = useState("");
-  const [percentage, setPercentage] = useState(0)
-  const [indicator, setIndicator] = useState(0)
+  const [percentage, setPercentage] = useState(0);
+  const [indicator, setIndicator] = useState(0);
 
   const getPercentage = () => {
-    const tes = (100 - Math.round((user.weight-user.targetWeight) * 100) / 100) / 100
-    setIndicator(tes)
-    setPercentage(Math.round((user.weight-user.targetWeight) * 100) / 100)
-  }
+    const tes =
+      (100 - Math.round((user.weight - user.targetWeight) * 100) / 100) / 100;
+    setIndicator(tes);
+    setPercentage(Math.round((user.weight - user.targetWeight) * 100) / 100);
+  };
 
   const getDate = () => {
     const days = [
@@ -68,12 +69,43 @@ export default function Achievement({ route }) {
     );
   };
 
+  const isCongratulation = () => {
+    if (loss >= 0) {
+      return (
+        <>
+          <View style={{ marginVertical: 20 }}>
+            <Text>Congratulations</Text>
+            <View style={{ alignItems: "center", marginVertical: 20 }}>
+              <Text style={{ fontWeight: "500", fontSize: 25 }}>
+                {user?.username || ""} has lost {loss}
+                <Text style={{ fontSize: 18 }}> kg</Text>
+              </Text>
+            </View>
+          </View>
+        </>
+      );
+    }else if(loss < 0){
+      return (
+        <>
+          <View style={{ marginVertical: 20 }}>
+            <Text>Your weight has increased.</Text>
+            <View style={{ alignItems: "center", marginVertical: 20 }}>
+              <Text style={{ fontWeight: "500", fontSize: 25 }}>
+                {user?.username || ""} has gain {loss * -1}
+                <Text style={{ fontSize: 18 }}> kg</Text>
+              </Text>
+            </View>
+          </View>
+        </>
+      )
+    }
+  };
   useEffect(() => {
     setLoss(
       Number(weight[weight.length - 2] - Number(weight[weight.length - 1]))
     );
     getDate();
-    getPercentage()
+    getPercentage();
   }, []);
 
   // FOR PERMISSION
@@ -255,7 +287,7 @@ export default function Achievement({ route }) {
                 flex: 2,
               }}
             >
-              <View style={{ marginVertical: 20 }}>
+              {/* <View style={{ marginVertical: 20 }}>
                 <Text>Congratulations</Text>
                 <View style={{ alignItems: "center", marginVertical: 20 }}>
                   <Text style={{ fontWeight: "500", fontSize: 25 }}>
@@ -263,15 +295,20 @@ export default function Achievement({ route }) {
                     <Text style={{ fontSize: 18 }}> kg</Text>
                   </Text>
                 </View>
-              </View>
+              </View> */}
+              {isCongratulation()}
               <View>
                 <Text>Progress</Text>
                 <View style={{ marginTop: 20 }}>
                   <View style={{ flexDirection: "row" }}>
                     <View>
-                      <Progress.Pie progress={indicator} size={70} color="#60935D" />
+                      <Progress.Pie
+                        progress={indicator}
+                        size={70}
+                        color="#60935D"
+                      />
                     </View>
-                    <View style={{ marginLeft: 18, justifyContent:"center" }}>
+                    <View style={{ marginLeft: 18, justifyContent: "center" }}>
                       <Text style={{ color: "black" }}>
                         Here's your progress on
                       </Text>
