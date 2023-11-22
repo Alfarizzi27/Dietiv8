@@ -93,8 +93,6 @@ export default function Home() {
       console.log(error?.response?.data);
       setMenuDatabase(false);
       return false;
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -167,7 +165,10 @@ export default function Home() {
       setChecklist(menuDefault);
     } finally {
       console.log("<-- sampai finally");
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+        console.log("masuk sini");
+      }, 2000);
     }
   };
 
@@ -188,7 +189,10 @@ export default function Home() {
     } catch (error) {
       console.log(error?.response?.data, "<<<< error add food");
     } finally {
-      setLoading(false);
+      // setLoading(false);
+      // setTimeout(() => {
+      //   setLoading(false);
+      // }, 5000);
     }
   };
 
@@ -198,9 +202,9 @@ export default function Home() {
     console.log(usermenu, "<<data usermenu");
   }, []);
 
-  useEffect(() => {
-    console.log(checklist, "<<<< ini POST BOS");
-  }, [checklist]);
+  // useEffect(() => {
+  //   console.log(checklist, "<<<< ini POST BOS");
+  // }, [checklist]);
 
   if (loading) {
     return (
@@ -226,7 +230,7 @@ export default function Home() {
               <Text style={styles.title}>Recommended Food</Text>
               <Text style={styles.title}>Personalized</Text>
               <Text
-                style={[styles.title, { color: "#FF8811", fontWeight: "800" }]}
+                style={[styles.title, { color: "#ffb12b", fontWeight: "800" }]}
               >
                 For You
               </Text>

@@ -6,6 +6,7 @@ import {
   FlatList,
   Dimensions,
   Pressable,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchBar } from "@rneui/themed";
@@ -44,6 +45,18 @@ export default function AddMenus() {
     setVisible(false);
   };
 
+  const alertSuccess = () => {
+    Alert.alert("Success", "Input food success", [
+      {
+        cancelable: true,
+        onDismiss: () =>
+          Alert.alert(
+            "This alert was dismissed by tapping outside of the alert dialog."
+          ),
+      },
+    ]);
+  };
+
   const handleAdd = async () => {
     // The user has pressed the "Delete" button, so here you can do your own logic.
     // ...Your logic
@@ -60,11 +73,12 @@ export default function AddMenus() {
           access_token: accessToken,
         },
       });
-      if (data.message === "Food has been inputed") {
-        setVisible(false);
-      }
+      // if (data.message === "Food has been inputed") {
+      setVisible(false);
+      alertSuccess();
+      // }
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
 
