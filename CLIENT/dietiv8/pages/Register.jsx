@@ -6,18 +6,18 @@ import { useNavigation } from "@react-navigation/native";
 import userStore from "../stores/userStore";
 import { useEffect } from "react";
 
-export default function Register({coba}) {
+export default function Register({ coba }) {
   const navigation = useNavigation();
-  const getAccessToken = userStore((state) => state.getAccessToken)
-  
+  const getAccessToken = userStore((state) => state.getAccessToken);
+
   async function checkLogin() {
-    const access = await getAccessToken()
-    if(access) navigation.navigate("maintab")
+    const access = await getAccessToken();
+    if (access) navigation.navigate("maintab");
   }
 
   useEffect(() => {
-    checkLogin()
-  }, [])
+    checkLogin();
+  }, []);
   return (
     <>
       <View style={styles.container}>
@@ -27,30 +27,29 @@ export default function Register({coba}) {
               <View style={{ justifyContent: "center", alignItems: "center" }}>
                 <Text
                   style={{
-                    color: "white",
+                    color: "#60935d",
                     textAlign: "center",
                     marginTop: 40,
-                    fontSize: 26,
+                    fontSize: 28,
                     width: 280,
                     borderRadius: 7,
-                    padding: 7,
-                    backgroundColor: "#60935d",
-                    fontWeight: "500",
+                    // padding: 7,
+                    // backgroundColor: "#60935d",
+                    fontWeight: "800",
                   }}
                 >
                   Welcome to DIETIV8
                 </Text>
                 <Text
                   style={{
-                    color: "white",
+                    color: "#60935d",
                     textAlign: "center",
-                    marginTop: 20,
-                    fontSize: 26,
+                    fontSize: 28,
                     width: 280,
                     borderRadius: 7,
-                    padding: 7,
-                    backgroundColor: "#60935d",
-                    fontWeight: "500",
+                    // padding: 7,
+                    // backgroundColor: "#60935d",
+                    fontWeight: "800",
                   }}
                 >
                   Nutrition Program
@@ -60,7 +59,7 @@ export default function Register({coba}) {
                     color: "#60935d",
                     textAlign: "center",
                     textAlignVertical: "center",
-                    marginTop: 120,
+                    marginTop: 140,
                     fontSize: 30,
                     width: 280,
                     height: 65,
