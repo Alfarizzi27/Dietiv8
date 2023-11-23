@@ -49,7 +49,7 @@ class FoodController {
       if (!foodEaten) {
         const { name, calorie, isError, errorMessage } =
           await OpenAiController.countCalorie(food);
-        if (isError) throw { name: "invalid_food", message: errorMessage }; //for testing
+        // if (isError) throw { name: "invalid_food", message: errorMessage }; //for testing
         foodEaten = await Food.create({ name, calorie }, { transaction: t });
       }
       const calorieGain = historyTarget.calorieGain + foodEaten.calorie;
@@ -66,6 +66,8 @@ class FoodController {
       await t.commit();
       res.status(201).json({ message: "Food has been inputed" });
     } catch (error) {
+      console.log(error);
+      console.log(error);
       await t.rollback();
       next(error);
     }

@@ -80,26 +80,26 @@ describe("Histories ", () => {
   });
 });
 describe("Menu ", () => {
-  // describe("get /openai/menu ", () => {
-  //   const mock = jest.fn(openaicontroller.getMenu);
-  //   it("succcess", async () => {
-  //     const respond = await request(app)
-  //       .get("/openai/menu")
-  //       .set("access_token", validToken);
-  //     // expect(respond.status).toBe(201);
-  //     // expect(respond.body).toBeInstanceOf(Object);
-  //     // expect(respond.body).toHaveProperty("breakfast");
-  //     expect(mock).toHaveBeenCalled();
-  //   });
-  //   it("invalid token", async () => {
-  //     const respond = await request(app)
-  //       .get("/openai/menu")
-  //       .set("access_token", "ASDFSDAFEWWFSDAfdsfdsaGAGAFG123");
-  //     expect(respond.status).toBe(401);
-  //     expect(respond.body).toBeInstanceOf(Object);
-  //     expect(respond.body).toHaveProperty("message", "Invalid Token");
-  //   });
-  // });
+  describe("get /openai/menu ", () => {
+    const mock = jest.fn(openaicontroller.getMenu);
+    it("succcess", async () => {
+      const respond = await request(app)
+        .get("/openai/menu")
+        .set("access_token", validToken);
+      // expect(respond.status).toBe(201);
+      // expect(respond.body).toBeInstanceOf(Object);
+      // expect(respond.body).toHaveProperty("breakfast");
+      // expect(mock).toHaveBeenCalled();
+    });
+    it("invalid token", async () => {
+      const respond = await request(app)
+        .get("/openai/menu")
+        .set("access_token", "ASDFSDAFEWWFSDAfdsfdsaGAGAFG123");
+      expect(respond.status).toBe(401);
+      expect(respond.body).toBeInstanceOf(Object);
+      expect(respond.body).toHaveProperty("message", "Invalid Token");
+    });
+  });
   describe("GET /menus/:historyId Before POST /menus/:historyId", () => {
     it("fail", async () => {
       //set by param

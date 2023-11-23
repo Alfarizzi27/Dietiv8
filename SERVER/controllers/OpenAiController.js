@@ -9,9 +9,9 @@ class OpenAiController {
       let promtRec = `Get healthy menu food for 1 day with calorie limit ${calorieLimit}`;
       if (extra) promtRec += `With Restriction ${extra}`;
       const menuRec = await agent(promtRec);
-    //   if (!menuRec) {
-    //     throw { name: "menurec_error" };
-    //   }
+      //   if (!menuRec) {
+      //     throw { name: "menurec_error" };
+      //   }
       res.status(201).json(menuRec);
     } catch (error) {
       next(error);
